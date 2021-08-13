@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>关于阿克尚的一些看法</title>
+    <url>/categories/%E6%B8%B8%E6%88%8F/LOL/%E5%85%B3%E4%BA%8E%E9%98%BF%E5%85%8B%E5%B0%9A%E7%9A%84%E4%B8%80%E4%BA%9B%E7%9C%8B%E6%B3%95/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>沉迷阿克尚无法自拔中，这英雄等他上赛场肯定得削，太强了，和别的英雄对比起来确实太强了。</p>
+<p>看这恐怖的对线压制力</p>
+<div id="dplayer0" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px; width:65%; height:65%;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer0"),"theme":"#FADFA3","video":{"url":"http://cloud.morty.ltd:4000/lol/2021-8-13/单杀1.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+<span id="more"></span>
+<p>打这种短手的真的是随便A他，走上去不让对面吃兵，来人立刻E钩墙拉开，注意站在一个刚好可以勾到河道墙的位置</p>
+<p>参与团战刚开始不要进场，边上ob，有残血先在远处放大摸奖，尽量找好位置放极限E，仅仅挨着一点点墙是不会下来的，可以蹭过去，当自己从潜行出来贴着墙时稍微走出来一点，对准远处放E。如果贴脸E相当于控自己，极限E是可以飞很远的，而且伤害巨高（同时附带攻击特效比如说海妖）</p>
+<div id="dplayer1" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px; width:65%; height:65%;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer1"),"theme":"#FADFA3","video":{"url":"http://cloud.morty.ltd:4000/lol/2021-8-13/五杀.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>]]></content>
+      <categories>
+        <category>游戏</category>
+        <category>LOL</category>
+      </categories>
+      <tags>
+        <tag>阿克尚</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>暑期集训-动态规划专题</title>
     <url>/categories/CPP/ACM/%E6%9A%91%E6%9C%9F%E9%9B%86%E8%AE%AD-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B8%93%E9%A2%98/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>属实是被dp问题吊打，对我来说还是太难了吧，又是树上dp又是图上dp，terrible<br>oh对了，特别注意.size()的返回值是unsigned int，如果写出<code>i&lt;a.size()-1;</code>这样的判断条件是会出问题的，如果有负数，得写出<code>i&lt;(int)a.size()-1;</code><br><a href="https://codeforces.com/group/5FquYr3Pbe/contest/289105">测验传送门</a></p>
@@ -122,24 +140,6 @@
         <tag>枚举</tag>
         <tag>思维</tag>
         <tag>构造</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>关于阿克尚的一些看法</title>
-    <url>/categories/%E6%B8%B8%E6%88%8F/LOL/%E5%85%B3%E4%BA%8E%E9%98%BF%E5%85%8B%E5%B0%9A%E7%9A%84%E4%B8%80%E4%BA%9B%E7%9C%8B%E6%B3%95/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>沉迷阿克尚无法自拔中，这英雄等他上赛场肯定得削，太强了，和别的英雄对比起来确实太强了。</p>
-<p>看这恐怖的对线压制力</p>
-<div id="dplayer0" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px; width:854px; height:480px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer0"),"theme":"#FADFA3","loop":true,"video":{"url":"http://cloud.morty.ltd:4000/lol/2021-8-13/单杀1.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
-<span id="more"></span>
-<p>打这种短手的真的是随便A他，走上去不让对面吃兵，来人立刻E钩墙拉开，注意站在一个刚好可以勾到河道墙的位置</p>
-<p>参与团战刚开始不要进场，边上ob，有残血先在远处放大摸奖，尽量找好位置放极限E，仅仅挨着一点点墙是不会下来的，可以蹭过去，当自己从潜行出来贴着墙时稍微走出来一点，对准远处放E。如果贴脸E相当于控自己，极限E是可以飞很远的，而且伤害巨高（同时附带攻击特效比如说海妖）</p>
-<div id="dplayer1" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px; width:854px; height:480px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer1"),"theme":"#FADFA3","loop":true,"video":{"url":"http://cloud.morty.ltd:4000/lol/2021-8-13/五杀.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>]]></content>
-      <categories>
-        <category>游戏</category>
-        <category>LOL</category>
-      </categories>
-      <tags>
-        <tag>阿克尚</tag>
       </tags>
   </entry>
   <entry>
