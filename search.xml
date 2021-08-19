@@ -4,11 +4,36 @@
     <title>关于阿克尚的一些看法</title>
     <url>/categories/%E6%B8%B8%E6%88%8F/LOL/%E5%85%B3%E4%BA%8E%E9%98%BF%E5%85%8B%E5%B0%9A%E7%9A%84%E4%B8%80%E4%BA%9B%E7%9C%8B%E6%B3%95/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>沉迷阿克尚无法自拔中，这英雄等他上赛场肯定得削，太强了，和别的英雄对比起来确实太强了。</p>
-<p>看这恐怖的对线压制力<br><video src="https://live.morty.ltd/images/lol/2021/08/13/1.mp4" controls="controls" style="max-width: 65%; display: block; margin-left: 1px; margin-right: auto;"><br>你的浏览器不支持播放该视频<br></video></p>
+<p>看这恐怖的对线压制力</p>
+<div id="dplayer"></div>
+<script src="https://cdn.jsdelivr.net/npm/dplayer@1.25.1/dist/DPlayer.min.js"></script>
+<script>
+    var dp = new DPlayer({
+        container: document.getElementById('dplayer'),  //播放器容器
+        screenshot: true,  //截图功能
+        video:{
+            url : 'https://cloud.morty.ltd:5443/api/v3/file/get/3785/1.mp4?sign=OTAaQx0ADivAbcO6Zqmo7e_Se8mO06d_CKfOHsv2_sY%3D%3A0',
+        }
+    });
+</script>
 <span id="more"></span>
-<p>打这种短手的真的是随便A他，走上去不让对面吃兵，来人立刻E钩墙拉开，注意站在一个刚好可以勾到河道墙的位置<br>抢个二级可以凶一下，对面身上有被动时E过去，在快碰到对方前下来，保持一个平A极限射程，但是如果打远程英雄是可以考虑直接E到脸上去A的<br>这波单杀最后其实是可以走的，觉得自己能打过兰博E了另一面墙，E自己家墙是可以直接翻到红buff墙边上的<br>阿克尚超强的机动性完全允许站在对方塔面前压制对面，来人赶紧E走，但是再E冷却转好之前不要往前走，这个时候是很脆弱的</p>
-<p>参与团战刚开始不要进场，边上ob，有残血先在远处放大摸奖，尽量找好位置放极限E，仅仅挨着一点点墙是不会下来的，可以蹭过去，当自己从潜行出来贴着墙时稍微走出来一点，对准远处放E。如果贴脸E相当于控自己，极限E是可以飞很远的，而且伤害巨高（同时附带攻击特效比如说海妖）<br><video src="https://live.morty.ltd/images/lol/2021/08/13/2.mp4" controls="controls" style="max-width: 65%; display: block; margin-left: 1px; margin-right: auto;"><br>你的浏览器不支持播放该视频<br></video></p>
-]]></content>
+打这种短手的真的是随便A他，走上去不让对面吃兵，来人立刻E钩墙拉开，注意站在一个刚好可以勾到河道墙的位置
+抢个二级可以凶一下，对面身上有被动时E过去，在快碰到对方前下来，保持一个平A极限射程，但是如果打远程英雄是可以考虑直接E到脸上去A的
+这波单杀最后其实是可以走的，觉得自己能打过兰博E了另一面墙，E自己家墙是可以直接翻到红buff墙边上的
+阿克尚超强的机动性完全允许站在对方塔面前压制对面，来人赶紧E走，但是再E冷却转好之前不要往前走，这个时候是很脆弱的
+
+<p>参与团战刚开始不要进场，边上ob，有残血先在远处放大摸奖，尽量找好位置放极限E，仅仅挨着一点点墙是不会下来的，可以蹭过去，当自己从潜行出来贴着墙时稍微走出来一点，对准远处放E。如果贴脸E相当于控自己，极限E是可以飞很远的，而且伤害巨高（同时附带攻击特效比如说海妖）</p>
+<div id="dplayer"></div>
+<script src="https://cdn.jsdelivr.net/npm/dplayer@1.25.1/dist/DPlayer.min.js"></script>
+<script>
+    var dp = new DPlayer({
+        container: document.getElementById('dplayer'),  //播放器容器
+        screenshot: true,  //截图功能
+        video:{
+            url : 'https://cloud.morty.ltd:5443/api/v3/file/get/3786/2.mp4?sign=MNbalMTBmUxizq9E68Rf2Jd9UlgdsSuv3oyDI6NbG7A%3D%3A0',
+        }
+    });
+</script>]]></content>
       <categories>
         <category>游戏</category>
         <category>LOL</category>
