@@ -19,31 +19,31 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"morty.ltd","root":"/","images":"/images","scheme":"Gemini","version":"8.6.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foliet.ltd","root":"/","images":"/images","scheme":"Gemini","version":"8.6.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 <meta name="description" content="前言属实是被dp问题吊打，对我来说还是太难了吧，又是树上dp又是图上dp，terribleoh对了，特别注意.size()的返回值是unsigned int，如果写出i&lt;a.size()-1;这样的判断条件是会出问题的，如果有负数，得写出i&lt;(int)a.size()-1;测验传送门">
 <meta property="og:type" content="article">
 <meta property="og:title" content="暑期集训-动态规划专题">
-<meta property="og:url" content="https://morty.ltd/categories/CPP/ACM/%E6%9A%91%E6%9C%9F%E9%9B%86%E8%AE%AD-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B8%93%E9%A2%98/index.html">
-<meta property="og:site_name" content="Morty&#39;s Blog">
+<meta property="og:url" content="https://foliet.ltd/categories/CPP/ACM/%E6%9A%91%E6%9C%9F%E9%9B%86%E8%AE%AD-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B8%93%E9%A2%98/index.html">
+<meta property="og:site_name" content="Foliet&#39;s Blog">
 <meta property="og:description" content="前言属实是被dp问题吊打，对我来说还是太难了吧，又是树上dp又是图上dp，terribleoh对了，特别注意.size()的返回值是unsigned int，如果写出i&lt;a.size()-1;这样的判断条件是会出问题的，如果有负数，得写出i&lt;(int)a.size()-1;测验传送门">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://espresso.codeforces.com/343ded9fa106a8a70028e480d8dcf8721cf19f03.png">
 <meta property="article:published_time" content="2021-07-22T17:07:57.000Z">
-<meta property="article:modified_time" content="2021-07-25T19:10:31.807Z">
-<meta property="article:author" content="Morty-C625">
+<meta property="article:modified_time" content="2021-10-13T12:13:22.790Z">
+<meta property="article:author" content="Foliet">
 <meta property="article:tag" content="DP">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://espresso.codeforces.com/343ded9fa106a8a70028e480d8dcf8721cf19f03.png">
 
 
-<link rel="canonical" href="https://morty.ltd/categories/CPP/ACM/%E6%9A%91%E6%9C%9F%E9%9B%86%E8%AE%AD-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B8%93%E9%A2%98/">
+<link rel="canonical" href="https://foliet.ltd/categories/CPP/ACM/%E6%9A%91%E6%9C%9F%E9%9B%86%E8%AE%AD-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B8%93%E9%A2%98/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://morty.ltd/categories/CPP/ACM/%E6%9A%91%E6%9C%9F%E9%9B%86%E8%AE%AD-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B8%93%E9%A2%98/","path":"categories/CPP/ACM/暑期集训-动态规划专题/","title":"暑期集训-动态规划专题"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foliet.ltd/categories/CPP/ACM/%E6%9A%91%E6%9C%9F%E9%9B%86%E8%AE%AD-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B8%93%E9%A2%98/","path":"categories/CPP/ACM/暑期集训-动态规划专题/","title":"暑期集训-动态规划专题"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>暑期集训-动态规划专题 | Morty's Blog</title>
+<title>暑期集训-动态规划专题 | Foliet's Blog</title>
   
 
 
@@ -72,7 +72,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">Morty's Blog</h1>
+      <h1 class="site-title">Foliet's Blog</h1>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">论废物的自我修养</p>
@@ -159,10 +159,10 @@
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-overview">
             <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Morty-C625"
+    <img class="site-author-image" itemprop="image" alt="Foliet"
       src="/images/avatar.jpg">
-  <p class="site-author-name" itemprop="name">Morty-C625</p>
-  <div class="site-description" itemprop="description">想成为优秀ACMer的Morty</div>
+  <p class="site-author-name" itemprop="name">Foliet</p>
+  <div class="site-description" itemprop="description">想成为优秀ACMer的Foliet</div>
 </div>
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
@@ -235,16 +235,16 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://morty.ltd/categories/CPP/ACM/%E6%9A%91%E6%9C%9F%E9%9B%86%E8%AE%AD-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B8%93%E9%A2%98/">
+    <link itemprop="mainEntityOfPage" href="https://foliet.ltd/categories/CPP/ACM/%E6%9A%91%E6%9C%9F%E9%9B%86%E8%AE%AD-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B8%93%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Morty-C625">
-      <meta itemprop="description" content="想成为优秀ACMer的Morty">
+      <meta itemprop="name" content="Foliet">
+      <meta itemprop="description" content="想成为优秀ACMer的Foliet">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Morty's Blog">
+      <meta itemprop="name" content="Foliet's Blog">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -266,7 +266,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-07-26 03:10:31" itemprop="dateModified" datetime="2021-07-26T03:10:31+08:00">2021-07-26</time>
+        <time title="修改时间：2021-10-13 20:13:22" itemprop="dateModified" datetime="2021-10-13T20:13:22+08:00">2021-10-13</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -318,7 +318,7 @@
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>属实是被dp问题吊打，对我来说还是太难了吧，又是树上dp又是图上dp，terrible<br>oh对了，特别注意.size()的返回值是unsigned int，如果写出<code>i&lt;a.size()-1;</code>这样的判断条件是会出问题的，如果有负数，得写出<code>i&lt;(int)a.size()-1;</code><br><a target="_blank" rel="noopener" href="https://codeforces.com/group/5FquYr3Pbe/contest/289105">测验传送门</a></p>
 <span id="more"></span>
 <h1 id="题目选集"><a href="#题目选集" class="headerlink" title="题目选集"></a>题目选集</h1><h2 id="J-Flood-Fill"><a href="#J-Flood-Fill" class="headerlink" title="J. Flood Fill"></a>J. Flood Fill</h2><h3 id="题面"><a href="#题面" class="headerlink" title="题面"></a>题面</h3><blockquote>
-<center>Time limit per test: 2 seconds<br/>Memory limit per test: 256 megabytes<br/></center>
+<div style="text-align: center;">Time limit per test: 2 seconds<br/>Memory limit per test: 256 megabytes<br/></div>
 </blockquote>
 <blockquote>
 <p>You are given a line of $n$ colored squares in a row, numbered from $1$ to $n$ from left to right. The $i$-th square initially has the color $c_i$.<br>Let’s say, that two squares $i$ and $j$ belong to the same connected component if $c_i=c_j$, and $c_i=c_k$ for all $k$ satisfying $i&lt;k&lt;j$. In other words, all squares on the segment from $i$ to $j$ should have the same color.<br>For example, the line $[3,3,3]$ has $1$ connected component, while the line $[5,2,4,4]$ has $3$ connected components.<br>The game “flood fill” is played on the given line as follows:</p>
@@ -345,7 +345,7 @@
 <h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>先存数组，连续的数字只存一次<br>选起始块时发现，如果起始块左右分别有数字x，那么可以只操作一次同时消除两个x，但不能直接用栈来括号匹配，如1 2 3 1 2，如果选3作为起始块，至少要操作3次而不是2次<br>这个情况想到回文串，找出原数组<strong>最长回文串</strong>即可，那么问题又可以转化为找出原数组和其倒序数组的<strong>最长公共子序列</strong>，直接套用模板lcs函数求解</p>
 <h3 id="AC代码"><a href="#AC代码" class="headerlink" title="AC代码"></a>AC代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> int long long</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> pii pair<span class="meta-string">&lt;int,int&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn=<span class="number">5050</span>;</span><br><span class="line"><span class="keyword">int</span> dp[maxn][maxn];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lcs</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp;a,vector&lt;<span class="keyword">int</span>&gt;&amp;b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=a.<span class="built_in">size</span>();i++)</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=b.<span class="built_in">size</span>();j++)</span><br><span class="line">        &#123;</span><br><span class="line">            dp[i][j]=dp[i<span class="number">-1</span>][j];</span><br><span class="line">            <span class="keyword">if</span>(dp[i][j<span class="number">-1</span>]&gt;dp[i][j])dp[i][j]=dp[i][j<span class="number">-1</span>];</span><br><span class="line">            <span class="keyword">if</span>(a[i]==b[j]&amp;&amp;dp[i<span class="number">-1</span>][j<span class="number">-1</span>]+<span class="number">1</span>&gt;dp[i][j])</span><br><span class="line">            dp[i][j]=dp[i<span class="number">-1</span>][j<span class="number">-1</span>]+<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[a.<span class="built_in">size</span>()][b.<span class="built_in">size</span>()];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">	cin.<span class="built_in">tie</span>(<span class="number">0</span>);</span><br><span class="line">	<span class="keyword">int</span> n,l=<span class="number">0</span>;</span><br><span class="line">	cin &gt;&gt; n;</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt;<span class="built_in">a</span>(<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> t;</span><br><span class="line">        cin &gt;&gt; t;</span><br><span class="line">        <span class="keyword">if</span>(t!=l)a.<span class="built_in">push_back</span>(t);</span><br><span class="line">        l=t;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> ans = a.<span class="built_in">size</span>()<span class="number">-2</span>;</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt;<span class="built_in">b</span>(a);</span><br><span class="line">    <span class="built_in">reverse</span>(b.<span class="built_in">begin</span>()+<span class="number">1</span>,b.<span class="built_in">end</span>());</span><br><span class="line">	cout &lt;&lt; ans-<span class="built_in">lcs</span>(a,b)/<span class="number">2</span> &lt;&lt; flush;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="K-Shaass-and-Bookshelf"><a href="#K-Shaass-and-Bookshelf" class="headerlink" title="K. Shaass and Bookshelf"></a>K. Shaass and Bookshelf</h2><h3 id="题面-1"><a href="#题面-1" class="headerlink" title="题面"></a>题面</h3><blockquote>
-<center>Time limit per test: 1 seconds<br/>Memory limit per test: 256 megabytes<br/></center>
+<div style="text-align: center;">Time limit per test: 1 seconds<br/>Memory limit per test: 256 megabytes<br/></div>
 </blockquote>
 <blockquote>
 <p>Shaass has $n$ books. He wants to make a bookshelf for all his books. He wants the bookshelf’s dimensions to be as small as possible. The thickness of the $i$-th book is $t_i$ and its pages’ width is equal to $w_i$. The thickness of each book is either $1$ or $2$. All books have the same page heights.<br>Shaass puts the books on the bookshelf in the following way. First he selects some of the books and put them vertically. Then he puts the rest of the books horizontally above the vertical books. The sum of the widths of the horizontal books must be no more than the total thickness of the vertical books. A sample arrangement of the books is depicted in the figure.<br><img src="https://espresso.codeforces.com/343ded9fa106a8a70028e480d8dcf8721cf19f03.png" alt="Alt"><br>Help Shaass to find the minimum total thickness of the vertical books that we can achieve.<br><strong>Input</strong><br>The first line of the input contains an integer $n$, $(1 ≤ n ≤ 100)$. Each of the next $n$ lines contains two integers $t_i$ and $w_i$ denoting the thickness and width of the $i$-th book correspondingly, $(1 ≤ ti ≤ 2, 1 ≤ wi ≤ 100)$.<br><strong>Output</strong><br>On the only line of the output print the minimum total thickness of the vertical books that we can achieve.</p>
@@ -410,7 +410,7 @@
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">Morty-C625</span>
+  <span class="author" itemprop="copyrightHolder">Foliet</span>
 </div>
 <div class="wordcount">
   <span class="post-meta-item">
