@@ -5,4 +5,142 @@
     <url>/categories/uncategorized/%E5%9C%A8MC%E9%87%8C%E5%AD%A6JAVA/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id=""><a href="#" class="headerlink" title=""></a></h1>]]></content>
   </entry>
+  <entry>
+    <title>数组与指针的深度理解</title>
+    <url>/categories/CPP/%E6%95%B0%E7%BB%84%E4%B8%8E%E6%8C%87%E9%92%88%E7%9A%84%E6%B7%B1%E5%BA%A6%E7%90%86%E8%A7%A3/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="数组存储与指针问题"><a href="#数组存储与指针问题" class="headerlink" title="数组存储与指针问题"></a>数组存储与指针问题</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><blockquote>
+<p>先定义$A_1$~$A_5$ 五个类型，请填写以下表格</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">Declare</th>
+<th align="center">sizeof $A_n$</th>
+<th align="center">sizeof *$A_n$</th>
+<th align="center">sizeof **$A_n$</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">int $A_1$[3][5]</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">int *$A_2$[3][5]</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">int (*$A_3$)[3][5]</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">int *($A_4$[3][5])</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">int (*$A_5$[3])[5]</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+<h3 id="A-1"><a href="#A-1" class="headerlink" title="$A_1$"></a>$A_1$</h3><p>此为一个普通的二维数组，直接计算其sizeof即为计算其在内存中所占大小，*$A_1$为int [5]即一个长度为5的一维数组，**$A_1$为int即一个普通的int类型的数据。</p>
+<p>以下标识了对应的<strong>数据类型</strong>，数据类型的后半部分标识是数组还是指针，前半部分表示数组/指针对应元素的数据类型，在使用Visual Studio的调试功能时可以显示每个变量对应的数据类型</p>
+<p>sizeof $A_1$=3*5*4=60   int [3][5]</p>
+<p>sizeof *$A_1$=5*4=20  int [5]</p>
+<p>sizeof **$A_1$=4  int</p>
+<h3 id="A-2"><a href="#A-2" class="headerlink" title="$A_2$"></a>$A_2$</h3><p>$A_2$同时与*和[]相连，[]优先级更高，则其为一个二维数组，数组的每一个元素为int*，即指针数组（装有指针的数组）。</p>
+<p>sizeof $A_2$=3*5*8=120  int* [3][5]</p>
+<p>sizeof *$A_2$=5*8=40  int* [5]</p>
+<p>sizeof **$A_2$=8  int*</p>
+<h3 id="A-3"><a href="#A-3" class="headerlink" title="$A_3$"></a>$A_3$</h3><p>$A_3$同时与*和[]相连，但*处打了括号，故*的优先级更高，则其为一个数组指针（指向一个二维数组的指针），以下语句完全是合法的：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> b[<span class="number">3</span>][<span class="number">5</span>] = *a;</span><br></pre></td></tr></table></figure>
+
+<p><em>$A_3$的大小即是二维数组的大小，</em>*$A_3$即是一维数组的大小。</p>
+<p>sizeof $A_3$=8  int[3][5] *</p>
+<p>sizeof *$A_3$=3*5*4=60  int [3][5]</p>
+<p>sizeof **$A_3$=5*4=20  int [5]</p>
+<h3 id="A-4"><a href="#A-4" class="headerlink" title="$A_4$"></a>$A_4$</h3><p>$A_4$同时与*和[]相连，[]本身优先级更高，加上括号性质不变，即情况同$A_2$。</p>
+<p>sizeof $A_4$=3*5*8=120</p>
+<p>sizeof *$A_4$=5*8=40</p>
+<p>sizeof **$A_4$=8</p>
+<h3 id="A-5"><a href="#A-5" class="headerlink" title="$A_5$"></a>$A_5$</h3><p>(*$A_5$[3])代表$A_5$是一个长度为3的一维数组，数组的元素是指针，该指针的数据类型为int[5] *。</p>
+<p>int[5] *，代表该元素是一个指针指向了长度为5的一维数组，数组中元素的数据类型为int。$A_5$的数据类型为int[5]* [3]。</p>
+<p>sizeof $A_5$=3*8=24  int[5]* [3] （长为3的数组装着int[5]*）</p>
+<p>sizeo *$A_5$=8  int[5] *</p>
+<p>sizeof **$A_5$=5*2=20  int [5]</p>
+<p>经过以上的分析后，可得出最终答案为：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Declare</th>
+<th align="center">sizeof $A_n$</th>
+<th align="center">sizeof *$A_n$</th>
+<th align="center">sizeof **$A_n$</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">int A1[3][5]</td>
+<td align="center">60</td>
+<td align="center">20</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td align="center">int *$A_2$[3][5]</td>
+<td align="center">120</td>
+<td align="center">40</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">int (*$A_3$)[3][5]</td>
+<td align="center">8</td>
+<td align="center">60</td>
+<td align="center">20</td>
+</tr>
+<tr>
+<td align="center">int *($A_4$[3][5])</td>
+<td align="center">120</td>
+<td align="center">40</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">int (*$A_5$[3])[5]</td>
+<td align="center">24</td>
+<td align="center">8</td>
+<td align="center">20</td>
+</tr>
+</tbody></table>
+<p>ps. $A_2$~$A_5$也可能是三维数组，此时一个指针所分配的空间长度不只是一个元素。</p>
+<p>如果$A_2$中二维数组装着的int*实际上都是new出来的长16的数组，那么为什么此时sizeof依然不变呢？</p>
+<p>对于int *a=new int[16]，a虽然被分配了64个字节大小的空间，但是sizeof并不计算这64个字节，这个a和int b[16]都是一个长16的数组，但是a的数据类型是int *只被看成一个路牌，而b的数据类型是int [16]被sizeof看成整个空间</p>
+<h2 id="延申"><a href="#延申" class="headerlink" title="延申"></a>延申</h2><p>int main()函数中其实存在参数，其完整表达形式应为int main(int argc, char **argv)。</p>
+<p>当a.cpp编译成a.exe后 可以在命令行里输入参数，例如：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">a.exe -a -s -o</span><br></pre></td></tr></table></figure>
+
+<p>此时这个时候argc是3（3个参数），argv则装着这三个参数。为什么用到了char**呢？这里举个例子：</p>
+<p>当定义一个int数组时，需要先定义长度，比如int array[100]，array其中的元素最多为100个，而且即使用不到100个位置，也占用了400byte内存。</p>
+<p>如何让使其不定长呢？先int* array = new int[16]，当想扩容时，int* temp = new int[32]，然后for循环把array复制进tmp，再array=tmp，即扩容了一倍。</p>
+<p>这种扩容<strong>不是在原来分配的地址上向周围扩容</strong>，而是新开辟一块更大空间并把原来的数据复制过去。</p>
+<p>举个例子来说，一个人有一块封地，后来被天子赐予了一块更大的封地，这块封地是在一个任意未开发的位置选取的，而不是在他原来的封地上进行扩容，因为原来的位置周围可能已经被别人占用了。</p>
+<p>那么为什么不先int array[16]，再int tmp[32]，for循环后再array=tmp呢？那是因为<strong>数组可以看成const类型的指针</strong>，初始化后就不能再修改他的值也就是指向的地址，而指针可以修改他所指向的地址。以上面的例子来说，数组就是一块预先分配好的固定的封地，而指针分配的封地是可以变的，那么先分配小封地，用满了再分配大封地就是扩容的策略。这也是C++的STL中的vector所使用的策略，vector并不需要预先定义大小，只需要push_back就可以了，当预先分配的空间满载的时候就使用另一块更大的空间，复制原数据并回收原来的空间。</p>
+<p>char**用的就是<strong>不定长的性质</strong>来代替定长的二维数组，用以有效利用内存。</p>
+<p>注意：int *a=new int[16]和int b[16]中a和b不同，前者是一个指针，导致了这样定义数组可扩容。后者是一个数组，长度是固定的，数组名的值和指针一样也是一个地址。指针和数组都指向一片地址，所以才说二者近似，但直接定义数组的空间是固定的，指针定义数组的空间是可变的，<strong>b是一个const类型的指针</strong>。</p>
+<p>同时还有另一种扩容的策略。在STL的deque中除了push_back以外还可以push_front，那么前面这种策略就不适用了。deque先预先分配一段空间，当头插数据到顶端了或者尾插数据到顶端了，deque开辟一块内存在<strong>逻辑上</strong>和原内存前后相连，而vector是<strong>物理上</strong>连续的。deque这样的方式类似于链表，将一块块内存在逻辑上串联起来。</p>
+]]></content>
+      <categories>
+        <category>CPP</category>
+      </categories>
+      <tags>
+        <tag>数组</tag>
+        <tag>指针</tag>
+      </tags>
+  </entry>
 </search>
