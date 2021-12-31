@@ -20,29 +20,27 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"foliet.com","root":"/","images":"/images","scheme":"Gemini","version":"8.6.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-<meta name="description" content="数组存储与指针问题问题 先定义$A_1$~$A_5$ 五个类型，请填写以下表格     Declare sizeof $A_n$ sizeof *$A_n$ sizeof **$A_n$    int $A_1$[3][5]      int *$A_2$[3][5]      int (*$A_3$)[3][5]      int *($A_4$[3][5])      int (*$A_5$[">
+<meta name="description" content="从Internet设计原则中汲取经验要深入理解软件工程的概念，就应该从那些经典的工程中学习，寻找共性。 从优秀工程的设计原则中思考，反思自己的项目工作中的设计方式， 回忆那些让开发变得很混乱的问题。从前人总结出的设计原则中和自己的工作对比，找出哪些是自己可以改进的，慢慢学习如何进行工程设计。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数组与指针的深度理解">
-<meta property="og:url" content="https://foliet.com/categories/CPP/%E6%95%B0%E7%BB%84%E4%B8%8E%E6%8C%87%E9%92%88%E7%9A%84%E6%B7%B1%E5%BA%A6%E7%90%86%E8%A7%A3/index.html">
+<meta property="og:title" content="从Internet设计原则中汲取经验">
+<meta property="og:url" content="https://foliet.com/categories/%E8%A7%84%E8%8C%83%E4%B8%8E%E6%A0%87%E5%87%86/%E4%BB%8EInternet%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E4%B8%AD%E6%B1%B2%E5%8F%96%E7%BB%8F%E9%AA%8C/index.html">
 <meta property="og:site_name" content="Foliet&#39;s Blog">
-<meta property="og:description" content="数组存储与指针问题问题 先定义$A_1$~$A_5$ 五个类型，请填写以下表格     Declare sizeof $A_n$ sizeof *$A_n$ sizeof **$A_n$    int $A_1$[3][5]      int *$A_2$[3][5]      int (*$A_3$)[3][5]      int *($A_4$[3][5])      int (*$A_5$[">
+<meta property="og:description" content="从Internet设计原则中汲取经验要深入理解软件工程的概念，就应该从那些经典的工程中学习，寻找共性。 从优秀工程的设计原则中思考，反思自己的项目工作中的设计方式， 回忆那些让开发变得很混乱的问题。从前人总结出的设计原则中和自己的工作对比，找出哪些是自己可以改进的，慢慢学习如何进行工程设计。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-11-15T05:38:53.000Z">
-<meta property="article:modified_time" content="2021-11-15T06:08:40.657Z">
+<meta property="article:published_time" content="2021-12-31T08:20:53.000Z">
+<meta property="article:modified_time" content="2021-12-31T08:23:24.378Z">
 <meta property="article:author" content="Foliet">
-<meta property="article:tag" content="数组">
-<meta property="article:tag" content="指针">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://foliet.com/categories/CPP/%E6%95%B0%E7%BB%84%E4%B8%8E%E6%8C%87%E9%92%88%E7%9A%84%E6%B7%B1%E5%BA%A6%E7%90%86%E8%A7%A3/">
+<link rel="canonical" href="https://foliet.com/categories/%E8%A7%84%E8%8C%83%E4%B8%8E%E6%A0%87%E5%87%86/%E4%BB%8EInternet%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E4%B8%AD%E6%B1%B2%E5%8F%96%E7%BB%8F%E9%AA%8C/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foliet.com/categories/CPP/%E6%95%B0%E7%BB%84%E4%B8%8E%E6%8C%87%E9%92%88%E7%9A%84%E6%B7%B1%E5%BA%A6%E7%90%86%E8%A7%A3/","path":"categories/CPP/数组与指针的深度理解/","title":"数组与指针的深度理解"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foliet.com/categories/%E8%A7%84%E8%8C%83%E4%B8%8E%E6%A0%87%E5%87%86/%E4%BB%8EInternet%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E4%B8%AD%E6%B1%B2%E5%8F%96%E7%BB%8F%E9%AA%8C/","path":"categories/规范与标准/从Internet设计原则中汲取经验/","title":"从Internet设计原则中汲取经验"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>数组与指针的深度理解 | Foliet's Blog</title>
+<title>从Internet设计原则中汲取经验 | Foliet's Blog</title>
   
 
 
@@ -151,7 +149,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E5%AD%98%E5%82%A8%E4%B8%8E%E6%8C%87%E9%92%88%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">数组存储与指针问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1"><span class="nav-number">1.1.1.</span> <span class="nav-text">$A_1$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-2"><span class="nav-number">1.1.2.</span> <span class="nav-text">$A_2$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-3"><span class="nav-number">1.1.3.</span> <span class="nav-text">$A_3$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-4"><span class="nav-number">1.1.4.</span> <span class="nav-text">$A_4$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-5"><span class="nav-number">1.1.5.</span> <span class="nav-text">$A_5$</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E7%94%B3"><span class="nav-number">1.2.</span> <span class="nav-text">延申</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8EInternet%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E4%B8%AD%E6%B1%B2%E5%8F%96%E7%BB%8F%E9%AA%8C"><span class="nav-number">1.</span> <span class="nav-text">从Internet设计原则中汲取经验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%9D%E8%AF%81%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.1.</span> <span class="nav-text">保证工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%9D%E6%8C%81%E7%AE%80%E5%8D%95"><span class="nav-number">1.2.</span> <span class="nav-text">保持简单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%8E%E7%A1%AE%E9%80%89%E6%8B%A9"><span class="nav-number">1.3.</span> <span class="nav-text">明确选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E5%BC%80%E5%8F%91"><span class="nav-number">1.4.</span> <span class="nav-text">模块开发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%9F%E6%9C%9B%E5%BC%82%E6%9E%84%E6%80%A7"><span class="nav-number">1.5.</span> <span class="nav-text">期望异构性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E9%9D%99%E6%80%81%E9%80%89%E9%A1%B9%E5%92%8C%E5%8F%82%E6%95%B0"><span class="nav-number">1.6.</span> <span class="nav-text">避免静态选项和参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%BB%E6%89%BE%E5%A5%BD%E7%9A%84%E8%80%8C%E4%B8%8D%E6%98%AF%E5%AE%8C%E7%BE%8E%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.7.</span> <span class="nav-text">寻找好的而不是完美的设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A5%E6%A0%BC%E5%8F%91%E9%80%81%EF%BC%8C%E5%AE%BD%E5%AE%B9%E6%8E%A5%E6%94%B6"><span class="nav-number">1.8.</span> <span class="nav-text">严格发送，宽容接收</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E8%99%91%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7"><span class="nav-number">1.9.</span> <span class="nav-text">考虑可扩展性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E8%99%91%E6%80%A7%E8%83%BD%E5%92%8C%E6%88%90%E6%9C%AC"><span class="nav-number">1.10.</span> <span class="nav-text">考虑性能和成本</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -234,7 +232,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://foliet.com/categories/CPP/%E6%95%B0%E7%BB%84%E4%B8%8E%E6%8C%87%E9%92%88%E7%9A%84%E6%B7%B1%E5%BA%A6%E7%90%86%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="https://foliet.com/categories/%E8%A7%84%E8%8C%83%E4%B8%8E%E6%A0%87%E5%87%86/%E4%BB%8EInternet%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E4%B8%AD%E6%B1%B2%E5%8F%96%E7%BB%8F%E9%AA%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -247,7 +245,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          数组与指针的深度理解
+          从Internet设计原则中汲取经验
         </h1>
 
         <div class="post-meta-container">
@@ -259,7 +257,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2021-11-15 13:38:53 / 修改时间：14:08:40" itemprop="dateCreated datePublished" datetime="2021-11-15T13:38:53+08:00">2021-11-15</time>
+      <time title="创建时间：2021-12-31 16:20:53 / 修改时间：16:23:24" itemprop="dateCreated datePublished" datetime="2021-12-31T16:20:53+08:00">2021-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -267,7 +265,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CPP/" itemprop="url" rel="index"><span itemprop="name">CPP</span></a>
+          <a href="/categories/%E8%A7%84%E8%8C%83%E4%B8%8E%E6%A0%87%E5%87%86/" itemprop="url" rel="index"><span itemprop="name">规范与标准</span></a>
         </span>
     </span>
 
@@ -286,14 +284,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.6k</span>
+      <span>988</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>1 分钟</span>
     </span>
 </div>
 
@@ -304,133 +302,20 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="数组存储与指针问题"><a href="#数组存储与指针问题" class="headerlink" title="数组存储与指针问题"></a>数组存储与指针问题</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><blockquote>
-<p>先定义$A_1$~$A_5$ 五个类型，请填写以下表格</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th align="center">Declare</th>
-<th align="center">sizeof $A_n$</th>
-<th align="center">sizeof *$A_n$</th>
-<th align="center">sizeof **$A_n$</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">int $A_1$[3][5]</td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">int *$A_2$[3][5]</td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">int (*$A_3$)[3][5]</td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">int *($A_4$[3][5])</td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">int (*$A_5$[3])[5]</td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
+        <h1 id="从Internet设计原则中汲取经验"><a href="#从Internet设计原则中汲取经验" class="headerlink" title="从Internet设计原则中汲取经验"></a>从Internet设计原则中汲取经验</h1><p>要深入理解软件工程的概念，就应该从那些经典的工程中学习，寻找共性。 从优秀工程的设计原则中思考，反思自己的项目工作中的设计方式， 回忆那些让开发变得很混乱的问题。<br>从前人总结出的设计原则中和自己的工作对比，找出哪些是自己可以改进的，慢慢学习如何进行工程设计。</p>
 <span id="more"></span>
-<h3 id="A-1"><a href="#A-1" class="headerlink" title="$A_1$"></a>$A_1$</h3><p>此为一个普通的二维数组，直接计算其sizeof即为计算其在内存中所占大小，*$A_1$为int [5]即一个长度为5的一维数组，**$A_1$为int即一个普通的int类型的数据。</p>
-<p>以下标识了对应的<strong>数据类型</strong>，数据类型的后半部分标识是数组还是指针，前半部分表示数组/指针对应元素的数据类型，在使用Visual Studio的调试功能时可以显示每个变量对应的数据类型</p>
-<p>sizeof $A_1$=3*5*4=60   int [3][5]</p>
-<p>sizeof *$A_1$=5*4=20  int [5]</p>
-<p>sizeof **$A_1$=4  int</p>
-<h3 id="A-2"><a href="#A-2" class="headerlink" title="$A_2$"></a>$A_2$</h3><p>$A_2$同时与*和[]相连，[]优先级更高，则其为一个二维数组，数组的每一个元素为int*，即指针数组（装有指针的数组）。</p>
-<p>sizeof $A_2$=3*5*8=120  int* [3][5]</p>
-<p>sizeof *$A_2$=5*8=40  int* [5]</p>
-<p>sizeof **$A_2$=8  int*</p>
-<h3 id="A-3"><a href="#A-3" class="headerlink" title="$A_3$"></a>$A_3$</h3><p>$A_3$同时与*和[]相连，但*处打了括号，故*的优先级更高，则其为一个数组指针（指向一个二维数组的指针），以下语句完全是合法的：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> b[<span class="number">3</span>][<span class="number">5</span>] = *a;</span><br></pre></td></tr></table></figure>
 
-<p><em>$A_3$的大小即是二维数组的大小，</em>*$A_3$即是一维数组的大小。</p>
-<p>sizeof $A_3$=8  int[3][5] *</p>
-<p>sizeof *$A_3$=3*5*4=60  int [3][5]</p>
-<p>sizeof **$A_3$=5*4=20  int [5]</p>
-<h3 id="A-4"><a href="#A-4" class="headerlink" title="$A_4$"></a>$A_4$</h3><p>$A_4$同时与*和[]相连，[]本身优先级更高，加上括号性质不变，即情况同$A_2$。</p>
-<p>sizeof $A_4$=3*5*8=120</p>
-<p>sizeof *$A_4$=5*8=40</p>
-<p>sizeof **$A_4$=8</p>
-<h3 id="A-5"><a href="#A-5" class="headerlink" title="$A_5$"></a>$A_5$</h3><p>(*$A_5$[3])代表$A_5$是一个长度为3的一维数组，数组的元素是指针，该指针的数据类型为int[5] *。</p>
-<p>int[5] *，代表该元素是一个指针指向了长度为5的一维数组，数组中元素的数据类型为int。$A_5$的数据类型为int[5]* [3]。</p>
-<p>sizeof $A_5$=3*8=24  int[5]* [3] （长为3的数组装着int[5]*）</p>
-<p>sizeo *$A_5$=8  int[5] *</p>
-<p>sizeof **$A_5$=5*2=20  int [5]</p>
-<p>经过以上的分析后，可得出最终答案为：</p>
-<table>
-<thead>
-<tr>
-<th align="center">Declare</th>
-<th align="center">sizeof $A_n$</th>
-<th align="center">sizeof *$A_n$</th>
-<th align="center">sizeof **$A_n$</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">int A1[3][5]</td>
-<td align="center">60</td>
-<td align="center">20</td>
-<td align="center">4</td>
-</tr>
-<tr>
-<td align="center">int *$A_2$[3][5]</td>
-<td align="center">120</td>
-<td align="center">40</td>
-<td align="center">8</td>
-</tr>
-<tr>
-<td align="center">int (*$A_3$)[3][5]</td>
-<td align="center">8</td>
-<td align="center">60</td>
-<td align="center">20</td>
-</tr>
-<tr>
-<td align="center">int *($A_4$[3][5])</td>
-<td align="center">120</td>
-<td align="center">40</td>
-<td align="center">8</td>
-</tr>
-<tr>
-<td align="center">int (*$A_5$[3])[5]</td>
-<td align="center">24</td>
-<td align="center">8</td>
-<td align="center">20</td>
-</tr>
-</tbody></table>
-<p>ps. $A_2$~$A_5$也可能是三维数组，此时一个指针所分配的空间长度不只是一个元素。</p>
-<p>如果$A_2$中二维数组装着的int*实际上都是new出来的长16的数组，那么为什么此时sizeof依然不变呢？</p>
-<p>对于int *a=new int[16]，a虽然被分配了64个字节大小的空间，但是sizeof并不计算这64个字节，这个a和int b[16]都是一个长16的数组，但是a的数据类型是int *只被看成一个路牌，而b的数据类型是int [16]被sizeof看成整个空间</p>
-<h2 id="延申"><a href="#延申" class="headerlink" title="延申"></a>延申</h2><p>int main()函数中其实存在参数，其完整表达形式应为int main(int argc, char **argv)。</p>
-<p>当a.cpp编译成a.exe后 可以在命令行里输入参数，例如：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a.exe -a -s -o</span><br></pre></td></tr></table></figure>
-
-<p>此时这个时候argc是3（3个参数），argv则装着这三个参数。为什么用到了char**呢？这里举个例子：</p>
-<p>当定义一个int数组时，需要先定义长度，比如int array[100]，array其中的元素最多为100个，而且即使用不到100个位置，也占用了400byte内存。</p>
-<p>如何让使其不定长呢？先int* array = new int[16]，当想扩容时，int* temp = new int[32]，然后for循环把array复制进tmp，再array=tmp，即扩容了一倍。</p>
-<p>这种扩容<strong>不是在原来分配的地址上向周围扩容</strong>，而是新开辟一块更大空间并把原来的数据复制过去。</p>
-<p>举个例子来说，一个人有一块封地，后来被天子赐予了一块更大的封地，这块封地是在一个任意未开发的位置选取的，而不是在他原来的封地上进行扩容，因为原来的位置周围可能已经被别人占用了。</p>
-<p>那么为什么不先int array[16]，再int tmp[32]，for循环后再array=tmp呢？那是因为<strong>数组可以看成const类型的指针</strong>，初始化后就不能再修改他的值也就是指向的地址，而指针可以修改他所指向的地址。以上面的例子来说，数组就是一块预先分配好的固定的封地，而指针分配的封地是可以变的，那么先分配小封地，用满了再分配大封地就是扩容的策略。这也是C++的STL中的vector所使用的策略，vector并不需要预先定义大小，只需要push_back就可以了，当预先分配的空间满载的时候就使用另一块更大的空间，复制原数据并回收原来的空间。</p>
-<p>char**用的就是<strong>不定长的性质</strong>来代替定长的二维数组，用以有效利用内存。</p>
-<p>注意：int *a=new int[16]和int b[16]中a和b不同，前者是一个指针，导致了这样定义数组可扩容。后者是一个数组，长度是固定的，数组名的值和指针一样也是一个地址。指针和数组都指向一片地址，所以才说二者近似，但直接定义数组的空间是固定的，指针定义数组的空间是可变的，<strong>b是一个const类型的指针</strong>。</p>
-<p>同时还有另一种扩容的策略。在STL的deque中除了push_back以外还可以push_front，那么前面这种策略就不适用了。deque先预先分配一段空间，当头插数据到顶端了或者尾插数据到顶端了，deque开辟一块内存在<strong>逻辑上</strong>和原内存前后相连，而vector是<strong>物理上</strong>连续的。deque这样的方式类似于链表，将一块块内存在逻辑上串联起来。</p>
-
+<p>Internet最重要的设计原则包括以下十点</p>
+<h2 id="保证工作"><a href="#保证工作" class="headerlink" title="保证工作"></a>保证工作</h2><blockquote>
+<p>直到多个原型系统成功地与对方相互通信，方可完成设计或者确定标准。设计者常常首先写出一个1000页的标准，并获得批准，过后才发现存在严重的缺陷，根本无法工作。然后他们再编写一个1.1版本的标准。这不是正确的工作方式。</p>
+</blockquote>
+<p>在建立标准前应该先测试一下可行性，有的时候我会认为自己的想法非常容易实现，甚至简单到没必要测试，<br>等到了实际开发的时候，特别是在实现那些我认为是细枝末节的地方时，发现这个地方的逻辑有问题，根本不可能实现。</p>
+<p>比如说我在设计数据库的表关系时，有order和user两个实体，每个user有很多order。<br>依据数据库设计三大范式，我在order的表里添加了user_id来建立映射关系，这听起来非常正确，所以我在最初以此作为标准进行开发。</p>
+<p>根据这个想法我实现了后端的功能，但是当我回到前端开发时，意识到我在前端需要显示每个订单对应的用户的名字。<br>在不改变后端代码的情况下，想要实现这个功能必须向后端发送大量的包来进行查询每个user_id对应的user，再把用户名给读取出来，这显然是效率低下的！</p>
+<p>于是我只能选择去重构后端（我前面举的例子是实际问题的简化，实际情况还要再复杂一点），而如果一开始先好好思考可行性并推敲好使用流程就可以避免类似的麻烦。</p>
+<p>上述问题在<strong>保证工作</strong>这个原则下的启示是，应该先尝试着将一条order的信息展示出来，再将标准确定下来。即使自己觉得逻辑非常清晰，也应该好好的从头开始捋一捋流程，避免忽略不切实际的设计。<br>就好像是高中的导数题，拿到题一看迅速的对应上了解题模型，觉得这道题非常简单，等到实际做起来发现好像和不是同一个类型的题。它很像曾经做过的某题，但是解题方法并不一样。<br>而发现这个问题时只能推倒重做。</p>
+<p><strong>这个原则不是要否定那些逻辑并不足够严谨的假设，而是警告设计者不要想当然地认为某些东西应该是对的</strong></p>
+<h2 id="保持简单"><a href="#保持简单" class="headerlink" title="保持简单"></a>保持简单</h2><h2 id="明确选择"><a href="#明确选择" class="headerlink" title="明确选择"></a>明确选择</h2><h2 id="模块开发"><a href="#模块开发" class="headerlink" title="模块开发"></a>模块开发</h2><h2 id="期望异构性"><a href="#期望异构性" class="headerlink" title="期望异构性"></a>期望异构性</h2><h2 id="避免静态选项和参数"><a href="#避免静态选项和参数" class="headerlink" title="避免静态选项和参数"></a>避免静态选项和参数</h2><h2 id="寻找好的而不是完美的设计"><a href="#寻找好的而不是完美的设计" class="headerlink" title="寻找好的而不是完美的设计"></a>寻找好的而不是完美的设计</h2><h2 id="严格发送，宽容接收"><a href="#严格发送，宽容接收" class="headerlink" title="严格发送，宽容接收"></a>严格发送，宽容接收</h2><h2 id="考虑可扩展性"><a href="#考虑可扩展性" class="headerlink" title="考虑可扩展性"></a>考虑可扩展性</h2><h2 id="考虑性能和成本"><a href="#考虑性能和成本" class="headerlink" title="考虑性能和成本"></a>考虑性能和成本</h2>
     </div>
 
     
@@ -438,20 +323,16 @@
     
 
     <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E6%95%B0%E7%BB%84/" rel="tag"><i class="fa fa-tag"></i> 数组</a>
-              <a href="/tags/%E6%8C%87%E9%92%88/" rel="tag"><i class="fa fa-tag"></i> 指针</a>
-          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
+                <a href="/categories/CPP/%E6%95%B0%E7%BB%84%E4%B8%8E%E6%8C%87%E9%92%88%E7%9A%84%E6%B7%B1%E5%BA%A6%E7%90%86%E8%A7%A3/" rel="prev" title="数组与指针的深度理解">
+                  <i class="fa fa-chevron-left"></i> 数组与指针的深度理解
+                </a>
             </div>
             <div class="post-nav-item">
-                <a href="/categories/%E8%A7%84%E8%8C%83%E4%B8%8E%E6%A0%87%E5%87%86/%E4%BB%8EInternet%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E4%B8%AD%E6%B1%B2%E5%8F%96%E7%BB%8F%E9%AA%8C/" rel="next" title="从Internet设计原则中汲取经验">
-                  从Internet设计原则中汲取经验 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -527,7 +408,7 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Foliet","repo":"Blog-comment","client_id":"e92cefb8c9c4246908b0","client_secret":"6cb98c583fc32a5f16c51db0c1831262dda5711c","admin_user":"Foliet","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"2788e61bed8c5bfcfb2070064b585ea3"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Foliet","repo":"Blog-comment","client_id":"e92cefb8c9c4246908b0","client_secret":"6cb98c583fc32a5f16c51db0c1831262dda5711c","admin_user":"Foliet","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"eefd9788a84a5a6bc455ff835afca74a"}</script>
 <script src="/js/third-party/comments/gitalk.js"></script>
 
 </body>
