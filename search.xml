@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>从Internet设计原则中汲取经验</title>
-    <url>/categories/%E8%A7%84%E8%8C%83%E4%B8%8E%E6%A0%87%E5%87%86/%E4%BB%8EInternet%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E4%B8%AD%E6%B1%B2%E5%8F%96%E7%BB%8F%E9%AA%8C/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="从Internet设计原则中汲取经验"><a href="#从Internet设计原则中汲取经验" class="headerlink" title="从Internet设计原则中汲取经验"></a>从Internet设计原则中汲取经验</h1><p>要深入理解软件工程的概念，就应该从那些经典的工程中学习，寻找共性。 从优秀工程的设计原则中思考，反思自己的项目工作中的设计方式， 回忆那些让开发变得很混乱的问题。<br>从前人总结出的设计原则中和自己的工作对比，找出哪些是自己可以改进的，慢慢学习如何进行工程设计。</p>
-<span id="more"></span>
-
-<p>Internet最重要的设计原则包括以下十点</p>
-<h2 id="保证工作"><a href="#保证工作" class="headerlink" title="保证工作"></a>保证工作</h2><blockquote>
-<p>直到多个原型系统成功地与对方相互通信，方可完成设计或者确定标准。设计者常常首先写出一个1000页的标准，并获得批准，过后才发现存在严重的缺陷，根本无法工作。然后他们再编写一个1.1版本的标准。这不是正确的工作方式。</p>
-</blockquote>
-<p>在建立标准前应该先测试一下可行性，有的时候我会认为自己的想法非常容易实现，甚至简单到没必要测试，<br>等到了实际开发的时候，特别是在实现那些我认为是细枝末节的地方时，发现这个地方的逻辑有问题，根本不可能实现。</p>
-<p>比如说我在设计数据库的表关系时，有order和user两个实体，每个user有很多order。<br>依据数据库设计三大范式，我在order的表里添加了user_id来建立映射关系，这听起来非常正确，所以我在最初以此作为标准进行开发。</p>
-<p>根据这个想法我实现了后端的功能，但是当我回到前端开发时，意识到我在前端需要显示每个订单对应的用户的名字。<br>在不改变后端代码的情况下，想要实现这个功能必须向后端发送大量的包来进行查询每个user_id对应的user，再把用户名给读取出来，这显然是效率低下的！</p>
-<p>于是我只能选择去重构后端（我前面举的例子是实际问题的简化，实际情况还要再复杂一点），而如果一开始先好好思考可行性并推敲好使用流程就可以避免类似的麻烦。</p>
-<p>上述问题在<strong>保证工作</strong>这个原则下的启示是，应该先尝试着将一条order的信息展示出来，再将标准确定下来。即使自己觉得逻辑非常清晰，也应该好好的从头开始捋一捋流程，避免忽略不切实际的设计。<br>就好像是高中的导数题，拿到题一看迅速的对应上了解题模型，觉得这道题非常简单，等到实际做起来发现好像和不是同一个类型的题。它很像曾经做过的某题，但是解题方法并不一样。<br>而发现这个问题时只能推倒重做。</p>
-<p><strong>这个原则不是要否定那些逻辑并不足够严谨的假设，而是警告设计者不要想当然地认为某些东西应该是对的</strong></p>
-<h2 id="保持简单"><a href="#保持简单" class="headerlink" title="保持简单"></a>保持简单</h2><h2 id="明确选择"><a href="#明确选择" class="headerlink" title="明确选择"></a>明确选择</h2><h2 id="模块开发"><a href="#模块开发" class="headerlink" title="模块开发"></a>模块开发</h2><h2 id="期望异构性"><a href="#期望异构性" class="headerlink" title="期望异构性"></a>期望异构性</h2><h2 id="避免静态选项和参数"><a href="#避免静态选项和参数" class="headerlink" title="避免静态选项和参数"></a>避免静态选项和参数</h2><h2 id="寻找好的而不是完美的设计"><a href="#寻找好的而不是完美的设计" class="headerlink" title="寻找好的而不是完美的设计"></a>寻找好的而不是完美的设计</h2><h2 id="严格发送，宽容接收"><a href="#严格发送，宽容接收" class="headerlink" title="严格发送，宽容接收"></a>严格发送，宽容接收</h2><h2 id="考虑可扩展性"><a href="#考虑可扩展性" class="headerlink" title="考虑可扩展性"></a>考虑可扩展性</h2><h2 id="考虑性能和成本"><a href="#考虑性能和成本" class="headerlink" title="考虑性能和成本"></a>考虑性能和成本</h2>]]></content>
-      <categories>
-        <category>规范与标准</category>
-      </categories>
-  </entry>
-  <entry>
     <title>数组与指针的深度理解</title>
     <url>/categories/CPP/%E6%95%B0%E7%BB%84%E4%B8%8E%E6%8C%87%E9%92%88%E7%9A%84%E6%B7%B1%E5%BA%A6%E7%90%86%E8%A7%A3/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="数组存储与指针问题"><a href="#数组存储与指针问题" class="headerlink" title="数组存储与指针问题"></a>数组存储与指针问题</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><blockquote>
@@ -158,5 +137,26 @@
         <tag>数组</tag>
         <tag>指针</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>从Internet设计原则中汲取经验</title>
+    <url>/categories/%E8%A7%84%E8%8C%83%E4%B8%8E%E6%A0%87%E5%87%86/%E4%BB%8EInternet%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E4%B8%AD%E6%B1%B2%E5%8F%96%E7%BB%8F%E9%AA%8C/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="从Internet设计原则中汲取经验"><a href="#从Internet设计原则中汲取经验" class="headerlink" title="从Internet设计原则中汲取经验"></a>从Internet设计原则中汲取经验</h1><p>要深入理解软件工程的概念，就应该从那些经典的工程中学习，寻找共性。 从优秀工程的设计原则中思考，反思自己的项目工作中的设计方式， 回忆那些让开发变得很混乱的问题。<br>从前人总结出的设计原则中和自己的工作对比，找出哪些是自己可以改进的，慢慢学习如何进行工程设计。</p>
+<span id="more"></span>
+
+<p>Internet最重要的设计原则包括以下十点</p>
+<h2 id="保证工作"><a href="#保证工作" class="headerlink" title="保证工作"></a>保证工作</h2><blockquote>
+<p>直到多个原型系统成功地与对方相互通信，方可完成设计或者确定标准。设计者常常首先写出一个1000页的标准，并获得批准，过后才发现存在严重的缺陷，根本无法工作。然后他们再编写一个1.1版本的标准。这不是正确的工作方式。</p>
+</blockquote>
+<p>在建立标准前应该先测试一下可行性，有的时候我会认为自己的想法非常容易实现，甚至简单到没必要测试，<br>等到了实际开发的时候，特别是在实现那些我认为是细枝末节的地方时，发现这个地方的逻辑有问题，根本不可能实现。</p>
+<p>比如说我在设计数据库的表关系时，有order和user两个实体，每个user有很多order。<br>依据数据库设计三大范式，我在order的表里添加了user_id来建立映射关系，这听起来非常正确，所以我在最初以此作为标准进行开发。</p>
+<p>根据这个想法我实现了后端的功能，但是当我回到前端开发时，意识到我在前端需要显示每个订单对应的用户的名字。<br>在不改变后端代码的情况下，想要实现这个功能必须向后端发送大量的包来进行查询每个user_id对应的user，再把用户名给读取出来，这显然是效率低下的！</p>
+<p>于是我只能选择去重构后端（我前面举的例子是实际问题的简化，实际情况还要再复杂一点），而如果一开始先好好思考可行性并推敲好使用流程就可以避免类似的麻烦。</p>
+<p>上述问题在<strong>保证工作</strong>这个原则下的启示是，应该先尝试着将一条order的信息展示出来，再将标准确定下来。即使自己觉得逻辑非常清晰，也应该好好的从头开始捋一捋流程，避免忽略不切实际的设计。<br>就好像是高中的导数题，拿到题一看迅速的对应上了解题模型，觉得这道题非常简单，等到实际做起来发现好像和不是同一个类型的题。它很像曾经做过的某题，但是解题方法并不一样。<br>而发现这个问题时只能推倒重做。</p>
+<p><strong>这个原则不是要否定那些逻辑并不足够严谨的假设，而是警告设计者不要想当然地认为某些东西应该是对的</strong></p>
+<h2 id="保持简单"><a href="#保持简单" class="headerlink" title="保持简单"></a>保持简单</h2><h2 id="明确选择"><a href="#明确选择" class="headerlink" title="明确选择"></a>明确选择</h2><h2 id="模块开发"><a href="#模块开发" class="headerlink" title="模块开发"></a>模块开发</h2><h2 id="期望异构性"><a href="#期望异构性" class="headerlink" title="期望异构性"></a>期望异构性</h2><h2 id="避免静态选项和参数"><a href="#避免静态选项和参数" class="headerlink" title="避免静态选项和参数"></a>避免静态选项和参数</h2><h2 id="寻找好的而不是完美的设计"><a href="#寻找好的而不是完美的设计" class="headerlink" title="寻找好的而不是完美的设计"></a>寻找好的而不是完美的设计</h2><h2 id="严格发送，宽容接收"><a href="#严格发送，宽容接收" class="headerlink" title="严格发送，宽容接收"></a>严格发送，宽容接收</h2><h2 id="考虑可扩展性"><a href="#考虑可扩展性" class="headerlink" title="考虑可扩展性"></a>考虑可扩展性</h2><h2 id="考虑性能和成本"><a href="#考虑性能和成本" class="headerlink" title="考虑性能和成本"></a>考虑性能和成本</h2>]]></content>
+      <categories>
+        <category>规范与标准</category>
+      </categories>
   </entry>
 </search>
