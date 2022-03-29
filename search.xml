@@ -65,6 +65,80 @@
       </categories>
   </entry>
   <entry>
+    <title>MIT6.s081操作系统实验——环境搭建</title>
+    <url>/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6-S081%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E9%AA%8C%E2%80%94%E2%80%94%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在做过各种语言的项目，对网站架构和职业要求有一个基础认知后，我认为要在卷翻天的职场立足，在了解并能使用前沿技术的同时还得打好计算机基础，所以痛下决心重拾大二摸鱼过去的OS实验。</p>
+<p>2018年及以前MIT6.828是MIT的本科生OS课程，2019开始这门课被拆成了6.s081和6.828，分别成为本科生和研究生的OS课程。6.s081的实验由原来的5个拆成了10个，总体难度降低，更加易于基础并不牢固的学生学习。</p>
+<p>课程链接<a href="https://pdos.csail.mit.edu/6.828/2021/">6.S081 / Fall 2021 (mit.edu)</a></p>
+<p>我将记录2021年课程的实验全过程，下文是运行环境以及<strong>调试环境</strong>搭建的记录，着重记录<strong>如何使用CLion进行远程开发以及远程调试</strong>，这在网上很难找到相应资料。（非常佩服能使用原始gdb进行调试的人，已经是一个离不开ide的一键跳转，自动补全，集成调试的废物了）</p>
+<span id="more"></span>
+
+<h1 id="安装虚拟机以及必要工具下载"><a href="#安装虚拟机以及必要工具下载" class="headerlink" title="安装虚拟机以及必要工具下载"></a>安装虚拟机以及必要工具下载</h1><p>课程的文档里有各个平台的安装教程，本文以VMware Workstation Pro 16中安装Ubuntu20.04.4 Server作为基础环境。</p>
+<p>课程原文 <a href="https://pdos.csail.mit.edu/6.828/2021/tools.html">6.S081 / Fall 2021 (mit.edu)</a></p>
+<p>安装虚拟机可以在百度上找到很多教程，这里不再赘述，仅放出下载链接</p>
+<ul>
+<li><p><a href="https://www.vmware.com/cn/products/workstation-pro/workstation-pro-evaluation.html">下载 VMware Workstation Pro | CN</a></p>
+</li>
+<li><p><a href="https://cn.ubuntu.com/download/server/step1">获取Ubuntu服务器版 | Ubuntu</a>   我下载的是Server版，只有命令行没有桌面，更喜爱桌面版可以自行下载</p>
+</li>
+</ul>
+<p>安装完成并启动虚拟机后输入以下命令下载必要工具，主要是c/c++编译工具集，riscv64架构的gnu工具集，qemu虚拟机，git，适用于riscv64架构的gdb。（本课程使用的操作系统为xv6，是一个基于riscv64架构的小型教学向OS）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-get install git build-essential gdb-multiarch qemu-system-misc gcc-riscv64-linux-gnu binutils-riscv64-linux-gnu </span><br></pre></td></tr></table></figure>
+
+<p>直接下载可能会过于缓慢，如果太慢了请先替换apt源为国内源，这里使用的是阿里源，网上教程有很多。</p>
+<h1 id="下载xv6的git仓库"><a href="#下载xv6的git仓库" class="headerlink" title="下载xv6的git仓库"></a>下载xv6的git仓库</h1><p>在用户文件夹下输入以下命令下载课程的xv6源码，注意<strong>不要下载xv6的官方源码而是下载课程改动过的源码</strong>，对改动内容感兴趣的话可以使用<code>git log</code>查看改动内容。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone git://g.csail.mit.edu/xv6-labs-2021</span><br></pre></td></tr></table></figure>
+
+<p>下载速度可能很缓慢，可以直接从我的git仓库fork一份或直接clone。<a href="https://github.com/Foliet/MIT-6.s081">Foliet/MIT-6.s081 (github.com)</a></p>
+<p>我仓库my开头的分支是我自己完成后代码。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone git@github.com:Foliet/MIT-6.s081.git #ssh</span><br><span class="line">git clone https://github.com/Foliet/MIT-6.s081.git #https</span><br></pre></td></tr></table></figure>
+
+<p>先进入文件夹内，然后输入以下两条命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git checkout util</span><br><span class="line">make qemu</span><br></pre></td></tr></table></figure>
+
+<p>看到如下输出即为启动成功，一切顺利，否则按照课程原文说明逐个工具检查是否下载成功。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">riscv64-unknown-elf-gcc    -c -o kernel/entry.o kernel/entry.S</span><br><span class="line">riscv64-unknown-elf-gcc -Wall -Werror -O -fno-omit-frame-pointer -ggdb -DSOL_UTIL -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -mno-relax -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/start.o kernel/start.c</span><br><span class="line">...  </span><br><span class="line">riscv64-unknown-elf-ld -z max-page-size=4096 -N -e main -Ttext 0 -o user/_zombie user/zombie.o user/ulib.o user/usys.o user/printf.o user/umalloc.o</span><br><span class="line">riscv64-unknown-elf-objdump -S user/_zombie &gt; user/zombie.asm</span><br><span class="line">riscv64-unknown-elf-objdump -t user/_zombie | sed &#x27;1,/SYMBOL TABLE/d; s/ .* / /; /^$/d&#x27; &gt; user/zombie.sym</span><br><span class="line">mkfs/mkfs fs.img README  user/xargstest.sh user/_cat user/_echo user/_forktest user/_grep user/_init user/_kill user/_ln user/_ls user/_mkdir user/_rm user/_sh user/_stressfs user/_usertests user/_grind user/_wc user/_zombie </span><br><span class="line">nmeta 46 (boot, super, log blocks 30 inode blocks 13, bitmap blocks 1) blocks 954 total 1000</span><br><span class="line">balloc: first 591 blocks have been allocated</span><br><span class="line">balloc: write bitmap block at sector 45</span><br><span class="line">qemu-system-riscv64 -machine virt -bios none -kernel kernel/kernel -m 128M -smp 3 -nographic -drive file=fs.img,if=none,format=raw,id=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0</span><br><span class="line"></span><br><span class="line">xv6 kernel is booting</span><br><span class="line"></span><br><span class="line">hart 2 starting</span><br><span class="line">hart 1 starting</span><br><span class="line">init: starting sh</span><br><span class="line"><span class="meta">$</span><span class="bash"> </span></span><br></pre></td></tr></table></figure>
+
+<h1 id="配置Ubuntu的ssh服务器"><a href="#配置Ubuntu的ssh服务器" class="headerlink" title="配置Ubuntu的ssh服务器"></a>配置Ubuntu的ssh服务器</h1><p>输入<code>ls /etc/ssh</code>命令查看是否有<code>sshd_config</code>这个文件，如果没有则输入<code>apt-get install openssh-server</code>下载。</p>
+<p>将<code>sshd_config</code>中的PermitRootLogin的#号去掉，并将值改为yes。</p>
+<p>输入<code>sudo su</code>进入root用户模式，然后输入<code>passwd</code>为root用户设置一个密码。</p>
+<p>完成后在物理机上打开一个shell，输入以下命令尝试连接虚拟机。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh root@&#123;你的虚拟机ip&#125;</span><br><span class="line">ssh root@192.168.126.128 # 比如这样</span><br></pre></td></tr></table></figure>
+
+<p>如果不成功请转向百度找问题，搜索<strong>“以root用户连接ssh服务器”</strong>应该能找到很多教程。</p>
+<h1 id="在CLion上连接虚拟机"><a href="#在CLion上连接虚拟机" class="headerlink" title="在CLion上连接虚拟机"></a>在CLion上连接虚拟机</h1><p>CLion是jetbrains公司面向c/c++的ide，<strong>通过学生优惠可以免费获取全家桶的一年通行证，并且在校期间可以无限续，只需要有edu的邮箱就行了</strong>，请转向百度搜索如何获得学生优惠。</p>
+<h2 id="配置工具链"><a href="#配置工具链" class="headerlink" title="配置工具链"></a>配置工具链</h2><p>打开<strong>设置</strong>，选择<strong>构建、执行、部署</strong>，选择<strong>工具链</strong>，点上方加号➕添加一个远程主机，添加一个ssh凭据并手动输入gdb-multiarch的路径来替代默认gdb。</p>
+<p><img src="https://s2.loli.net/2022/03/29/1rWfZYPtheDXa9x.png" alt="image-20220329105815490"></p>
+<p>我这里是下了cmake，不下cmake也没关系，只需要管<strong>凭据</strong>和<strong>调试器</strong>。</p>
+<h2 id="配置部署服务器"><a href="#配置部署服务器" class="headerlink" title="配置部署服务器"></a>配置部署服务器</h2><p>点击上方<strong>工具</strong>，选择<strong>部署</strong>，点击<strong>配置</strong>，填好映射路径。</p>
+<p><img src="https://s2.loli.net/2022/03/29/1U4cAjmp2x89Gqf.png" alt="image-20220329130436272"></p>
+<p>然后依次点<strong>工具</strong>、<strong>部署</strong>、<strong>浏览远程主机</strong>，就可以管理虚拟机的文件了。</p>
+<p>删除项目内初始的文件，右键项目文件夹，点击部署，然后就可以与虚拟机内的xv6文件夹进行同步了。</p>
+<h2 id="添加调试配置"><a href="#添加调试配置" class="headerlink" title="添加调试配置"></a>添加调试配置</h2><p>在右上角打开<strong>运行/调试配置</strong>，添加一个<strong>远程调试</strong>的配置。</p>
+<p><img src="https://s2.loli.net/2022/03/29/f4ZpBogFPX83tIl.png" alt="image-20220329124021990"></p>
+<p>课程内的gdb服务器默认使用25000端口。</p>
+<p>执行<code>make</code>后会对内核程序和和每个用户程序各生成一个符号文件，内核的符号文件就叫kernel，用户程序的符号文件为_{程序名}，例如ls的符号文件为_ls。</p>
+<h2 id="设置-gdbinit"><a href="#设置-gdbinit" class="headerlink" title="设置.gdbinit"></a>设置.gdbinit</h2><p>在/root文件夹下创建一个名为.gdbinit的文件</p>
+<p>向里面填入如下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">set confirm off</span><br><span class="line">set architecture riscv:rv64</span><br><span class="line">file kernel/kernel</span><br><span class="line">add-symbol-file user/_ls</span><br><span class="line">set disassemble-next-line auto</span><br><span class="line">set riscv use-compressed-breakpoints yes</span><br></pre></td></tr></table></figure>
+
+<p>这里是调试ls，如果要调试自己写的程序，比如说myproc，就添加一行<code>add-symbol-file user/_myproc</code>。</p>
+<h2 id="启动调试服务器"><a href="#启动调试服务器" class="headerlink" title="启动调试服务器"></a>启动调试服务器</h2><p>在虚拟机的xv6文件夹下输入<code>make qemu-gdb</code>来启动gdb服务器，如遇到错误可以尝试<code>make clean</code>来清除之前make生成的文件，shell输出以下内容即为开启成功。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">*** Now run &#x27;gdb&#x27; in another window.</span><br><span class="line">qemu-system-riscv64 -machine virt -bios none -kernel kernel/kernel -m 128M -smp 3 -nographic -drive file=fs.img,if=none,format=raw,id=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0 -S -gdb tcp::25000</span><br></pre></td></tr></table></figure>
+
+<p>如果显示25000端口已被占用或者文件fs.img被占用，应该是上一次运行没有正确退出，请自行百度查找如何根据占用端口或者文件获取pid，然后kill掉。</p>
+<h2 id="开始调试"><a href="#开始调试" class="headerlink" title="开始调试"></a>开始调试</h2><p>点击CLion右上角调试按钮开始调试ls，下方会显示连接成功，然后回到shell会发现可以输入命令了，此时我输入<code>ls grep</code>，成功触发断点。</p>
+<p><img src="https://s2.loli.net/2022/03/29/dE2UWb5O3a6RSvo.png" alt="image-20220329131621170"></p>
+<h2 id="xv6相关"><a href="#xv6相关" class="headerlink" title="xv6相关"></a>xv6相关</h2><p>xv6没有实现ps程序，要列出进程可以在xv6的终端里中输入<code>ctrl+p</code>，关闭xv6先按<code>ctrl+a</code>再按<code>x</code>。</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>MIT6.S081</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数组与指针的深度理解</title>
     <url>/categories/CPP/%E6%95%B0%E7%BB%84%E4%B8%8E%E6%8C%87%E9%92%88%E7%9A%84%E6%B7%B1%E5%BA%A6%E7%90%86%E8%A7%A3/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="数组存储与指针问题"><a href="#数组存储与指针问题" class="headerlink" title="数组存储与指针问题"></a>数组存储与指针问题</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><blockquote>
