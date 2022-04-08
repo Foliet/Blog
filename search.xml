@@ -14,7 +14,7 @@
 
 <h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><ul>
 <li>观察<em>user</em>文件夹下的<em>grep.c</em>等文件来学习命令行参数如何传入程序。</li>
-<li>将<em>sleep</em>程序添加进<em>Makefile</em>文件中的<em>UPROGS</em>。（添加完后点击Makefile右上角图标重新加载Makefile项目才能将sleep.c加入索引）</li>
+<li>将<em>sleep</em>程序添加进<em>Makefile</em>文件中的<em>UPROGS</em>。（添加完后点击<em>Makefile</em>右上角图标重新加载<em>Makefile</em>项目才能将<em>sleep.c</em>加入索引）</li>
 <li>在用户没有给出<em>sleep</em>的参数时打印错误信息。</li>
 <li>使用<code>atoi</code>函数将命令行参数由字符串转为整形。</li>
 <li>确保<code>main</code>函数调用了<code>exit</code>函数来退出程序。</li>
@@ -25,7 +25,7 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make qemu</span><br><span class="line">...</span><br><span class="line">init: starting sh</span><br><span class="line">$ pingpong</span><br><span class="line">4: received ping</span><br><span class="line">3: received pong</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
 
 <h2 id="提示-1"><a href="#提示-1" class="headerlink" title="提示"></a>提示</h2><ul>
-<li>使用<code>pipe</code>建立管道。<a href="https://blog.csdn.net/qq_35433716/article/details/86171936">Linux系统编程pipe()</a></li>
+<li>使用<code>pipe</code>建立管道，关于管道请面向百度学习。<a href="https://blog.csdn.net/qq_35433716/article/details/86171936">Linux系统编程pipe()</a></li>
 <li>使用<code>fork</code>创建子进程。</li>
 <li>使用<code>read</code>和<code>write</code>对管道进行读和写。</li>
 <li>使用<code>getpid</code>获取当前进程的pid。</li>
@@ -35,7 +35,7 @@
 <h1 id="primes-moderate-hard"><a href="#primes-moderate-hard" class="headerlink" title="primes(moderate/hard)"></a>primes(moderate/hard)</h1><h2 id="任务-2"><a href="#任务-2" class="headerlink" title="任务"></a>任务</h2><p>使用管道写一个并发版本的素数筛来找出2~35中的素数。</p>
 <p>相关链接<a href="https://swtch.com/~rsc/thread/">Bell Labs and CSP Threads (swtch.com)</a></p>
 <p>概念图：</p>
-<p><img src="https://s2.loli.net/2022/04/05/1gfBPmyOSnMvtCl.gif" alt="img"></p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/1gfBPmyOSnMvtCl.gif" alt="img"></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make qemu</span><br><span class="line">...</span><br><span class="line">init: starting sh</span><br><span class="line">$ primes</span><br><span class="line">prime 2</span><br><span class="line">prime 3</span><br><span class="line">prime 5</span><br><span class="line">prime 7</span><br><span class="line">prime 11</span><br><span class="line">prime 13</span><br><span class="line">prime 17</span><br><span class="line">prime 19</span><br><span class="line">prime 23</span><br><span class="line">prime 29</span><br><span class="line">prime 31</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
 
 <h2 id="提示-2"><a href="#提示-2" class="headerlink" title="提示"></a>提示</h2><ul>
@@ -47,12 +47,12 @@
 </li>
 <li><p>当一个管道的写端被关闭时，对读端进行<code>read</code>会返回0。</p>
 </li>
-<li><p>写入所有数字后<strong>再写入一个0来表示写入完毕</strong>，否则子进程无法知道父进程是否写入完毕。</p>
+<li><p>写入所有数字后<strong>再写入一个0来表示写入完毕</strong>，否则子进程无法知道父进程是否写入完毕。采取这种做法是因为执行了<code>fork</code>后父进程才关闭管道写端，子进程并不能感应到管道写端已经关闭了。</p>
 </li>
 </ul>
 <h2 id="源码-2"><a href="#源码-2" class="headerlink" title="源码"></a>源码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//primes.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> p1[<span class="number">2</span>];</span><br><span class="line">    pipe(p1);</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">2</span>; i &lt;= <span class="number">35</span>; i++) &#123;</span><br><span class="line">        write(p1[<span class="number">1</span>], &amp;i, <span class="keyword">sizeof</span>(i));</span><br><span class="line">    &#125;</span><br><span class="line">    i = <span class="number">0</span>;</span><br><span class="line">    write(p1[<span class="number">1</span>], &amp;i, <span class="keyword">sizeof</span>(i));</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> n, prime, p2[<span class="number">2</span>];</span><br><span class="line">        pipe(p2);</span><br><span class="line">        read(p1[<span class="number">0</span>], &amp;prime, <span class="keyword">sizeof</span>(prime));</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;prime %d\n&quot;</span>, prime);</span><br><span class="line">        <span class="keyword">if</span> (read(p1[<span class="number">0</span>], &amp;n, <span class="keyword">sizeof</span>(n)) &amp;&amp; n) &#123;</span><br><span class="line">            <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">//子进程会复制一遍父进程的两个管道，其中父进程用来与祖父进程交流的管道应该被关闭</span></span><br><span class="line">                close(p1[<span class="number">0</span>]);</span><br><span class="line">                close(p1[<span class="number">1</span>]);</span><br><span class="line">                p1[<span class="number">0</span>] = p2[<span class="number">0</span>];</span><br><span class="line">                p1[<span class="number">1</span>] = p2[<span class="number">1</span>];</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">do</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (n % prime != <span class="number">0</span>)</span><br><span class="line">                    write(p2[<span class="number">1</span>], &amp;n, <span class="keyword">sizeof</span>(n));</span><br><span class="line">            &#125; <span class="keyword">while</span> (read(p1[<span class="number">0</span>], &amp;n, <span class="keyword">sizeof</span>(n)) &amp;&amp; n);</span><br><span class="line">            write(p2[<span class="number">1</span>], &amp;n, <span class="keyword">sizeof</span>(n));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//关闭占用的管道</span></span><br><span class="line">        close(p1[<span class="number">0</span>]);</span><br><span class="line">        close(p1[<span class="number">1</span>]);</span><br><span class="line">        close(p2[<span class="number">0</span>]);</span><br><span class="line">        close(p2[<span class="number">1</span>]);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    wait(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="find-moderate"><a href="#find-moderate" class="headerlink" title="find(moderate)"></a>find(moderate)</h1><h2 id="任务-3"><a href="#任务-3" class="headerlink" title="任务"></a>任务</h2><p>写一个简单版本的UNIX find程序，<code>ls path filename</code>为寻找目录path下所有文件名为filename的文件并输出。</p>
+<h1 id="find-moderate"><a href="#find-moderate" class="headerlink" title="find(moderate)"></a>find(moderate)</h1><h2 id="任务-3"><a href="#任务-3" class="headerlink" title="任务"></a>任务</h2><p>写一个简单版本的UNIX find程序，<code>ls path filename</code>为寻找目录<em>path</em>下所有文件名为<em>filename</em>的文件并输出。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make qemu</span><br><span class="line">...</span><br><span class="line">init: starting sh</span><br><span class="line">$ <span class="built_in">echo</span> &gt; b</span><br><span class="line">$ mkdir a</span><br><span class="line">$ <span class="built_in">echo</span> &gt; a/b</span><br><span class="line">$ find . b</span><br><span class="line">./b</span><br><span class="line">./a/b</span><br><span class="line">$ </span><br></pre></td></tr></table></figure>
 
 <h2 id="提示-3"><a href="#提示-3" class="headerlink" title="提示"></a>提示</h2><ul>
@@ -63,9 +63,9 @@
 </ul>
 <h2 id="源码-3"><a href="#源码-3" class="headerlink" title="源码"></a>源码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//find.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;kernel/stat.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;user/user.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;kernel/fs.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;kernel/fcntl.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> *target;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*读取path中的文件名*/</span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *</span></span><br><span class="line"><span class="function"><span class="title">filename</span><span class="params">(<span class="keyword">char</span> *path)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *p = path;</span><br><span class="line">    <span class="keyword">while</span> (*p)</span><br><span class="line">        p++;</span><br><span class="line">    <span class="keyword">while</span> (*p != <span class="string">&#x27;/&#x27;</span> &amp;&amp; p != path)</span><br><span class="line">        p--;</span><br><span class="line">    <span class="keyword">return</span> p == path ? p : ++p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span></span></span><br><span class="line"><span class="function"><span class="title">find</span><span class="params">(<span class="keyword">char</span> *path)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">st</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> <span class="title">de</span>;</span></span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">512</span>], *p;</span><br><span class="line">    <span class="keyword">if</span> ((fd = open(path, O_RDONLY)) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="number">2</span>, <span class="string">&quot;find: cannot open %s\n&quot;</span>, path);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (fstat(fd, &amp;st) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="number">2</span>, <span class="string">&quot;find: cannot stat %s\n&quot;</span>, path);</span><br><span class="line">        close(fd);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span> (st.type) &#123;</span><br><span class="line">        <span class="keyword">case</span> T_FILE:</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">strcmp</span>(filename(path), target) == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, path);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> T_DIR:</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">strlen</span>(path) + <span class="number">1</span> + DIRSIZ + <span class="number">1</span> &gt; <span class="keyword">sizeof</span> buf) &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;find: path too long\n&quot;</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">strcpy</span>(buf, path);</span><br><span class="line">            p = buf + <span class="built_in">strlen</span>(buf);</span><br><span class="line">            *p++ = <span class="string">&#x27;/&#x27;</span>;</span><br><span class="line">            <span class="keyword">while</span> (read(fd, &amp;de, <span class="keyword">sizeof</span>(de)) == <span class="keyword">sizeof</span>(de)) &#123;</span><br><span class="line">                <span class="keyword">if</span> (de.inum == <span class="number">0</span> || <span class="built_in">strcmp</span>(de.name, <span class="string">&quot;.&quot;</span>) == <span class="number">0</span> || <span class="built_in">strcmp</span>(de.name, <span class="string">&quot;..&quot;</span>) == <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                memmove(p, de.name, DIRSIZ);</span><br><span class="line">                p[DIRSIZ] = <span class="number">0</span>;</span><br><span class="line">                find(buf);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    close(fd);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span></span></span><br><span class="line"><span class="function"><span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">3</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="number">2</span>, <span class="string">&quot;Usage: find path filename\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    target = argv[<span class="number">2</span>];</span><br><span class="line">    find(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="xargs-moderate"><a href="#xargs-moderate" class="headerlink" title="xargs(moderate)"></a>xargs(moderate)</h1><h2 id="任务-4"><a href="#任务-4" class="headerlink" title="任务"></a>任务</h2><p>写一个简单版本的UNIX xargs程序，从stdin逐行读取，将每一行作为参数执行命令。比如echo hello too | xargs echo bye，要输出bye hello too，等价于echo bye hello too。（建议看原文理解）</p>
+<h1 id="xargs-moderate"><a href="#xargs-moderate" class="headerlink" title="xargs(moderate)"></a>xargs(moderate)</h1><h2 id="任务-4"><a href="#任务-4" class="headerlink" title="任务"></a>任务</h2><p>写一个简单版本的UNIX xargs程序，从<em>stdin</em>逐行读取，将每一行作为参数执行命令。比如<code>echo hello too | xargs echo bye</code>，要输出<code>bye hello too</code>，等价于<code>echo bye hello too</code>。（建议看原文理解）</p>
 <h2 id="提示-4"><a href="#提示-4" class="headerlink" title="提示"></a>提示</h2><ul>
-<li><p>使用<code>gets</code>函数来读取stdin。</p>
+<li><p>使用<code>gets</code>函数来读取<em>stdin</em>。</p>
 </li>
 <li><p>使用<code>fork</code>和<code>exec</code>函数来执行子进程。</p>
 </li>
@@ -82,70 +82,6 @@
       <tags>
         <tag>MIT6.S081</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>从Internet设计原则中汲取经验</title>
-    <url>/categories/%E8%A7%84%E8%8C%83%E4%B8%8E%E6%A0%87%E5%87%86/%E4%BB%8EInternet%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E4%B8%AD%E6%B1%B2%E5%8F%96%E7%BB%8F%E9%AA%8C/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="从Internet设计原则中汲取经验"><a href="#从Internet设计原则中汲取经验" class="headerlink" title="从Internet设计原则中汲取经验"></a>从Internet设计原则中汲取经验</h1><p>要深入理解软件工程的概念，就应该从那些经典的工程中学习，寻找共性。 从优秀工程的设计原则中思考，反思自己的项目工作中的设计方式， 回忆那些让开发变得很混乱的问题。<br>从前人总结出的设计原则中和自己的工作对比，找出哪些是自己可以改进的，慢慢学习如何进行工程设计。</p>
-<span id="more"></span>
-
-<p>Internet最重要的设计原则包括以下十点</p>
-<h2 id="保证工作"><a href="#保证工作" class="headerlink" title="保证工作"></a>保证工作</h2><blockquote>
-<p>直到多个原型系统成功地与对方相互通信，方可完成设计或者确定标准。设计者常常首先写出一个1000页的标准，并获得批准，过后才发现存在严重的缺陷，根本无法工作。然后他们再编写一个1.1版本的标准。这不是正确的工作方式。</p>
-</blockquote>
-<p>在建立标准前应该先测试一下可行性，有的时候我会认为自己的想法非常容易实现，甚至简单到没必要测试，等到了实际开发的时候，特别是在实现那些我认为是细枝末节的地方时，发现这个地方的逻辑有问题，根本不可能实现。</p>
-<p>比如说我在设计数据库的表关系时，有order和user两个实体，每个user有很多order。依据数据库设计三大范式，我在order的表里添加了user_id来建立映射关系，这听起来非常正确，所以我在最初以此作为标准进行开发。</p>
-<p>根据这个想法我实现了后端的功能，但是当我回到前端开发时，意识到我在前端需要显示每个订单对应的用户的名字。<br>在不改变后端代码的情况下，想要实现这个功能必须向后端发送大量的包来进行查询每个user_id对应的user，再把用户名给读取出来，这显然是效率低下的！</p>
-<p>于是我只能选择去重构后端（我前面举的例子是实际问题的简化，实际情况还要再复杂一点），而如果一开始先好好思考可行性并推敲好使用流程就可以避免类似的麻烦。</p>
-<p>上述问题在<strong>保证工作</strong>这个原则下的启示是，应该先尝试着将一条order的信息展示出来，再将标准确定下来。即使自己觉得逻辑非常清晰，也应该好好的从头开始捋一捋流程，避免忽略不切实际的设计。</p>
-<p>就好像是高中的导数题，拿到题一看迅速的对应上了解题模型，觉得这道题非常简单，等到实际做起来发现好像和不是同一个类型的题。它很像曾经做过的某题，但是解题方法并不一样，而到发现这个问题时只能推倒重做。</p>
-<p><strong>这个原则不是要否定那些逻辑并不足够严谨的假设，而是警告设计者不要想当然地认为某些东西应该是对的</strong></p>
-<h2 id="保持简单"><a href="#保持简单" class="headerlink" title="保持简单"></a>保持简单</h2><blockquote>
-<p>有疑问时应该使用最简单的解决方案。William of Occam在14世纪就提出了这条原则(称为奥卡姆的剃刀)。换成现代术语就是:决斗特性。如果一项特性并非绝对不要，那么就放弃该特性。尤其是，通过组合其他的特性也能够获得同样效果的时候。</p>
-</blockquote>
-<h2 id="明确选择"><a href="#明确选择" class="headerlink" title="明确选择"></a>明确选择</h2><blockquote>
-<p>如果有几种方法可以完成同样的事情，则选择其中一种方法。用两种或者多种方法来做同样的事情简直是自找麻烦。通常标准会有多个选项、多种模式或多个参数，因为多个实力强大的参与方坚持认为他们的方法是最好的。设计者应该坚决抵制这种倾向，学会说“不”。</p>
-</blockquote>
-<h2 id="模块开发"><a href="#模块开发" class="headerlink" title="模块开发"></a>模块开发</h2><blockquote>
-<p>这条原则直接导致了协议栈的思想，每一层的协议完全独立于所有其他的协议。按照这种方法，如果实际环境中要求改变一个模块或者一层，则其他模块或层都不会受到影响。</p>
-</blockquote>
-<p>编写代码时一定得注重<strong>”高内聚，低耦合“</strong>，这是有效提升可维护性的手段，试想以下情景：</p>
-<ul>
-<li><p>你正在编写一个函数，已经写了一百多行，当你逻辑不够清晰时想再重新梳理一遍这个函数，发现自己一时难以重新理顺逻辑。</p>
-</li>
-<li><p>你需要在两个不同的地方做同样的事情，你为了方便直接复制粘贴再稍微修改了一下，一切运行正常。过了几天你改了前一个位置的代码并调试至可以正常运行。之后，你在使用过程中发现后一个位置出了问题，你看了看发现原来是后面那里忘了改。</p>
-</li>
-<li><p>程序有bug，出问题的函数有一百多行，很难确定在哪个位置。</p>
-<p>以上问题都在于过多功能杂糅到一个模块里，而没有把任务切块，分成若干个零件，单个模块承担了过多责任，即内聚性弱。或者一个地方的修改导致很多其他地方也要修改，即耦合性强。</p>
-<p>如果要写归并排序，把二分和合并分开一定有助于编写；如果要写一个网页，若内容较多，将布局分成header、footer、aside、main，每一块单独做一个文件来处理会是不错的选择；使用vue开发，分割组件时，尽量用props暴露最低限度的接口而不是使用refs直接操作子组件（在必须耦合的情况下尽量数据耦合而不是控制耦合）；多个模块共享的数据应该是常量；一个模块只暴露必要的接口，其他部分应该对外部隐藏，而留出的接口应该在一开始就规划好以保证不到万不得已的情况不修改。</p>
-<p>以上一些增强内聚性，降低耦合性的方法。</p>
-<p><a href="https://baike.baidu.com/item/%E9%AB%98%E5%86%85%E8%81%9A%E4%BD%8E%E8%80%A6%E5%90%88/5227009?fr=aladdin">高内聚低耦合_百度百科</a></p>
-</li>
-</ul>
-<h2 id="期望异构性"><a href="#期望异构性" class="headerlink" title="期望异构性"></a>期望异构性</h2><blockquote>
-<p>在任何一个大型的网络中，可能存在不同类型的硬件、传输设施和应用程序。为了处理它们，网络的设计必须简单、通用和灵活。</p>
-</blockquote>
-<h2 id="避免静态选项和参数"><a href="#避免静态选项和参数" class="headerlink" title="避免静态选项和参数"></a>避免静态选项和参数</h2><blockquote>
-<p>如果不可避免要使用参数的话（比如最大数据包长度)，那么，最好的办法是让发送方和接收方协商一个值，而不是定义固定的参数值。</p>
-</blockquote>
-<p>比如说设计网页时一个页面展示多少条信息可以由用户选择；设计mc的一个物品时它的掉落率可以由配置文件调整</p>
-<h2 id="寻找好的而不是完美的设计"><a href="#寻找好的而不是完美的设计" class="headerlink" title="寻找好的而不是完美的设计"></a>寻找好的而不是完美的设计</h2><blockquote>
-<p>通常设计者有一个好的设计，但是它不能够处理一些怪异的特殊情况。设计者不应该乱改设计，而是坚持这个好的设计，将围绕着特殊情况而展开的工作负担转移到那些强烈需求的人身上。</p>
-</blockquote>
-<h2 id="严格发送，宽容接收"><a href="#严格发送，宽容接收" class="headerlink" title="严格发送，宽容接收"></a>严格发送，宽容接收</h2><blockquote>
-<p>换句话说，只发送那些严格符合标准的数据包，但是，容许接收那些不完全符合标准的数据包，并且试图对它们进行处理。</p>
-</blockquote>
-<p>分工设计时，不要想着别人的数据包是严格符合你的思维的，考虑好各种可能的null问题</p>
-<h2 id="考虑可扩展性"><a href="#考虑可扩展性" class="headerlink" title="考虑可扩展性"></a>考虑可扩展性</h2><blockquote>
-<p>如果系统需要有效地处理上百万台主机和几十亿用户，那么，没有一种中心数据库是可以容忍的,同时必须将负载尽可能均匀地分布到所有可用的资源上。</p>
-</blockquote>
-<h2 id="考虑性能和成本"><a href="#考虑性能和成本" class="headerlink" title="考虑性能和成本"></a>考虑性能和成本</h2><blockquote>
-<p>如果一个网络的性能很差，或者成本很高，那么没有人会使用它。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>规范与标准</category>
-      </categories>
   </entry>
   <entry>
     <title>MIT6.s081操作系统实验——环境搭建</title>
@@ -198,20 +134,20 @@
 <h1 id="在CLion上连接虚拟机"><a href="#在CLion上连接虚拟机" class="headerlink" title="在CLion上连接虚拟机"></a>在CLion上连接虚拟机</h1><p>CLion是jetbrains公司面向c/c++的ide，<strong>通过学生优惠可以免费获取全家桶的一年通行证，并且在校期间可以无限续，只需要有edu后缀的邮箱就行了</strong>，请转向百度搜索如何获得学生优惠。</p>
 <p><a href="https://www.jetbrains.com/zh-cn/clion/">CLion：JetBrains 出品的 C 和 C++ 跨平台 IDE</a></p>
 <h2 id="配置工具链"><a href="#配置工具链" class="headerlink" title="配置工具链"></a>配置工具链</h2><p>新建一个项目，打开<strong>设置</strong>，选择<strong>构建、执行、部署</strong>，选择<strong>工具链</strong>，点上方加号➕添加一个远程主机，添加一个ssh凭据并手动输入gdb-multiarch的路径来替代默认gdb（原始gdb不能识别riscv的指令集）。</p>
-<p><img src="https://picture-bed-1306010815.cos.ap-shanghai.myqcloud.com/image-20220329105815490.png" alt="image-20220329105815490"></p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220329105815490.png" alt="image-20220329105815490"></p>
 <p>我这里是下了cmake，不下cmake也没关系，只需要管<strong>凭据</strong>和<strong>调试器</strong>。</p>
 <h2 id="配置部署服务器"><a href="#配置部署服务器" class="headerlink" title="配置部署服务器"></a>配置部署服务器</h2><p>点击上方<strong>工具</strong>，选择<strong>部署</strong>，点击<strong>配置</strong>，填好映射路径。</p>
-<p><img src="https://picture-bed-1306010815.cos.ap-shanghai.myqcloud.com/image-20220329130436272.png" alt="image-20220329130436272"></p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220329130436272.png" alt="image-20220329130436272"></p>
 <p>然后依次点<strong>工具</strong>、<strong>部署</strong>、<strong>浏览远程主机</strong>，就可以管理虚拟机的文件了，在这里可以很方便的直接管理虚拟机文件。</p>
 <p>删除项目内初始的文件（如果有的话），右键项目文件夹，点击部署，然后下载虚拟机里的文件。</p>
 <h2 id="配置Makefile项目"><a href="#配置Makefile项目" class="headerlink" title="配置Makefile项目"></a>配置Makefile项目</h2><p>打开设置，将构建目标设置为<em>qemu-gdb</em>。</p>
-<p><img src="https://picture-bed-1306010815.cos.ap-shanghai.myqcloud.com/d3PMj8gnxAlXT6u.png" alt="image-20220402152641258"></p>
-<p><strong>如果设置里显示未检测到Makefile项目就删掉项目文件夹里的.idea文件夹，然后重新打开项目。</strong>之前的设置会被初始化，需要重新设置一下。</p>
-<p>设置完了之后打开Makefile文件，点右上角按钮重新加载项目。</p>
-<p><img src="https://picture-bed-1306010815.cos.ap-shanghai.myqcloud.com/FXeTWYk2zhjrHGS.png" alt="image-20220402152934792"></p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/d3PMj8gnxAlXT6u.png" alt="image-20220402152641258"></p>
+<p><strong>如果设置里显示未检测到<em>Makefile</em>项目就删掉项目文件夹里的*.idea*文件夹，然后重新打开项目。</strong>之前的设置会被初始化，需要重新设置一下。</p>
+<p>设置完了之后打开<em>Makefile</em>文件，点右上角按钮重新加载项目。</p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/FXeTWYk2zhjrHGS.png" alt="image-20220402152934792"></p>
 <p>此时索引就建立完毕了，可以自动补全和<code>ctrl+B</code>来快速跳转了。</p>
 <h2 id="添加调试配置"><a href="#添加调试配置" class="headerlink" title="添加调试配置"></a>添加调试配置</h2><p>在右上角打开<strong>运行/调试配置</strong>，添加一个<strong>远程调试</strong>的配置。</p>
-<p><img src="https://picture-bed-1306010815.cos.ap-shanghai.myqcloud.com/image-20220329124021990.png" alt="image-20220329124021990"></p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220329124021990.png" alt="image-20220329124021990"></p>
 <p>课程内的gdb服务器默认使用<em>25000</em>端口。</p>
 <p>执行<code>make</code>后会对内核程序和和每个用户程序各生成一个符号文件，内核的符号文件就叫<em>kernel</em>，用户程序的符号文件为_{程序名}，例如ls的符号文件为<em>_ls</em>。</p>
 <h2 id="设置-gdbinit"><a href="#设置-gdbinit" class="headerlink" title="设置.gdbinit"></a>设置.gdbinit</h2><p>在*/root<em>文件夹下创建一个名为</em>.gdbinit*的文件</p>
@@ -222,11 +158,15 @@
 <h2 id="启动调试服务器"><a href="#启动调试服务器" class="headerlink" title="启动调试服务器"></a>启动调试服务器</h2><p>在虚拟机的xv6文件夹下输入<code>make qemu-gdb</code>来启动gdb服务器，如遇到错误可以尝试<code>make clean</code>来清除之前make生成的文件，shell输出以下内容即为开启成功。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">*** Now run <span class="string">&#x27;gdb&#x27;</span> <span class="keyword">in</span> another window.</span><br><span class="line">qemu-system-riscv64 -machine virt -bios none -kernel kernel/kernel -m 128M -smp 3 -nographic -drive file=fs.img,<span class="keyword">if</span>=none,format=raw,id=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0 -S -gdb tcp::25000</span><br></pre></td></tr></table></figure>
 
-<p>如果显示<em>25000</em>端口已被占用或者文件<em>fs.img</em>被占用，应该是上一次运行没有正确退出，请自行百度查找如何根据占用端口或者文件获取pid，然后kill掉。</p>
-<h2 id="开始调试"><a href="#开始调试" class="headerlink" title="开始调试"></a>开始调试</h2><p>点击CLion右上角调试按钮开始调试<em>ls</em>程序，下方会显示连接成功，然后回到shell会发现可以输入命令了，此时我输入<code>ls grep</code>，成功触发断点。</p>
-<p><img src="https://picture-bed-1306010815.cos.ap-shanghai.myqcloud.com/dE2UWb5O3a6RSvo.png" alt="image-20220329131621170"></p>
+<p>如果显示<em>25000</em>端口已被占用或者文件<em>fs.img</em>被占用，应该是上一次运行没有正确退出，请自行百度查找如何根据占用端口或者文件获取pid，然后kill掉，这里建议使用lsof。</p>
+<ul>
+<li><code>apt-get install lsof</code>安装lsof。</li>
+<li><code>lsof fs.img</code>和<code>lsof -i:25000</code>查询进程。</li>
+</ul>
+<h2 id="开始调试"><a href="#开始调试" class="headerlink" title="开始调试"></a>开始调试</h2><p>点击CLion右上角调试按钮开始调试ls程序，下方会显示连接成功，然后回到shell会发现可以输入命令了，此时我输入<code>ls grep</code>，成功触发断点。</p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/dE2UWb5O3a6RSvo.png" alt="image-20220329131621170"></p>
 <h1 id="xv6和CLion相关"><a href="#xv6和CLion相关" class="headerlink" title="xv6和CLion相关"></a>xv6和CLion相关</h1><ul>
-<li>xv6没有实现<em>ps</em>程序，要列出进程可以在xv6的终端里中输入<code>ctrl+p</code>，关闭xv6先按<code>ctrl+a</code>再按<code>x</code>。</li>
+<li>xv6没有实现ps程序，要列出当前进程可以在xv6的终端里中输入<code>ctrl+p</code>，关闭xv6先按<code>ctrl+a</code>再按<code>x</code>。</li>
 <li>调试xv6时发生读取空指针，缓冲区溢出等错误时CLion不会报错，但是会导致调试异常，当系统中断，跳转到<em>spinlock.c</em>等文件内时需要格外注意。</li>
 <li>在CLion内可以用<code>ctrl+alt+h</code>来查看一个函数被哪些函数调用了。</li>
 </ul>
@@ -375,5 +315,69 @@
         <tag>数组</tag>
         <tag>指针</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>从Internet设计原则中汲取经验</title>
+    <url>/categories/%E8%A7%84%E8%8C%83%E4%B8%8E%E6%A0%87%E5%87%86/%E4%BB%8EInternet%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E4%B8%AD%E6%B1%B2%E5%8F%96%E7%BB%8F%E9%AA%8C/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="从Internet设计原则中汲取经验"><a href="#从Internet设计原则中汲取经验" class="headerlink" title="从Internet设计原则中汲取经验"></a>从Internet设计原则中汲取经验</h1><p>要深入理解软件工程的概念，就应该从那些经典的工程中学习，寻找共性。 从优秀工程的设计原则中思考，反思自己的项目工作中的设计方式， 回忆那些让开发变得很混乱的问题。<br>从前人总结出的设计原则中和自己的工作对比，找出哪些是自己可以改进的，慢慢学习如何进行工程设计。</p>
+<span id="more"></span>
+
+<p>Internet最重要的设计原则包括以下十点</p>
+<h2 id="保证工作"><a href="#保证工作" class="headerlink" title="保证工作"></a>保证工作</h2><blockquote>
+<p>直到多个原型系统成功地与对方相互通信，方可完成设计或者确定标准。设计者常常首先写出一个1000页的标准，并获得批准，过后才发现存在严重的缺陷，根本无法工作。然后他们再编写一个1.1版本的标准。这不是正确的工作方式。</p>
+</blockquote>
+<p>在建立标准前应该先测试一下可行性，有的时候我会认为自己的想法非常容易实现，甚至简单到没必要测试，等到了实际开发的时候，特别是在实现那些我认为是细枝末节的地方时，发现这个地方的逻辑有问题，根本不可能实现。</p>
+<p>比如说我在设计数据库的表关系时，有order和user两个实体，每个user有很多order。依据数据库设计三大范式，我在order的表里添加了user_id来建立映射关系，这听起来非常正确，所以我在最初以此作为标准进行开发。</p>
+<p>根据这个想法我实现了后端的功能，但是当我回到前端开发时，意识到我在前端需要显示每个订单对应的用户的名字。<br>在不改变后端代码的情况下，想要实现这个功能必须向后端发送大量的包来进行查询每个user_id对应的user，再把用户名给读取出来，这显然是效率低下的！</p>
+<p>于是我只能选择去重构后端（我前面举的例子是实际问题的简化，实际情况还要再复杂一点），而如果一开始先好好思考可行性并推敲好使用流程就可以避免类似的麻烦。</p>
+<p>上述问题在<strong>保证工作</strong>这个原则下的启示是，应该先尝试着将一条order的信息展示出来，再将标准确定下来。即使自己觉得逻辑非常清晰，也应该好好的从头开始捋一捋流程，避免忽略不切实际的设计。</p>
+<p>就好像是高中的导数题，拿到题一看迅速的对应上了解题模型，觉得这道题非常简单，等到实际做起来发现好像和不是同一个类型的题。它很像曾经做过的某题，但是解题方法并不一样，而到发现这个问题时只能推倒重做。</p>
+<p><strong>这个原则不是要否定那些逻辑并不足够严谨的假设，而是警告设计者不要想当然地认为某些东西应该是对的</strong></p>
+<h2 id="保持简单"><a href="#保持简单" class="headerlink" title="保持简单"></a>保持简单</h2><blockquote>
+<p>有疑问时应该使用最简单的解决方案。William of Occam在14世纪就提出了这条原则(称为奥卡姆的剃刀)。换成现代术语就是:决斗特性。如果一项特性并非绝对不要，那么就放弃该特性。尤其是，通过组合其他的特性也能够获得同样效果的时候。</p>
+</blockquote>
+<h2 id="明确选择"><a href="#明确选择" class="headerlink" title="明确选择"></a>明确选择</h2><blockquote>
+<p>如果有几种方法可以完成同样的事情，则选择其中一种方法。用两种或者多种方法来做同样的事情简直是自找麻烦。通常标准会有多个选项、多种模式或多个参数，因为多个实力强大的参与方坚持认为他们的方法是最好的。设计者应该坚决抵制这种倾向，学会说“不”。</p>
+</blockquote>
+<h2 id="模块开发"><a href="#模块开发" class="headerlink" title="模块开发"></a>模块开发</h2><blockquote>
+<p>这条原则直接导致了协议栈的思想，每一层的协议完全独立于所有其他的协议。按照这种方法，如果实际环境中要求改变一个模块或者一层，则其他模块或层都不会受到影响。</p>
+</blockquote>
+<p>编写代码时一定得注重<strong>”高内聚，低耦合“</strong>，这是有效提升可维护性的手段，试想以下情景：</p>
+<ul>
+<li><p>你正在编写一个函数，已经写了一百多行，当你逻辑不够清晰时想再重新梳理一遍这个函数，发现自己一时难以重新理顺逻辑。</p>
+</li>
+<li><p>你需要在两个不同的地方做同样的事情，你为了方便直接复制粘贴再稍微修改了一下，一切运行正常。过了几天你改了前一个位置的代码并调试至可以正常运行。之后，你在使用过程中发现后一个位置出了问题，你看了看发现原来是后面那里忘了改。</p>
+</li>
+<li><p>程序有bug，出问题的函数有一百多行，很难确定在哪个位置。</p>
+<p>以上问题都在于过多功能杂糅到一个模块里，而没有把任务切块，分成若干个零件，单个模块承担了过多责任，即内聚性弱。或者一个地方的修改导致很多其他地方也要修改，即耦合性强。</p>
+<p>如果要写归并排序，把二分和合并分开一定有助于编写；如果要写一个网页，若内容较多，将布局分成header、footer、aside、main，每一块单独做一个文件来处理会是不错的选择；使用vue开发，分割组件时，尽量用props暴露最低限度的接口而不是使用refs直接操作子组件（在必须耦合的情况下尽量数据耦合而不是控制耦合）；多个模块共享的数据应该是常量；一个模块只暴露必要的接口，其他部分应该对外部隐藏，而留出的接口应该在一开始就规划好以保证不到万不得已的情况不修改。</p>
+<p>以上一些增强内聚性，降低耦合性的方法。</p>
+<p><a href="https://baike.baidu.com/item/%E9%AB%98%E5%86%85%E8%81%9A%E4%BD%8E%E8%80%A6%E5%90%88/5227009?fr=aladdin">高内聚低耦合_百度百科</a></p>
+</li>
+</ul>
+<h2 id="期望异构性"><a href="#期望异构性" class="headerlink" title="期望异构性"></a>期望异构性</h2><blockquote>
+<p>在任何一个大型的网络中，可能存在不同类型的硬件、传输设施和应用程序。为了处理它们，网络的设计必须简单、通用和灵活。</p>
+</blockquote>
+<h2 id="避免静态选项和参数"><a href="#避免静态选项和参数" class="headerlink" title="避免静态选项和参数"></a>避免静态选项和参数</h2><blockquote>
+<p>如果不可避免要使用参数的话（比如最大数据包长度)，那么，最好的办法是让发送方和接收方协商一个值，而不是定义固定的参数值。</p>
+</blockquote>
+<p>比如说设计网页时一个页面展示多少条信息可以由用户选择；设计mc的一个物品时它的掉落率可以由配置文件调整</p>
+<h2 id="寻找好的而不是完美的设计"><a href="#寻找好的而不是完美的设计" class="headerlink" title="寻找好的而不是完美的设计"></a>寻找好的而不是完美的设计</h2><blockquote>
+<p>通常设计者有一个好的设计，但是它不能够处理一些怪异的特殊情况。设计者不应该乱改设计，而是坚持这个好的设计，将围绕着特殊情况而展开的工作负担转移到那些强烈需求的人身上。</p>
+</blockquote>
+<h2 id="严格发送，宽容接收"><a href="#严格发送，宽容接收" class="headerlink" title="严格发送，宽容接收"></a>严格发送，宽容接收</h2><blockquote>
+<p>换句话说，只发送那些严格符合标准的数据包，但是，容许接收那些不完全符合标准的数据包，并且试图对它们进行处理。</p>
+</blockquote>
+<p>分工设计时，不要想着别人的数据包是严格符合你的思维的，考虑好各种可能的null问题</p>
+<h2 id="考虑可扩展性"><a href="#考虑可扩展性" class="headerlink" title="考虑可扩展性"></a>考虑可扩展性</h2><blockquote>
+<p>如果系统需要有效地处理上百万台主机和几十亿用户，那么，没有一种中心数据库是可以容忍的,同时必须将负载尽可能均匀地分布到所有可用的资源上。</p>
+</blockquote>
+<h2 id="考虑性能和成本"><a href="#考虑性能和成本" class="headerlink" title="考虑性能和成本"></a>考虑性能和成本</h2><blockquote>
+<p>如果一个网络的性能很差，或者成本很高，那么没有人会使用它。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>规范与标准</category>
+      </categories>
   </entry>
 </search>
