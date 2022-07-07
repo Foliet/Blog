@@ -1,6 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>MIT6.S081操作系统实验——Xv6 and Unix utilities</title>
+    <url>/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6-S081/MIT6-S081%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E9%AA%8C%E2%80%94%E2%80%94Xv6-and-Unix-utilities/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本实验需要编写一些用户程序，调用<em>system call</em>来达成目标，了解<em>pipe</em>的用法。</p>
+<p>实验原文：<a href="https://pdos.csail.mit.edu/6.828/2021/labs/util.html">Lab: Xv6 and Unix utilities (mit.edu)</a></p>
+<span id="more"></span>
+
+<h1 id="前置工作"><a href="#前置工作" class="headerlink" title="前置工作"></a>前置工作</h1><p>进入工作文件夹下，输入以下命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout -util <span class="comment">#切换到util分支，对应本实验</span></span><br><span class="line">git clean -xfd <span class="comment">#清除无关文件（未追踪的、忽略的文件和文件夹）</span></span><br><span class="line">git checkout -b solveutil <span class="comment">#新建一个solveutil分支，来记录自己的编程过程</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="sleep-easy"><a href="#sleep-easy" class="headerlink" title="sleep (easy)"></a>sleep (easy)</h1><h2 id="任务"><a href="#任务" class="headerlink" title="任务"></a>任务</h2><p>写一个用户程序<em>sleep</em>，调用<em>system call</em>来实现休眠。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make qemu</span><br><span class="line">...</span><br><span class="line">init: starting sh</span><br><span class="line">$ <span class="built_in">sleep</span> 10</span><br><span class="line">(nothing happens <span class="keyword">for</span> a little <span class="keyword">while</span>)</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+
+<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><ul>
+<li>观察<em>user</em>文件夹下的<em>grep.c</em>等文件来学习命令行参数如何传入程序。</li>
+<li>将<em>sleep</em>程序添加进<em>Makefile</em>文件中的<em>UPROGS</em>。（添加完后点击<em>Makefile</em>右上角图标重新加载<em>Makefile</em>项目才能将<em>sleep.c</em>加入索引）</li>
+<li>在用户没有给出<em>sleep</em>的参数时打印错误信息。</li>
+<li>使用<code>atoi</code>函数将命令行参数由字符串转为整形。</li>
+<li>确保<code>main</code>函数调用了<code>exit</code>函数来退出程序。</li>
+</ul>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//sleep.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>* argv[])</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(argc != <span class="number">2</span>)&#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="number">2</span>, <span class="string">&quot;Usage: sleep ticks\n&quot;</span>);<span class="comment">//stderr的文件描述符的值为2</span></span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> ticks = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">    sleep(ticks);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="pingpong-easy"><a href="#pingpong-easy" class="headerlink" title="pingpong(easy)"></a>pingpong(easy)</h1><h2 id="任务-1"><a href="#任务-1" class="headerlink" title="任务"></a>任务</h2><p>写一个用户程序<em>pingpong</em>，实现两个进程间的数据传递。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make qemu</span><br><span class="line">...</span><br><span class="line">init: starting sh</span><br><span class="line">$ pingpong</span><br><span class="line">4: received ping</span><br><span class="line">3: received pong</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+
+<h2 id="提示-1"><a href="#提示-1" class="headerlink" title="提示"></a>提示</h2><ul>
+<li>使用<code>pipe</code>建立管道，关于管道请面向百度学习。<a href="https://blog.csdn.net/qq_35433716/article/details/86171936">Linux系统编程pipe()</a></li>
+<li>使用<code>fork</code>创建子进程。</li>
+<li>使用<code>read</code>和<code>write</code>对管道进行读和写。</li>
+<li>使用<code>getpid</code>获取当前进程的pid。</li>
+</ul>
+<h2 id="源码-1"><a href="#源码-1" class="headerlink" title="源码"></a>源码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//pingpong.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> p1[<span class="number">2</span>];<span class="comment">//parent-&gt;child</span></span><br><span class="line">    <span class="type">int</span> p2[<span class="number">2</span>];<span class="comment">//child-&gt;parent</span></span><br><span class="line">    pipe(p1);</span><br><span class="line">    pipe(p2);</span><br><span class="line">    <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">//child</span></span><br><span class="line">        <span class="type">char</span> buffer[] = &#123;<span class="string">&#x27;y&#x27;</span>&#125;;</span><br><span class="line">        read(p1[<span class="number">0</span>],buffer,<span class="keyword">sizeof</span>(buffer));</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="number">2</span>,<span class="string">&quot;%d: received ping\n&quot;</span>,getpid());</span><br><span class="line">        write(p2[<span class="number">1</span>],buffer,<span class="keyword">sizeof</span>(buffer));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//parent</span></span><br><span class="line">    <span class="type">char</span> buffer[] = &#123;<span class="string">&#x27;x&#x27;</span>&#125;;</span><br><span class="line">    write(p1[<span class="number">1</span>],buffer,<span class="keyword">sizeof</span>(buffer));</span><br><span class="line">    wait(<span class="number">0</span>);</span><br><span class="line">    read(p2[<span class="number">0</span>],buffer,<span class="keyword">sizeof</span>(buffer));</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="number">2</span>,<span class="string">&quot;%d: received pong\n&quot;</span>,getpid());</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="primes-moderate-x2F-hard"><a href="#primes-moderate-x2F-hard" class="headerlink" title="primes(moderate&#x2F;hard)"></a>primes(moderate&#x2F;hard)</h1><h2 id="任务-2"><a href="#任务-2" class="headerlink" title="任务"></a>任务</h2><p>使用管道写一个并发版本的素数筛来找出2~35中的素数。</p>
+<p>相关链接<a href="https://swtch.com/~rsc/thread/">Bell Labs and CSP Threads (swtch.com)</a></p>
+<p>概念图：</p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/1gfBPmyOSnMvtCl.gif" alt="img"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make qemu</span><br><span class="line">...</span><br><span class="line">init: starting sh</span><br><span class="line">$ primes</span><br><span class="line">prime 2</span><br><span class="line">prime 3</span><br><span class="line">prime 5</span><br><span class="line">prime 7</span><br><span class="line">prime 11</span><br><span class="line">prime 13</span><br><span class="line">prime 17</span><br><span class="line">prime 19</span><br><span class="line">prime 23</span><br><span class="line">prime 29</span><br><span class="line">prime 31</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+
+<h2 id="提示-2"><a href="#提示-2" class="headerlink" title="提示"></a>提示</h2><ul>
+<li><p>请牢记这个题目的要求是<strong>通过多线程来加速素数筛</strong>，在编写程序时要检查自己的程序是否满足并发，<strong>一定不要在父进程写入所有数字后子进程才开始处理！</strong>即使这样也能通过测试。</p>
+</li>
+<li><p>请小心关闭进程不需要的文件描述符，否则程序将在第一个进程达到 35 之前耗尽xv6的资源。（<strong>及时关闭管道非常重要！！！</strong>）</p>
+</li>
+<li><p>当一个进程读取完所有数字后，应该等到所有他的子进程终止才能终止，从而避免产生僵尸进程。（善用<code>ctrl+p</code>）</p>
+</li>
+<li><p>当一个管道的写端被关闭时，对读端进行<code>read</code>会返回0。</p>
+</li>
+<li><p>写入所有数字后<strong>再写入一个0来表示写入完毕</strong>，否则子进程无法知道父进程是否写入完毕。采取这种做法是因为执行了<code>fork</code>后父进程才关闭管道写端，子进程并不能感应到管道写端已经关闭了。</p>
+</li>
+</ul>
+<h2 id="源码-2"><a href="#源码-2" class="headerlink" title="源码"></a>源码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//primes.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> p1[<span class="number">2</span>];</span><br><span class="line">    pipe(p1);</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">2</span>; i &lt;= <span class="number">35</span>; i++) &#123;</span><br><span class="line">        write(p1[<span class="number">1</span>], &amp;i, <span class="keyword">sizeof</span>(i));</span><br><span class="line">    &#125;</span><br><span class="line">    i = <span class="number">0</span>;</span><br><span class="line">    write(p1[<span class="number">1</span>], &amp;i, <span class="keyword">sizeof</span>(i));</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">int</span> n, prime, p2[<span class="number">2</span>];</span><br><span class="line">        pipe(p2);</span><br><span class="line">        read(p1[<span class="number">0</span>], &amp;prime, <span class="keyword">sizeof</span>(prime));</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;prime %d\n&quot;</span>, prime);</span><br><span class="line">        <span class="keyword">if</span> (read(p1[<span class="number">0</span>], &amp;n, <span class="keyword">sizeof</span>(n)) &amp;&amp; n) &#123;</span><br><span class="line">            <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">//子进程会复制一遍父进程的两个管道，其中父进程用来与祖父进程交流的管道应该被关闭</span></span><br><span class="line">                close(p1[<span class="number">0</span>]);</span><br><span class="line">                close(p1[<span class="number">1</span>]);</span><br><span class="line">                p1[<span class="number">0</span>] = p2[<span class="number">0</span>];</span><br><span class="line">                p1[<span class="number">1</span>] = p2[<span class="number">1</span>];</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">do</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (n % prime != <span class="number">0</span>)</span><br><span class="line">                    write(p2[<span class="number">1</span>], &amp;n, <span class="keyword">sizeof</span>(n));</span><br><span class="line">            &#125; <span class="keyword">while</span> (read(p1[<span class="number">0</span>], &amp;n, <span class="keyword">sizeof</span>(n)) &amp;&amp; n);</span><br><span class="line">            write(p2[<span class="number">1</span>], &amp;n, <span class="keyword">sizeof</span>(n));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//关闭占用的管道</span></span><br><span class="line">        close(p1[<span class="number">0</span>]);</span><br><span class="line">        close(p1[<span class="number">1</span>]);</span><br><span class="line">        close(p2[<span class="number">0</span>]);</span><br><span class="line">        close(p2[<span class="number">1</span>]);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    wait(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="find-moderate"><a href="#find-moderate" class="headerlink" title="find(moderate)"></a>find(moderate)</h1><h2 id="任务-3"><a href="#任务-3" class="headerlink" title="任务"></a>任务</h2><p>写一个简单版本的UNIX find程序，<code>ls path filename</code>为寻找目录<em>path</em>下所有文件名为<em>filename</em>的文件并输出。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make qemu</span><br><span class="line">...</span><br><span class="line">init: starting sh</span><br><span class="line">$ <span class="built_in">echo</span> &gt; b</span><br><span class="line">$ <span class="built_in">mkdir</span> a</span><br><span class="line">$ <span class="built_in">echo</span> &gt; a/b</span><br><span class="line">$ find . b</span><br><span class="line">./b</span><br><span class="line">./a/b</span><br><span class="line">$ </span><br></pre></td></tr></table></figure>
+
+<h2 id="提示-3"><a href="#提示-3" class="headerlink" title="提示"></a>提示</h2><ul>
+<li>查看<em>user&#x2F;ls.c</em>中的代码来学习如何读取文件夹。</li>
+<li>使用递归来实现遍历所有子目录。</li>
+<li>不要递归进入*”.”<em>（即当前目录）和</em>“..”*（即父目录）</li>
+<li>请使用<code>strcmp</code>函数而非<code>==</code></li>
+</ul>
+<h2 id="源码-3"><a href="#源码-3" class="headerlink" title="源码"></a>源码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//find.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/stat.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/fs.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/fcntl.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> *target;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*读取path中的文件名*/</span></span><br><span class="line"><span class="type">char</span> *</span><br><span class="line"><span class="title function_">filename</span><span class="params">(<span class="type">char</span> *path)</span> &#123;</span><br><span class="line">    <span class="type">char</span> *p = path;</span><br><span class="line">    <span class="keyword">while</span> (*p)</span><br><span class="line">        p++;</span><br><span class="line">    <span class="keyword">while</span> (*p != <span class="string">&#x27;/&#x27;</span> &amp;&amp; p != path)</span><br><span class="line">        p--;</span><br><span class="line">    <span class="keyword">return</span> p == path ? p : ++p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span></span><br><span class="line"><span class="title function_">find</span><span class="params">(<span class="type">char</span> *path)</span> &#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">st</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> <span class="title">de</span>;</span></span><br><span class="line">    <span class="type">char</span> buf[<span class="number">512</span>], *p;</span><br><span class="line">    <span class="keyword">if</span> ((fd = open(path, O_RDONLY)) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="number">2</span>, <span class="string">&quot;find: cannot open %s\n&quot;</span>, path);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (fstat(fd, &amp;st) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="number">2</span>, <span class="string">&quot;find: cannot stat %s\n&quot;</span>, path);</span><br><span class="line">        close(fd);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span> (st.type) &#123;</span><br><span class="line">        <span class="keyword">case</span> T_FILE:</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">strcmp</span>(filename(path), target) == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, path);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> T_DIR:</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">strlen</span>(path) + <span class="number">1</span> + DIRSIZ + <span class="number">1</span> &gt; <span class="keyword">sizeof</span> buf) &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;find: path too long\n&quot;</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">strcpy</span>(buf, path);</span><br><span class="line">            p = buf + <span class="built_in">strlen</span>(buf);</span><br><span class="line">            *p++ = <span class="string">&#x27;/&#x27;</span>;</span><br><span class="line">            <span class="keyword">while</span> (read(fd, &amp;de, <span class="keyword">sizeof</span>(de)) == <span class="keyword">sizeof</span>(de)) &#123;</span><br><span class="line">                <span class="keyword">if</span> (de.inum == <span class="number">0</span> || <span class="built_in">strcmp</span>(de.name, <span class="string">&quot;.&quot;</span>) == <span class="number">0</span> || <span class="built_in">strcmp</span>(de.name, <span class="string">&quot;..&quot;</span>) == <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                memmove(p, de.name, DIRSIZ);</span><br><span class="line">                p[DIRSIZ] = <span class="number">0</span>;</span><br><span class="line">                find(buf);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    close(fd);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">3</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="number">2</span>, <span class="string">&quot;Usage: find path filename\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    target = argv[<span class="number">2</span>];</span><br><span class="line">    find(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="xargs-moderate"><a href="#xargs-moderate" class="headerlink" title="xargs(moderate)"></a>xargs(moderate)</h1><h2 id="任务-4"><a href="#任务-4" class="headerlink" title="任务"></a>任务</h2><p>写一个简单版本的UNIX xargs程序，从<em>stdin</em>逐行读取，将每一行作为参数执行命令。比如<code>echo hello too | xargs echo bye</code>，要输出<code>bye hello too</code>，等价于<code>echo bye hello too</code>。（建议看原文理解）</p>
+<h2 id="提示-4"><a href="#提示-4" class="headerlink" title="提示"></a>提示</h2><ul>
+<li><p>使用<code>gets</code>函数来读取<em>stdin</em>。</p>
+</li>
+<li><p>使用<code>fork</code>和<code>exec</code>函数来执行子进程。</p>
+</li>
+</ul>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//xargs.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span> &#123;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">64</span>], *xargs[<span class="number">32</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; argc; i++)</span><br><span class="line">        xargs[i - <span class="number">1</span>] = argv[i];</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">int</span> x = argc - <span class="number">1</span>;</span><br><span class="line">        gets(buf, <span class="number">64</span>);</span><br><span class="line">        <span class="keyword">if</span> (buf[<span class="number">0</span>] == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        xargs[x++] = buf;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">char</span> *p = buf; *p; p++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (*p == <span class="string">&#x27; &#x27;</span>) &#123;</span><br><span class="line">                *p = <span class="number">0</span>;</span><br><span class="line">                xargs[x++] = p + <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (*p == <span class="string">&#x27;\n&#x27;</span>) &#123;</span><br><span class="line">                *p = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">            exec(argv[<span class="number">1</span>], xargs);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    wait(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="评测"><a href="#评测" class="headerlink" title="评测"></a>评测</h1><p>输入<code>make grade</code>或<code>python ./grade-lab-util</code>来评测整个实验。</p>
+<p>若想单独评测一个题目比如<em>sleep</em>可以使用<code>python ./grade-lab-util sleep</code>。</p>
+<p>评测整个实验前别忘了在xv6根目录创建一个名为<em>time.txt</em>的文件，在里面输入一个整数表明自己在这个实验上花了多少个小时。</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+        <category>MIT6.S081</category>
+      </categories>
+      <tags>
+        <tag>MIT Lab</tag>
+        <tag>pipe</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MIT6.s081操作系统实验——环境搭建</title>
     <url>/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6-S081/MIT6-S081%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E9%AA%8C%E2%80%94%E2%80%94%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在做过各种语言的项目，对网站架构和职业要求有一个基础认知后，我认为要在卷翻天的职场立足，在了解并能使用前沿技术的同时还得打好计算机基础，所以痛下决心重拾大二摸鱼过去的OS实验。</p>
@@ -97,6 +183,70 @@
         <tag>Clion</tag>
         <tag>环境搭建</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>从Internet设计原则中汲取经验</title>
+    <url>/categories/%E8%A7%84%E8%8C%83%E4%B8%8E%E6%A0%87%E5%87%86/%E4%BB%8EInternet%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E4%B8%AD%E6%B1%B2%E5%8F%96%E7%BB%8F%E9%AA%8C/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="从Internet设计原则中汲取经验"><a href="#从Internet设计原则中汲取经验" class="headerlink" title="从Internet设计原则中汲取经验"></a>从Internet设计原则中汲取经验</h1><p>要深入理解软件工程的概念，就应该从那些经典的工程中学习，寻找共性。 从优秀工程的设计原则中思考，反思自己的项目工作中的设计方式， 回忆那些让开发变得很混乱的问题。<br>从前人总结出的设计原则中和自己的工作对比，找出哪些是自己可以改进的，慢慢学习如何进行工程设计。</p>
+<span id="more"></span>
+
+<p>Internet最重要的设计原则包括以下十点</p>
+<h2 id="保证工作"><a href="#保证工作" class="headerlink" title="保证工作"></a>保证工作</h2><blockquote>
+<p>直到多个原型系统成功地与对方相互通信，方可完成设计或者确定标准。设计者常常首先写出一个1000页的标准，并获得批准，过后才发现存在严重的缺陷，根本无法工作。然后他们再编写一个1.1版本的标准。这不是正确的工作方式。</p>
+</blockquote>
+<p>在建立标准前应该先测试一下可行性，有的时候我会认为自己的想法非常容易实现，甚至简单到没必要测试，等到了实际开发的时候，特别是在实现那些我认为是细枝末节的地方时，发现这个地方的逻辑有问题，根本不可能实现。</p>
+<p>比如说我在设计数据库的表关系时，有order和user两个实体，每个user有很多order。依据数据库设计三大范式，我在order的表里添加了user_id来建立映射关系，这听起来非常正确，所以我在最初以此作为标准进行开发。</p>
+<p>根据这个想法我实现了后端的功能，但是当我回到前端开发时，意识到我在前端需要显示每个订单对应的用户的名字。<br>在不改变后端代码的情况下，想要实现这个功能必须向后端发送大量的包来进行查询每个user_id对应的user，再把用户名给读取出来，这显然是效率低下的！</p>
+<p>于是我只能选择去重构后端（我前面举的例子是实际问题的简化，实际情况还要再复杂一点），而如果一开始先好好思考可行性并推敲好使用流程就可以避免类似的麻烦。</p>
+<p>上述问题在<strong>保证工作</strong>这个原则下的启示是，应该先尝试着将一条order的信息展示出来，再将标准确定下来。即使自己觉得逻辑非常清晰，也应该好好的从头开始捋一捋流程，避免忽略不切实际的设计。</p>
+<p>就好像是高中的导数题，拿到题一看迅速的对应上了解题模型，觉得这道题非常简单，等到实际做起来发现好像和不是同一个类型的题。它很像曾经做过的某题，但是解题方法并不一样，而到发现这个问题时只能推倒重做。</p>
+<p><strong>这个原则不是要否定那些逻辑并不足够严谨的假设，而是警告设计者不要想当然地认为某些东西应该是对的</strong></p>
+<h2 id="保持简单"><a href="#保持简单" class="headerlink" title="保持简单"></a>保持简单</h2><blockquote>
+<p>有疑问时应该使用最简单的解决方案。William of Occam在14世纪就提出了这条原则(称为奥卡姆的剃刀)。换成现代术语就是:决斗特性。如果一项特性并非绝对不要，那么就放弃该特性。尤其是，通过组合其他的特性也能够获得同样效果的时候。</p>
+</blockquote>
+<h2 id="明确选择"><a href="#明确选择" class="headerlink" title="明确选择"></a>明确选择</h2><blockquote>
+<p>如果有几种方法可以完成同样的事情，则选择其中一种方法。用两种或者多种方法来做同样的事情简直是自找麻烦。通常标准会有多个选项、多种模式或多个参数，因为多个实力强大的参与方坚持认为他们的方法是最好的。设计者应该坚决抵制这种倾向，学会说“不”。</p>
+</blockquote>
+<h2 id="模块开发"><a href="#模块开发" class="headerlink" title="模块开发"></a>模块开发</h2><blockquote>
+<p>这条原则直接导致了协议栈的思想，每一层的协议完全独立于所有其他的协议。按照这种方法，如果实际环境中要求改变一个模块或者一层，则其他模块或层都不会受到影响。</p>
+</blockquote>
+<p>编写代码时一定得注重<strong>”高内聚，低耦合“</strong>，这是有效提升可维护性的手段，试想以下情景：</p>
+<ul>
+<li><p>你正在编写一个函数，已经写了一百多行，当你逻辑不够清晰时想再重新梳理一遍这个函数，发现自己一时难以重新理顺逻辑。</p>
+</li>
+<li><p>你需要在两个不同的地方做同样的事情，你为了方便直接复制粘贴再稍微修改了一下，一切运行正常。过了几天你改了前一个位置的代码并调试至可以正常运行。之后，你在使用过程中发现后一个位置出了问题，你看了看发现原来是后面那里忘了改。</p>
+</li>
+<li><p>程序有bug，出问题的函数有一百多行，很难确定在哪个位置。</p>
+<p>以上问题都在于过多功能杂糅到一个模块里，而没有把任务切块，分成若干个零件，单个模块承担了过多责任，即内聚性弱。或者一个地方的修改导致很多其他地方也要修改，即耦合性强。</p>
+<p>如果要写归并排序，把二分和合并分开一定有助于编写；如果要写一个网页，若内容较多，将布局分成header、footer、aside、main，每一块单独做一个文件来处理会是不错的选择；使用vue开发，分割组件时，尽量用props暴露最低限度的接口而不是使用refs直接操作子组件（在必须耦合的情况下尽量数据耦合而不是控制耦合）；多个模块共享的数据应该是常量；一个模块只暴露必要的接口，其他部分应该对外部隐藏，而留出的接口应该在一开始就规划好以保证不到万不得已的情况不修改。</p>
+<p>以上一些增强内聚性，降低耦合性的方法。</p>
+<p><a href="https://baike.baidu.com/item/%E9%AB%98%E5%86%85%E8%81%9A%E4%BD%8E%E8%80%A6%E5%90%88/5227009?fr=aladdin">高内聚低耦合_百度百科</a></p>
+</li>
+</ul>
+<h2 id="期望异构性"><a href="#期望异构性" class="headerlink" title="期望异构性"></a>期望异构性</h2><blockquote>
+<p>在任何一个大型的网络中，可能存在不同类型的硬件、传输设施和应用程序。为了处理它们，网络的设计必须简单、通用和灵活。</p>
+</blockquote>
+<h2 id="避免静态选项和参数"><a href="#避免静态选项和参数" class="headerlink" title="避免静态选项和参数"></a>避免静态选项和参数</h2><blockquote>
+<p>如果不可避免要使用参数的话（比如最大数据包长度)，那么，最好的办法是让发送方和接收方协商一个值，而不是定义固定的参数值。</p>
+</blockquote>
+<p>比如说设计网页时一个页面展示多少条信息可以由用户选择；设计mc的一个物品时它的掉落率可以由配置文件调整</p>
+<h2 id="寻找好的而不是完美的设计"><a href="#寻找好的而不是完美的设计" class="headerlink" title="寻找好的而不是完美的设计"></a>寻找好的而不是完美的设计</h2><blockquote>
+<p>通常设计者有一个好的设计，但是它不能够处理一些怪异的特殊情况。设计者不应该乱改设计，而是坚持这个好的设计，将围绕着特殊情况而展开的工作负担转移到那些强烈需求的人身上。</p>
+</blockquote>
+<h2 id="严格发送，宽容接收"><a href="#严格发送，宽容接收" class="headerlink" title="严格发送，宽容接收"></a>严格发送，宽容接收</h2><blockquote>
+<p>换句话说，只发送那些严格符合标准的数据包，但是，容许接收那些不完全符合标准的数据包，并且试图对它们进行处理。</p>
+</blockquote>
+<p>分工设计时，不要想着别人的数据包是严格符合你的思维的，考虑好各种可能的null问题</p>
+<h2 id="考虑可扩展性"><a href="#考虑可扩展性" class="headerlink" title="考虑可扩展性"></a>考虑可扩展性</h2><blockquote>
+<p>如果系统需要有效地处理上百万台主机和几十亿用户，那么，没有一种中心数据库是可以容忍的,同时必须将负载尽可能均匀地分布到所有可用的资源上。</p>
+</blockquote>
+<h2 id="考虑性能和成本"><a href="#考虑性能和成本" class="headerlink" title="考虑性能和成本"></a>考虑性能和成本</h2><blockquote>
+<p>如果一个网络的性能很差，或者成本很高，那么没有人会使用它。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>规范与标准</category>
+      </categories>
   </entry>
   <entry>
     <title>数组与指针的深度理解</title>
@@ -237,70 +387,6 @@
       </tags>
   </entry>
   <entry>
-    <title>从Internet设计原则中汲取经验</title>
-    <url>/categories/%E8%A7%84%E8%8C%83%E4%B8%8E%E6%A0%87%E5%87%86/%E4%BB%8EInternet%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E4%B8%AD%E6%B1%B2%E5%8F%96%E7%BB%8F%E9%AA%8C/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="从Internet设计原则中汲取经验"><a href="#从Internet设计原则中汲取经验" class="headerlink" title="从Internet设计原则中汲取经验"></a>从Internet设计原则中汲取经验</h1><p>要深入理解软件工程的概念，就应该从那些经典的工程中学习，寻找共性。 从优秀工程的设计原则中思考，反思自己的项目工作中的设计方式， 回忆那些让开发变得很混乱的问题。<br>从前人总结出的设计原则中和自己的工作对比，找出哪些是自己可以改进的，慢慢学习如何进行工程设计。</p>
-<span id="more"></span>
-
-<p>Internet最重要的设计原则包括以下十点</p>
-<h2 id="保证工作"><a href="#保证工作" class="headerlink" title="保证工作"></a>保证工作</h2><blockquote>
-<p>直到多个原型系统成功地与对方相互通信，方可完成设计或者确定标准。设计者常常首先写出一个1000页的标准，并获得批准，过后才发现存在严重的缺陷，根本无法工作。然后他们再编写一个1.1版本的标准。这不是正确的工作方式。</p>
-</blockquote>
-<p>在建立标准前应该先测试一下可行性，有的时候我会认为自己的想法非常容易实现，甚至简单到没必要测试，等到了实际开发的时候，特别是在实现那些我认为是细枝末节的地方时，发现这个地方的逻辑有问题，根本不可能实现。</p>
-<p>比如说我在设计数据库的表关系时，有order和user两个实体，每个user有很多order。依据数据库设计三大范式，我在order的表里添加了user_id来建立映射关系，这听起来非常正确，所以我在最初以此作为标准进行开发。</p>
-<p>根据这个想法我实现了后端的功能，但是当我回到前端开发时，意识到我在前端需要显示每个订单对应的用户的名字。<br>在不改变后端代码的情况下，想要实现这个功能必须向后端发送大量的包来进行查询每个user_id对应的user，再把用户名给读取出来，这显然是效率低下的！</p>
-<p>于是我只能选择去重构后端（我前面举的例子是实际问题的简化，实际情况还要再复杂一点），而如果一开始先好好思考可行性并推敲好使用流程就可以避免类似的麻烦。</p>
-<p>上述问题在<strong>保证工作</strong>这个原则下的启示是，应该先尝试着将一条order的信息展示出来，再将标准确定下来。即使自己觉得逻辑非常清晰，也应该好好的从头开始捋一捋流程，避免忽略不切实际的设计。</p>
-<p>就好像是高中的导数题，拿到题一看迅速的对应上了解题模型，觉得这道题非常简单，等到实际做起来发现好像和不是同一个类型的题。它很像曾经做过的某题，但是解题方法并不一样，而到发现这个问题时只能推倒重做。</p>
-<p><strong>这个原则不是要否定那些逻辑并不足够严谨的假设，而是警告设计者不要想当然地认为某些东西应该是对的</strong></p>
-<h2 id="保持简单"><a href="#保持简单" class="headerlink" title="保持简单"></a>保持简单</h2><blockquote>
-<p>有疑问时应该使用最简单的解决方案。William of Occam在14世纪就提出了这条原则(称为奥卡姆的剃刀)。换成现代术语就是:决斗特性。如果一项特性并非绝对不要，那么就放弃该特性。尤其是，通过组合其他的特性也能够获得同样效果的时候。</p>
-</blockquote>
-<h2 id="明确选择"><a href="#明确选择" class="headerlink" title="明确选择"></a>明确选择</h2><blockquote>
-<p>如果有几种方法可以完成同样的事情，则选择其中一种方法。用两种或者多种方法来做同样的事情简直是自找麻烦。通常标准会有多个选项、多种模式或多个参数，因为多个实力强大的参与方坚持认为他们的方法是最好的。设计者应该坚决抵制这种倾向，学会说“不”。</p>
-</blockquote>
-<h2 id="模块开发"><a href="#模块开发" class="headerlink" title="模块开发"></a>模块开发</h2><blockquote>
-<p>这条原则直接导致了协议栈的思想，每一层的协议完全独立于所有其他的协议。按照这种方法，如果实际环境中要求改变一个模块或者一层，则其他模块或层都不会受到影响。</p>
-</blockquote>
-<p>编写代码时一定得注重<strong>”高内聚，低耦合“</strong>，这是有效提升可维护性的手段，试想以下情景：</p>
-<ul>
-<li><p>你正在编写一个函数，已经写了一百多行，当你逻辑不够清晰时想再重新梳理一遍这个函数，发现自己一时难以重新理顺逻辑。</p>
-</li>
-<li><p>你需要在两个不同的地方做同样的事情，你为了方便直接复制粘贴再稍微修改了一下，一切运行正常。过了几天你改了前一个位置的代码并调试至可以正常运行。之后，你在使用过程中发现后一个位置出了问题，你看了看发现原来是后面那里忘了改。</p>
-</li>
-<li><p>程序有bug，出问题的函数有一百多行，很难确定在哪个位置。</p>
-<p>以上问题都在于过多功能杂糅到一个模块里，而没有把任务切块，分成若干个零件，单个模块承担了过多责任，即内聚性弱。或者一个地方的修改导致很多其他地方也要修改，即耦合性强。</p>
-<p>如果要写归并排序，把二分和合并分开一定有助于编写；如果要写一个网页，若内容较多，将布局分成header、footer、aside、main，每一块单独做一个文件来处理会是不错的选择；使用vue开发，分割组件时，尽量用props暴露最低限度的接口而不是使用refs直接操作子组件（在必须耦合的情况下尽量数据耦合而不是控制耦合）；多个模块共享的数据应该是常量；一个模块只暴露必要的接口，其他部分应该对外部隐藏，而留出的接口应该在一开始就规划好以保证不到万不得已的情况不修改。</p>
-<p>以上一些增强内聚性，降低耦合性的方法。</p>
-<p><a href="https://baike.baidu.com/item/%E9%AB%98%E5%86%85%E8%81%9A%E4%BD%8E%E8%80%A6%E5%90%88/5227009?fr=aladdin">高内聚低耦合_百度百科</a></p>
-</li>
-</ul>
-<h2 id="期望异构性"><a href="#期望异构性" class="headerlink" title="期望异构性"></a>期望异构性</h2><blockquote>
-<p>在任何一个大型的网络中，可能存在不同类型的硬件、传输设施和应用程序。为了处理它们，网络的设计必须简单、通用和灵活。</p>
-</blockquote>
-<h2 id="避免静态选项和参数"><a href="#避免静态选项和参数" class="headerlink" title="避免静态选项和参数"></a>避免静态选项和参数</h2><blockquote>
-<p>如果不可避免要使用参数的话（比如最大数据包长度)，那么，最好的办法是让发送方和接收方协商一个值，而不是定义固定的参数值。</p>
-</blockquote>
-<p>比如说设计网页时一个页面展示多少条信息可以由用户选择；设计mc的一个物品时它的掉落率可以由配置文件调整</p>
-<h2 id="寻找好的而不是完美的设计"><a href="#寻找好的而不是完美的设计" class="headerlink" title="寻找好的而不是完美的设计"></a>寻找好的而不是完美的设计</h2><blockquote>
-<p>通常设计者有一个好的设计，但是它不能够处理一些怪异的特殊情况。设计者不应该乱改设计，而是坚持这个好的设计，将围绕着特殊情况而展开的工作负担转移到那些强烈需求的人身上。</p>
-</blockquote>
-<h2 id="严格发送，宽容接收"><a href="#严格发送，宽容接收" class="headerlink" title="严格发送，宽容接收"></a>严格发送，宽容接收</h2><blockquote>
-<p>换句话说，只发送那些严格符合标准的数据包，但是，容许接收那些不完全符合标准的数据包，并且试图对它们进行处理。</p>
-</blockquote>
-<p>分工设计时，不要想着别人的数据包是严格符合你的思维的，考虑好各种可能的null问题</p>
-<h2 id="考虑可扩展性"><a href="#考虑可扩展性" class="headerlink" title="考虑可扩展性"></a>考虑可扩展性</h2><blockquote>
-<p>如果系统需要有效地处理上百万台主机和几十亿用户，那么，没有一种中心数据库是可以容忍的,同时必须将负载尽可能均匀地分布到所有可用的资源上。</p>
-</blockquote>
-<h2 id="考虑性能和成本"><a href="#考虑性能和成本" class="headerlink" title="考虑性能和成本"></a>考虑性能和成本</h2><blockquote>
-<p>如果一个网络的性能很差，或者成本很高，那么没有人会使用它。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>规范与标准</category>
-      </categories>
-  </entry>
-  <entry>
     <title>面向万物互联的终端操作系统设计与实现</title>
     <url>/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%9D%A2%E5%90%91%E4%B8%87%E7%89%A9%E4%BA%92%E8%81%94%E7%9A%84%E7%BB%88%E7%AB%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p> 　　我们正在进入物联网时代，各种智能设备除了相应的硬件之外，同样也需要运行操作系统进行软硬件的管理。相应地，操作系统须支持设备的多样性：功能多样性，支持简单数据采样，到较为复杂的数据预处理&#x2F;压缩&#x2F;推断等;硬件多样性，从最基本的温度传感器，到智能处理设备等，其CPU&#x2F;内存&#x2F;外存差异大，需要进行灵活配置。</p>
@@ -322,9 +408,9 @@
 <p>　　（5）融入了面向对象技术。</p>
 <p>　　鉴于以上优势，本新型终端设备操作系统采用微内核架构进行设计，以此适应终端设备的软硬件多样性，在CPU&#x2F;内存&#x2F;外存差异巨大的情况下保持良好的效率、适应性和扩展性。</p>
 <h1 id="二、整体设计"><a href="#二、整体设计" class="headerlink" title="二、整体设计"></a>二、整体设计</h1><h2 id="2-1-系统工作流程"><a href="#2-1-系统工作流程" class="headerlink" title="2.1 系统工作流程"></a>2.1 系统工作流程</h2><p>　　相对于宏内核将所有OS服务放入内核，并在内核模式下运行这些服务，微内核仅保留必须直接依赖于硬件的服务如进程间通信（IPC，inter-process communication）、任务调度（dispatcher）、低级内存管理（basic memory management）等。其他硬件无关的服务如设备驱动、文件系统、网络服务等都以服务器进程的形式运行在用户空间内。</p>
-<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20220704060553156.png" alt="image-20220704060553156"></p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220704060553156.png" alt="image-20220704060553156"></p>
 <p>　　为了满足微内核的模块化设计需求，通过参考Minix R3.3.0的架构设计，本新型终端设备操作系统采用分层架构。系统架构分为服务接口层、服务层、内核接口层、内核层、硬件适配层。其中内核层负责实现微内核直接依赖于硬件的基本服务，通过调用硬件适配层来适应不同硬件如芯片、内存条的差异以提升操作系统的可移植性，并通过内核接口层向服务层提供接口。服务层模块化地实现了从宏内核中分离出来的系统服务如设备驱动、文件管理、网络服务，这些系统服务以分离的进程的形式运行，彼此之间互相隔离，通过内核层提供的IPC服务互相通信，并通过服务接口层向应用层提供接口。</p>
-<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20220704024914963.png" alt="image-20220704024914963"></p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220704024914963.png" alt="image-20220704024914963"></p>
 <p>　　这种分层架构有利于适配多种多样的硬件平台，使得可移植性显著提升。</p>
 <h2 id="2-2-系统对新硬件设备的支持"><a href="#2-2-系统对新硬件设备的支持" class="headerlink" title="2.2 系统对新硬件设备的支持"></a>2.2 系统对新硬件设备的支持</h2><p>　　当添加一个新硬件设备时，硬件适配层会将新硬件设备的驱动程序和中断处理程序载入以创建一个新的服务器进程。当用户进程执行I&#x2F;O操作时，调用的接口和宏内核一致，但是实现方式从宏内核的直接函数调用方式替换为了进程间通信方式。</p>
 <p>　　以read系统调用为例，当一个用户进程执行read系统调用时，会使用内核层的IPC服务向文件系统进程发送消息。文件系统进程收到消息后再向设备驱动进程发送消息，随后设备驱动进程会调用相应外部设备的控制器进行读取操作。设备控制器将读取到的数据放入缓冲区后，设备驱动程序执行系统调用请求内核将设备控制器缓冲区的数据拷贝至文件系统进程的缓冲区，接着文件系统进程执行系统再调用请求内核将数据拷贝至用户进程的缓冲区中。</p>
@@ -356,17 +442,17 @@
 <p>　　用来判断是否人员过于密集的公式如下:<br>$$<br>\min(机械采样臂处理速率,识别扫码仪处理速率)&lt;人员到达速率<br>$$<br>　　若满足上列公式，则认为人员过于密集，需要广播该采样点人员过多的提示音。</p>
 <h2 id="3-4-进程调度"><a href="#3-4-进程调度" class="headerlink" title="3.4 进程调度"></a>3.4 进程调度</h2><p>　　为了满足核酸检测过程中采样机械臂的快速重采样要求，本新型终端设备操作系统的任务调度模块支持基于优先级的多级队列调度算法和时间轮转片调度算法，操作系统采用位图管理任务的优先级。应用任务可以通过接口创建另一个任务，并设置该任务的优先级。出于安全性考虑，当一个任务创建另外一个任务时，只能把另外一个任务优先级设置不高于该任务，即任务不能创建比自己优先级还高的子任务。操作系统为每一个优先级维护一个就绪队列，每次调度时选取最高优先级且非空的就绪队列，对相同优先级的任务采取时间轮转片调度算法进行调度。</p>
 <p>　　当采样机械臂人脸定位识别失败后进行重采样时，临时提高采样机械臂进程的优先级，若此次人脸定位成功，在采样后重置为默认优先级，否则继续提高采样机械臂进程的优先级直到优先级达到用户进程的最高优先级。</p>
-<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20220704175301205.png" alt="image-20220704175301205"></p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220704175301205.png" alt="image-20220704175301205"></p>
 <p>　　通过这种老化策略来保证采样机械臂在人脸定位失败后能够快速的重采样以避免被采样者等待过长时间，解决了采样机械臂可能存在的饥饿问题。</p>
 <h1 id="四、内存管理"><a href="#四、内存管理" class="headerlink" title="四、内存管理"></a>四、内存管理</h1><h2 id="4-1-物理页面分配"><a href="#4-1-物理页面分配" class="headerlink" title="4.1 物理页面分配"></a>4.1 物理页面分配</h2><p>　　为了适应终端设备的多样性，支持差异巨大的软件、硬件，本新型终端设备操作系统的物理页面分配策略采用可变分配全局置换策略。内存管理服务器刚开始会为每个进程分配一定数量的物理页面，同时会保持一个空闲物理块队列。当某进程发生缺页时，从空闲物理页面中取出一页分配给该进程；若已无空闲物理页面，则可选择一个未锁定的页面换出外存，再将该物理页面分配给缺页的进程。采用这种策略时，只要某进程发生缺页都将获得新的物理页面，仅当空闲物理页面用完时，系统才选择一个未锁定的页面调出。被选择调出的页面可能是系统中任何一个进程中的页面，因此这个被选中的进程拥有的物理页面会减少，发出请求的进程拥有的物理页面会增多。通过这种方式内存管理进程可以动态调节每个进程拥有的物理页面，有利于复用空闲的物理页面，将这些空闲的物理页面重新分配给物理页面不足的进程，以此降低缺页率。</p>
 <p>　　调页策略采用预调页和请求调页结合的方式，在进程加载、重启时预先调入多个相邻页面，这些页面必然会在不久的将来被使用，提前将这些页面加载到内存中可以减少I&#x2F;O次数，提高内存管理进程的效率。进程在运行过程中采取惰性加载措施，只在发生缺页时向内存管理进程请求调入缺失的页面。</p>
 <h2 id="4-2-页面置换"><a href="#4-2-页面置换" class="headerlink" title="4.2 页面置换"></a>4.2 页面置换</h2><p>　　当物理页面全部分配后，进程再次发生缺页，为了将进程需要的物理页面调入，必须先将一个已经分配出去的页面调出，选择被淘汰页面的方式有很多种类，其中常见的页面置换算法有先进先出置换算法（FIFO）、最近最久未使用置换算法（LRU）、第二次机会置换算法、时钟置换算法、最不常用置换算法（LFU）。其中LRU置换算法效率最佳，且不会出现belady异常，最接近最佳置换算法（OPT）的性能，但是需要大量软件和硬件的支持，不利于支持硬件设备的多样性，因而选择近似LRU的时钟置换算法作为替代。</p>
 <p>　　最简单的时钟策略需要给每一页框关联一个附加位，称为使用位。当某一页首次装入内存中时，则将该页页框的使用位设置为1；当该页随后被访问到时（在访问产生缺页中断之后），它的使用位也会被设置为1。该方法中，用于置换的候选页框集合被看做是一个循环缓冲区，并且有一个指针针与之相关联。当一页被置换时，该指针针被设置成指向缓冲区中的下一页框。当需要置换一页时，操作系统扫描缓冲区，以查找使用位被置为0的一页框。每当遇到一个使用位为1的页框时，操作系统就将该位重新置为0；如果在这个过程开始时，缓冲区中所有页框的使用位均为0时，则选择遇到的第一个页框置换；如果所有页框的使用位均为1时，则指针针在缓冲区中完整地循环一周，把所有使用位都置为0，并且停留在最初的位置上，置换该页框中的页。当需要使用的页已经存在时，则指针不会受到影响，不会发生转动。</p>
-<p>![未命名文件 (2)](C:\Users\Lenovo\Downloads\未命名文件 (2).png)</p>
+<p>![未命名文件 (2)](<a href="https://picture-bed-1306010815.file.myqcloud.com/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6">https://picture-bed-1306010815.file.myqcloud.com/未命名文件</a> (2).png)</p>
 <p>　　可见该策略类似于FIFO置换算法，唯一不同的是，在时钟策略中使用位为1的页框被跳过，该策略之所以称为时钟策略，是因为可以把页框形象地想象成在一个环中。许多操作系统都采用这种简单时钟策略的某种变体。</p>
 <h1 id="五、文件系统"><a href="#五、文件系统" class="headerlink" title="五、文件系统"></a>五、文件系统</h1><h2 id="5-1-设计思路"><a href="#5-1-设计思路" class="headerlink" title="5.1 设计思路"></a>5.1 设计思路</h2><p>　　面对高度结构化数据的存储时，可以仿照数据库管理机制对数据建立索引进行维护。参考Mysql设计原理，本新型终端设备操作系统采用B+树来组织和维护核酸采样信息。B+树是一种树数据结构，通常用于数据库和操作系统的文件系统中。B+树的特点是能够保持数据稳定有序，其插入与修改拥有较稳定的对数时间复杂度。B+树元素自底向上插入，这与二叉树恰好相反。</p>
 <p>　　B+树在节点访问时间远远超过节点内部访问时间的时候，比红黑树、AVL树等数据结构有着显著的优势。通过最大化在每个内部节点内的子节点的数目减少树的高度，平衡操作不经常发生，而且效率增加了。这种价值得以确立通常需要每个节点在次级存储中占据完整的磁盘块或近似的大小。B+背后的想法是内部节点可以有在预定范围内的可变数目的子节点。因此，B+树不需要象其他自平衡二叉查找树那样经常的重新平衡。对于特定的实现在子节点数目上的低和高边界是固定的。</p>
-<p><img src="C:\Users\Lenovo\Downloads\子集问题解空间树.png" alt="子集问题解空间树"></p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/%E5%AD%90%E9%9B%86%E9%97%AE%E9%A2%98%E8%A7%A3%E7%A9%BA%E9%97%B4%E6%A0%91.png" alt="子集问题解空间树"></p>
 <h2 id="5-2-具体应用"><a href="#5-2-具体应用" class="headerlink" title="5.2 具体应用"></a>5.2 具体应用</h2><p>　　以此为基础，将核酸采样信息的每条记录记为一行，将试管编号作为主键建立B+树，同时允许选择性地为其他可以作为查询关键词的属性建立B+树索引，如身份证号码、采样时间、采样点代码。非主键上的B+树索引不携带行数据，需要回表查询，牺牲了一些性能但节省了大量的储存空间。</p>
 <p>　　由于核酸采样信息具有不频繁更新或从不更新的性质，且增删频率相对于计算机运行速度来说极低，在更新数据时选择采用序列化的方式来保证一致性，在并行运行的情况下一次只有一个进程可以操作核酸采样信息，其他需要操作核酸采样信息的进程会陷入阻塞，直到可以操作数据时重新进入就绪队列。通过运用B+树，对核酸采样信息的增删改查操作的复杂度都降为$O(\log n)$，且支持范围查询。</p>
 <h1 id="六、总结与展望"><a href="#六、总结与展望" class="headerlink" title="六、总结与展望"></a>六、总结与展望</h1><h2 id="6-1-全文工作总结"><a href="#6-1-全文工作总结" class="headerlink" title="6.1 全文工作总结"></a>6.1 全文工作总结</h2><p>　　本文基于对支持万物互联的新型操作系统进行研究，首先介绍了微内核技术的发展与优势，展示了该新型终端设备操作系统的整体设计架构与工作流程。随后以全自动核酸采样设备作为载体，进一步细化设计目标，详细地介绍了用以适配该终端设备的进程管理系统、内存管理系统和文件管理系统的设计方案与工作细节。</p>
@@ -386,92 +472,6 @@
       <tags>
         <tag>物联网</tag>
         <tag>微内核</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MIT6.S081操作系统实验——Xv6 and Unix utilities</title>
-    <url>/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6-S081/MIT6-S081%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E9%AA%8C%E2%80%94%E2%80%94Xv6-and-Unix-utilities/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本实验需要编写一些用户程序，调用<em>system call</em>来达成目标，了解<em>pipe</em>的用法。</p>
-<p>实验原文：<a href="https://pdos.csail.mit.edu/6.828/2021/labs/util.html">Lab: Xv6 and Unix utilities (mit.edu)</a></p>
-<span id="more"></span>
-
-<h1 id="前置工作"><a href="#前置工作" class="headerlink" title="前置工作"></a>前置工作</h1><p>进入工作文件夹下，输入以下命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout -util <span class="comment">#切换到util分支，对应本实验</span></span><br><span class="line">git clean -xfd <span class="comment">#清除无关文件（未追踪的、忽略的文件和文件夹）</span></span><br><span class="line">git checkout -b solveutil <span class="comment">#新建一个solveutil分支，来记录自己的编程过程</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="sleep-easy"><a href="#sleep-easy" class="headerlink" title="sleep (easy)"></a>sleep (easy)</h1><h2 id="任务"><a href="#任务" class="headerlink" title="任务"></a>任务</h2><p>写一个用户程序<em>sleep</em>，调用<em>system call</em>来实现休眠。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make qemu</span><br><span class="line">...</span><br><span class="line">init: starting sh</span><br><span class="line">$ <span class="built_in">sleep</span> 10</span><br><span class="line">(nothing happens <span class="keyword">for</span> a little <span class="keyword">while</span>)</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
-
-<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><ul>
-<li>观察<em>user</em>文件夹下的<em>grep.c</em>等文件来学习命令行参数如何传入程序。</li>
-<li>将<em>sleep</em>程序添加进<em>Makefile</em>文件中的<em>UPROGS</em>。（添加完后点击<em>Makefile</em>右上角图标重新加载<em>Makefile</em>项目才能将<em>sleep.c</em>加入索引）</li>
-<li>在用户没有给出<em>sleep</em>的参数时打印错误信息。</li>
-<li>使用<code>atoi</code>函数将命令行参数由字符串转为整形。</li>
-<li>确保<code>main</code>函数调用了<code>exit</code>函数来退出程序。</li>
-</ul>
-<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//sleep.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>* argv[])</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(argc != <span class="number">2</span>)&#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="number">2</span>, <span class="string">&quot;Usage: sleep ticks\n&quot;</span>);<span class="comment">//stderr的文件描述符的值为2</span></span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> ticks = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">    sleep(ticks);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="pingpong-easy"><a href="#pingpong-easy" class="headerlink" title="pingpong(easy)"></a>pingpong(easy)</h1><h2 id="任务-1"><a href="#任务-1" class="headerlink" title="任务"></a>任务</h2><p>写一个用户程序<em>pingpong</em>，实现两个进程间的数据传递。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make qemu</span><br><span class="line">...</span><br><span class="line">init: starting sh</span><br><span class="line">$ pingpong</span><br><span class="line">4: received ping</span><br><span class="line">3: received pong</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
-
-<h2 id="提示-1"><a href="#提示-1" class="headerlink" title="提示"></a>提示</h2><ul>
-<li>使用<code>pipe</code>建立管道，关于管道请面向百度学习。<a href="https://blog.csdn.net/qq_35433716/article/details/86171936">Linux系统编程pipe()</a></li>
-<li>使用<code>fork</code>创建子进程。</li>
-<li>使用<code>read</code>和<code>write</code>对管道进行读和写。</li>
-<li>使用<code>getpid</code>获取当前进程的pid。</li>
-</ul>
-<h2 id="源码-1"><a href="#源码-1" class="headerlink" title="源码"></a>源码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//pingpong.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> p1[<span class="number">2</span>];<span class="comment">//parent-&gt;child</span></span><br><span class="line">    <span class="type">int</span> p2[<span class="number">2</span>];<span class="comment">//child-&gt;parent</span></span><br><span class="line">    pipe(p1);</span><br><span class="line">    pipe(p2);</span><br><span class="line">    <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">//child</span></span><br><span class="line">        <span class="type">char</span> buffer[] = &#123;<span class="string">&#x27;y&#x27;</span>&#125;;</span><br><span class="line">        read(p1[<span class="number">0</span>],buffer,<span class="keyword">sizeof</span>(buffer));</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="number">2</span>,<span class="string">&quot;%d: received ping\n&quot;</span>,getpid());</span><br><span class="line">        write(p2[<span class="number">1</span>],buffer,<span class="keyword">sizeof</span>(buffer));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//parent</span></span><br><span class="line">    <span class="type">char</span> buffer[] = &#123;<span class="string">&#x27;x&#x27;</span>&#125;;</span><br><span class="line">    write(p1[<span class="number">1</span>],buffer,<span class="keyword">sizeof</span>(buffer));</span><br><span class="line">    wait(<span class="number">0</span>);</span><br><span class="line">    read(p2[<span class="number">0</span>],buffer,<span class="keyword">sizeof</span>(buffer));</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="number">2</span>,<span class="string">&quot;%d: received pong\n&quot;</span>,getpid());</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="primes-moderate-x2F-hard"><a href="#primes-moderate-x2F-hard" class="headerlink" title="primes(moderate&#x2F;hard)"></a>primes(moderate&#x2F;hard)</h1><h2 id="任务-2"><a href="#任务-2" class="headerlink" title="任务"></a>任务</h2><p>使用管道写一个并发版本的素数筛来找出2~35中的素数。</p>
-<p>相关链接<a href="https://swtch.com/~rsc/thread/">Bell Labs and CSP Threads (swtch.com)</a></p>
-<p>概念图：</p>
-<p><img src="https://picture-bed-1306010815.file.myqcloud.com/1gfBPmyOSnMvtCl.gif" alt="img"></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make qemu</span><br><span class="line">...</span><br><span class="line">init: starting sh</span><br><span class="line">$ primes</span><br><span class="line">prime 2</span><br><span class="line">prime 3</span><br><span class="line">prime 5</span><br><span class="line">prime 7</span><br><span class="line">prime 11</span><br><span class="line">prime 13</span><br><span class="line">prime 17</span><br><span class="line">prime 19</span><br><span class="line">prime 23</span><br><span class="line">prime 29</span><br><span class="line">prime 31</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
-
-<h2 id="提示-2"><a href="#提示-2" class="headerlink" title="提示"></a>提示</h2><ul>
-<li><p>请牢记这个题目的要求是<strong>通过多线程来加速素数筛</strong>，在编写程序时要检查自己的程序是否满足并发，<strong>一定不要在父进程写入所有数字后子进程才开始处理！</strong>即使这样也能通过测试。</p>
-</li>
-<li><p>请小心关闭进程不需要的文件描述符，否则程序将在第一个进程达到 35 之前耗尽xv6的资源。（<strong>及时关闭管道非常重要！！！</strong>）</p>
-</li>
-<li><p>当一个进程读取完所有数字后，应该等到所有他的子进程终止才能终止，从而避免产生僵尸进程。（善用<code>ctrl+p</code>）</p>
-</li>
-<li><p>当一个管道的写端被关闭时，对读端进行<code>read</code>会返回0。</p>
-</li>
-<li><p>写入所有数字后<strong>再写入一个0来表示写入完毕</strong>，否则子进程无法知道父进程是否写入完毕。采取这种做法是因为执行了<code>fork</code>后父进程才关闭管道写端，子进程并不能感应到管道写端已经关闭了。</p>
-</li>
-</ul>
-<h2 id="源码-2"><a href="#源码-2" class="headerlink" title="源码"></a>源码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//primes.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> p1[<span class="number">2</span>];</span><br><span class="line">    pipe(p1);</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">2</span>; i &lt;= <span class="number">35</span>; i++) &#123;</span><br><span class="line">        write(p1[<span class="number">1</span>], &amp;i, <span class="keyword">sizeof</span>(i));</span><br><span class="line">    &#125;</span><br><span class="line">    i = <span class="number">0</span>;</span><br><span class="line">    write(p1[<span class="number">1</span>], &amp;i, <span class="keyword">sizeof</span>(i));</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">int</span> n, prime, p2[<span class="number">2</span>];</span><br><span class="line">        pipe(p2);</span><br><span class="line">        read(p1[<span class="number">0</span>], &amp;prime, <span class="keyword">sizeof</span>(prime));</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;prime %d\n&quot;</span>, prime);</span><br><span class="line">        <span class="keyword">if</span> (read(p1[<span class="number">0</span>], &amp;n, <span class="keyword">sizeof</span>(n)) &amp;&amp; n) &#123;</span><br><span class="line">            <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">//子进程会复制一遍父进程的两个管道，其中父进程用来与祖父进程交流的管道应该被关闭</span></span><br><span class="line">                close(p1[<span class="number">0</span>]);</span><br><span class="line">                close(p1[<span class="number">1</span>]);</span><br><span class="line">                p1[<span class="number">0</span>] = p2[<span class="number">0</span>];</span><br><span class="line">                p1[<span class="number">1</span>] = p2[<span class="number">1</span>];</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">do</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (n % prime != <span class="number">0</span>)</span><br><span class="line">                    write(p2[<span class="number">1</span>], &amp;n, <span class="keyword">sizeof</span>(n));</span><br><span class="line">            &#125; <span class="keyword">while</span> (read(p1[<span class="number">0</span>], &amp;n, <span class="keyword">sizeof</span>(n)) &amp;&amp; n);</span><br><span class="line">            write(p2[<span class="number">1</span>], &amp;n, <span class="keyword">sizeof</span>(n));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//关闭占用的管道</span></span><br><span class="line">        close(p1[<span class="number">0</span>]);</span><br><span class="line">        close(p1[<span class="number">1</span>]);</span><br><span class="line">        close(p2[<span class="number">0</span>]);</span><br><span class="line">        close(p2[<span class="number">1</span>]);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    wait(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="find-moderate"><a href="#find-moderate" class="headerlink" title="find(moderate)"></a>find(moderate)</h1><h2 id="任务-3"><a href="#任务-3" class="headerlink" title="任务"></a>任务</h2><p>写一个简单版本的UNIX find程序，<code>ls path filename</code>为寻找目录<em>path</em>下所有文件名为<em>filename</em>的文件并输出。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make qemu</span><br><span class="line">...</span><br><span class="line">init: starting sh</span><br><span class="line">$ <span class="built_in">echo</span> &gt; b</span><br><span class="line">$ <span class="built_in">mkdir</span> a</span><br><span class="line">$ <span class="built_in">echo</span> &gt; a/b</span><br><span class="line">$ find . b</span><br><span class="line">./b</span><br><span class="line">./a/b</span><br><span class="line">$ </span><br></pre></td></tr></table></figure>
-
-<h2 id="提示-3"><a href="#提示-3" class="headerlink" title="提示"></a>提示</h2><ul>
-<li>查看<em>user&#x2F;ls.c</em>中的代码来学习如何读取文件夹。</li>
-<li>使用递归来实现遍历所有子目录。</li>
-<li>不要递归进入*”.”<em>（即当前目录）和</em>“..”*（即父目录）</li>
-<li>请使用<code>strcmp</code>函数而非<code>==</code></li>
-</ul>
-<h2 id="源码-3"><a href="#源码-3" class="headerlink" title="源码"></a>源码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//find.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/stat.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/fs.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/fcntl.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> *target;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*读取path中的文件名*/</span></span><br><span class="line"><span class="type">char</span> *</span><br><span class="line"><span class="title function_">filename</span><span class="params">(<span class="type">char</span> *path)</span> &#123;</span><br><span class="line">    <span class="type">char</span> *p = path;</span><br><span class="line">    <span class="keyword">while</span> (*p)</span><br><span class="line">        p++;</span><br><span class="line">    <span class="keyword">while</span> (*p != <span class="string">&#x27;/&#x27;</span> &amp;&amp; p != path)</span><br><span class="line">        p--;</span><br><span class="line">    <span class="keyword">return</span> p == path ? p : ++p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span></span><br><span class="line"><span class="title function_">find</span><span class="params">(<span class="type">char</span> *path)</span> &#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">st</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> <span class="title">de</span>;</span></span><br><span class="line">    <span class="type">char</span> buf[<span class="number">512</span>], *p;</span><br><span class="line">    <span class="keyword">if</span> ((fd = open(path, O_RDONLY)) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="number">2</span>, <span class="string">&quot;find: cannot open %s\n&quot;</span>, path);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (fstat(fd, &amp;st) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="number">2</span>, <span class="string">&quot;find: cannot stat %s\n&quot;</span>, path);</span><br><span class="line">        close(fd);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span> (st.type) &#123;</span><br><span class="line">        <span class="keyword">case</span> T_FILE:</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">strcmp</span>(filename(path), target) == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, path);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> T_DIR:</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">strlen</span>(path) + <span class="number">1</span> + DIRSIZ + <span class="number">1</span> &gt; <span class="keyword">sizeof</span> buf) &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;find: path too long\n&quot;</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">strcpy</span>(buf, path);</span><br><span class="line">            p = buf + <span class="built_in">strlen</span>(buf);</span><br><span class="line">            *p++ = <span class="string">&#x27;/&#x27;</span>;</span><br><span class="line">            <span class="keyword">while</span> (read(fd, &amp;de, <span class="keyword">sizeof</span>(de)) == <span class="keyword">sizeof</span>(de)) &#123;</span><br><span class="line">                <span class="keyword">if</span> (de.inum == <span class="number">0</span> || <span class="built_in">strcmp</span>(de.name, <span class="string">&quot;.&quot;</span>) == <span class="number">0</span> || <span class="built_in">strcmp</span>(de.name, <span class="string">&quot;..&quot;</span>) == <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                memmove(p, de.name, DIRSIZ);</span><br><span class="line">                p[DIRSIZ] = <span class="number">0</span>;</span><br><span class="line">                find(buf);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    close(fd);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">3</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="number">2</span>, <span class="string">&quot;Usage: find path filename\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    target = argv[<span class="number">2</span>];</span><br><span class="line">    find(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="xargs-moderate"><a href="#xargs-moderate" class="headerlink" title="xargs(moderate)"></a>xargs(moderate)</h1><h2 id="任务-4"><a href="#任务-4" class="headerlink" title="任务"></a>任务</h2><p>写一个简单版本的UNIX xargs程序，从<em>stdin</em>逐行读取，将每一行作为参数执行命令。比如<code>echo hello too | xargs echo bye</code>，要输出<code>bye hello too</code>，等价于<code>echo bye hello too</code>。（建议看原文理解）</p>
-<h2 id="提示-4"><a href="#提示-4" class="headerlink" title="提示"></a>提示</h2><ul>
-<li><p>使用<code>gets</code>函数来读取<em>stdin</em>。</p>
-</li>
-<li><p>使用<code>fork</code>和<code>exec</code>函数来执行子进程。</p>
-</li>
-</ul>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//xargs.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span> &#123;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">64</span>], *xargs[<span class="number">32</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; argc; i++)</span><br><span class="line">        xargs[i - <span class="number">1</span>] = argv[i];</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">int</span> x = argc - <span class="number">1</span>;</span><br><span class="line">        gets(buf, <span class="number">64</span>);</span><br><span class="line">        <span class="keyword">if</span> (buf[<span class="number">0</span>] == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        xargs[x++] = buf;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">char</span> *p = buf; *p; p++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (*p == <span class="string">&#x27; &#x27;</span>) &#123;</span><br><span class="line">                *p = <span class="number">0</span>;</span><br><span class="line">                xargs[x++] = p + <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (*p == <span class="string">&#x27;\n&#x27;</span>) &#123;</span><br><span class="line">                *p = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">            exec(argv[<span class="number">1</span>], xargs);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    wait(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="评测"><a href="#评测" class="headerlink" title="评测"></a>评测</h1><p>输入<code>make grade</code>或<code>python ./grade-lab-util</code>来评测整个实验。</p>
-<p>若想单独评测一个题目比如<em>sleep</em>可以使用<code>python ./grade-lab-util sleep</code>。</p>
-<p>评测整个实验前别忘了在xv6根目录创建一个名为<em>time.txt</em>的文件，在里面输入一个整数表明自己在这个实验上花了多少个小时。</p>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-        <category>MIT6.S081</category>
-      </categories>
-      <tags>
-        <tag>MIT Lab</tag>
-        <tag>pipe</tag>
       </tags>
   </entry>
   <entry>
