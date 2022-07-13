@@ -87,363 +87,6 @@
       </tags>
   </entry>
   <entry>
-    <title>MIT6.s081操作系统实验——环境搭建</title>
-    <url>/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6-S081/MIT6-S081%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E9%AA%8C%E2%80%94%E2%80%94%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在做过各种语言的项目，对网站架构和职业要求有一个基础认知后，我认为要在卷翻天的职场立足，在了解并能使用前沿技术的同时还得打好计算机基础，所以痛下决心重拾大二摸鱼过去的OS实验。</p>
-<p>2018年及以前MIT6.828是MIT的本科生OS课程，2019开始这门课被拆成了6.s081和6.828，分别成为本科生和研究生的OS课程。6.s081的实验由原来的5个拆成了10个，总体难度降低，更加易于基础并不牢固的学生学习。</p>
-<p>课程链接<a href="https://pdos.csail.mit.edu/6.828/2021/">6.S081 &#x2F; Fall 2021 (mit.edu)</a></p>
-<p>我将记录2021年课程的实验全过程，下文是运行环境以及<strong>调试环境</strong>搭建的记录，着重记录<strong>如何使用CLion进行远程开发以及远程调试</strong>，这在网上很难找到相应资料。（非常佩服能使用原始gdb进行调试的人，已经是一个离不开ide的快速跳转，自动补全，集成调试的废物了）</p>
-<span id="more"></span>
-
-<h1 id="安装虚拟机以及必要工具下载"><a href="#安装虚拟机以及必要工具下载" class="headerlink" title="安装虚拟机以及必要工具下载"></a>安装虚拟机以及必要工具下载</h1><p>课程的文档里有各个平台的安装教程，本文以VMware Workstation Pro 16中安装Ubuntu20.04.4 Server作为基础环境。</p>
-<p>课程原文 <a href="https://pdos.csail.mit.edu/6.828/2021/tools.html">6.S081 &#x2F; Fall 2021 (mit.edu)</a></p>
-<p>安装虚拟机可以在百度上找到很多教程，这里不再赘述，仅放出下载链接</p>
-<ul>
-<li><p><a href="https://www.vmware.com/cn/products/workstation-pro/workstation-pro-evaluation.html">下载 VMware Workstation Pro | CN</a></p>
-</li>
-<li><p><a href="https://cn.ubuntu.com/download/server/step1">获取Ubuntu服务器版 | Ubuntu</a>   我下载的是Server版，只有命令行没有桌面，更喜爱桌面版可以自行下载</p>
-</li>
-</ul>
-<p>安装完成并启动虚拟机后输入以下命令下载必要工具，主要是c&#x2F;c++编译工具集，riscv64架构的gnu工具集，qemu虚拟机，git，适用于riscv64架构的gdb。（本课程使用的操作系统为xv6，是一个基于riscv64架构的小型教学向OS）</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install git build-essential gdb-multiarch qemu-system-misc gcc-riscv64-linux-gnu binutils-riscv64-linux-gnu </span><br></pre></td></tr></table></figure>
-
-<p>直接下载可能会过于缓慢，如果太慢了请先替换apt源为国内源（<strong>请尽量用较新的源</strong>）。这里使用的是阿里源和清华源，网上教程有很多，以下是我使用的源，用它替换掉*&#x2F;etc&#x2F;apt&#x2F;source.list*中的内容后输入<code>apt-get update</code>就行了。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#添加阿里源</span></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse</span><br><span class="line"><span class="comment">#添加清华源</span></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse</span></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse</span></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse</span></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="下载xv6的git仓库"><a href="#下载xv6的git仓库" class="headerlink" title="下载xv6的git仓库"></a>下载xv6的git仓库</h1><p>在用户文件夹下输入以下命令下载课程的xv6源码，注意<strong>不要下载xv6的官方源码而是下载课程改动过的源码</strong>，对改动内容感兴趣的话可以使用<code>git log</code>查看改动内容。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git://g.csail.mit.edu/xv6-labs-2021</span><br></pre></td></tr></table></figure>
-
-<p>下载速度可能很缓慢，可以直接从我的git仓库fork一份或直接clone。</p>
-<p><a href="https://github.com/foliet/MIT-6.s081">foliet&#x2F;MIT-6.s081 (github.com)</a></p>
-<p>我仓库my+实验名的分支是我自己完成后代码，ricsv分支是xv6的源码，其他十个分支是对应lab的分支。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git@github.com:Foliet/MIT-6.s081.git <span class="comment">#ssh</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/Foliet/MIT-6.s081.git <span class="comment">#https</span></span><br></pre></td></tr></table></figure>
-
-<p>先进入文件夹内，然后输入以下两条命令。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout util</span><br><span class="line">make qemu</span><br></pre></td></tr></table></figure>
-
-<p>看到如下输出即为启动成功，一切顺利，否则按照课程原文说明逐个工具检查是否下载成功。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">riscv64-unknown-elf-gcc    -c -o kernel/entry.o kernel/entry.S</span><br><span class="line">riscv64-unknown-elf-gcc -Wall -Werror -O -fno-omit-frame-pointer -ggdb -DSOL_UTIL -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -mno-relax -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/start.o kernel/start.c</span><br><span class="line">...  </span><br><span class="line">riscv64-unknown-elf-ld -z max-page-size=4096 -N -e main -Ttext 0 -o user/_zombie user/zombie.o user/ulib.o user/usys.o user/printf.o user/umalloc.o</span><br><span class="line">riscv64-unknown-elf-objdump -S user/_zombie &gt; user/zombie.asm</span><br><span class="line">riscv64-unknown-elf-objdump -t user/_zombie | sed <span class="string">&#x27;1,/SYMBOL TABLE/d; s/ .* / /; /^$/d&#x27;</span> &gt; user/zombie.sym</span><br><span class="line">mkfs/mkfs fs.img README  user/xargstest.sh user/_cat user/_echo user/_forktest user/_grep user/_init user/_kill user/_ln user/_ls user/_mkdir user/_rm user/_sh user/_stressfs user/_usertests user/_grind user/_wc user/_zombie </span><br><span class="line">nmeta 46 (boot, super, <span class="built_in">log</span> blocks 30 inode blocks 13, bitmap blocks 1) blocks 954 total 1000</span><br><span class="line">balloc: first 591 blocks have been allocated</span><br><span class="line">balloc: write bitmap block at sector 45</span><br><span class="line">qemu-system-riscv64 -machine virt -bios none -kernel kernel/kernel -m 128M -smp 3 -nographic -drive file=fs.img,<span class="keyword">if</span>=none,format=raw,<span class="built_in">id</span>=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0</span><br><span class="line"></span><br><span class="line">xv6 kernel is booting</span><br><span class="line"></span><br><span class="line">hart 2 starting</span><br><span class="line">hart 1 starting</span><br><span class="line">init: starting sh</span><br><span class="line">$ </span><br></pre></td></tr></table></figure>
-
-<h1 id="配置Ubuntu的ssh服务器"><a href="#配置Ubuntu的ssh服务器" class="headerlink" title="配置Ubuntu的ssh服务器"></a>配置Ubuntu的ssh服务器</h1><p>输入<code>sudo su</code>进入root用户模式，然后输入<code>passwd</code>为root用户设置一个密码。</p>
-<p>输入<code>ls /etc/ssh</code>命令查看是否有<em>sshd_config</em>这个文件，如果没有则输入<code>apt-get install openssh-server</code>下载。</p>
-<p>将<code>sshd_config</code>中的PermitRootLogin的#号去掉，并将值改为yes。</p>
-<p>输入<code>service ssh restart</code>重启ssh服务。（<strong>如果没设置开机自动启动，那么每次开机都要重启ssh服务</strong>）</p>
-<p>完成后在物理机上打开一个shell，输入以下命令尝试连接虚拟机。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh root@&#123;你的虚拟机ip&#125;</span><br><span class="line">ssh root@192.168.126.128 <span class="comment"># 比如这样</span></span><br></pre></td></tr></table></figure>
-
-<p>如果不成功请转向百度找问题，搜索<strong>“以root用户连接ssh服务器”</strong>应该能找到很多教程。</p>
-<h1 id="在CLion上连接虚拟机"><a href="#在CLion上连接虚拟机" class="headerlink" title="在CLion上连接虚拟机"></a>在CLion上连接虚拟机</h1><p>CLion是jetbrains公司面向c&#x2F;c++的ide，<strong>通过学生优惠可以免费获取全家桶的一年通行证，并且在校期间可以无限续，只需要有edu后缀的邮箱就行了</strong>，请转向百度搜索如何获得学生优惠。</p>
-<p><a href="https://www.jetbrains.com/zh-cn/clion/">CLion：JetBrains 出品的 C 和 C++ 跨平台 IDE</a></p>
-<h2 id="配置工具链"><a href="#配置工具链" class="headerlink" title="配置工具链"></a>配置工具链</h2><p>新建一个项目，打开<strong>设置</strong>，选择<strong>构建、执行、部署</strong>，选择<strong>工具链</strong>，点上方加号➕添加一个远程主机，添加一个ssh凭据并手动输入gdb-multiarch的路径来替代默认gdb（原始gdb不能识别riscv的指令集）。</p>
-<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220329105815490.png" alt="image-20220329105815490"></p>
-<p>我这里是下了cmake，不下cmake也没关系，只需要管<strong>凭据</strong>和<strong>调试器</strong>。</p>
-<h2 id="配置部署服务器"><a href="#配置部署服务器" class="headerlink" title="配置部署服务器"></a>配置部署服务器</h2><p>点击上方<strong>工具</strong>，选择<strong>部署</strong>，点击<strong>配置</strong>，填好映射路径。</p>
-<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220329130436272.png" alt="image-20220329130436272"></p>
-<p>然后依次点<strong>工具</strong>、<strong>部署</strong>、<strong>浏览远程主机</strong>，就可以管理虚拟机的文件了，在这里可以很方便的直接管理虚拟机文件。</p>
-<p>删除项目内初始的文件（如果有的话），右键项目文件夹，点击部署，然后下载虚拟机里的文件。</p>
-<h2 id="配置Makefile项目"><a href="#配置Makefile项目" class="headerlink" title="配置Makefile项目"></a>配置Makefile项目</h2><p>打开设置，将构建目标设置为<em>qemu-gdb</em>。</p>
-<p><img src="https://picture-bed-1306010815.file.myqcloud.com/d3PMj8gnxAlXT6u.png" alt="image-20220402152641258"></p>
-<p><strong>如果设置里显示未检测到<em>Makefile</em>项目就删掉项目文件夹里的*.idea*文件夹，然后重新打开项目。</strong>之前的设置会被初始化，需要重新设置一下。</p>
-<p>设置完了之后打开<em>Makefile</em>文件，点右上角按钮重新加载项目。</p>
-<p><img src="https://picture-bed-1306010815.file.myqcloud.com/FXeTWYk2zhjrHGS.png" alt="image-20220402152934792"></p>
-<p>此时索引就建立完毕了，可以自动补全和<code>ctrl+B</code>来快速跳转了。</p>
-<h2 id="添加调试配置"><a href="#添加调试配置" class="headerlink" title="添加调试配置"></a>添加调试配置</h2><p>在右上角打开<strong>运行&#x2F;调试配置</strong>，添加一个<strong>远程调试</strong>的配置。</p>
-<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220329124021990.png" alt="image-20220329124021990"></p>
-<p>课程内的gdb服务器默认使用<em>25000</em>端口。</p>
-<p>执行<code>make</code>后会对内核程序和和每个用户程序各生成一个符号文件，内核的符号文件就叫<em>kernel</em>，用户程序的符号文件为_{程序名}，例如ls的符号文件为<em>_ls</em>。</p>
-<h2 id="设置-gdbinit"><a href="#设置-gdbinit" class="headerlink" title="设置.gdbinit"></a>设置.gdbinit</h2><p>在*&#x2F;root<em>文件夹下创建一个名为</em>.gdbinit*的文件</p>
-<p>向里面填入如下内容</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">set</span> confirm off</span><br><span class="line"><span class="built_in">set</span> architecture riscv:rv64</span><br><span class="line">file kernel/kernel</span><br><span class="line">add-symbol-file user/_ls</span><br><span class="line"><span class="built_in">set</span> disassemble-next-line auto</span><br><span class="line"><span class="built_in">set</span> riscv use-compressed-breakpoints <span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
-
-<p>这里是调试<em>ls</em>，如果要调试自己写的程序，比如说<em>myproc</em>，就添加一行<code>add-symbol-file user/_myproc</code>。</p>
-<h2 id="启动调试服务器"><a href="#启动调试服务器" class="headerlink" title="启动调试服务器"></a>启动调试服务器</h2><p>在虚拟机的xv6文件夹下输入<code>make qemu-gdb</code>来启动gdb服务器，如遇到错误可以尝试<code>make clean</code>来清除之前make生成的文件，shell输出以下内容即为开启成功。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">*** Now run <span class="string">&#x27;gdb&#x27;</span> <span class="keyword">in</span> another window.</span><br><span class="line">qemu-system-riscv64 -machine virt -bios none -kernel kernel/kernel -m 128M -smp 3 -nographic -drive file=fs.img,<span class="keyword">if</span>=none,format=raw,<span class="built_in">id</span>=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0 -S -gdb tcp::25000</span><br></pre></td></tr></table></figure>
-
-<p>如果显示<em>25000</em>端口已被占用或者文件<em>fs.img</em>被占用，应该是上一次运行没有正确退出，请自行百度查找如何根据占用端口或者文件获取pid，然后kill掉，这里建议使用lsof。</p>
-<ul>
-<li><code>apt-get install lsof</code>安装lsof。</li>
-<li><code>lsof fs.img</code>和<code>lsof -i:25000</code>查询进程。</li>
-</ul>
-<h2 id="开始调试"><a href="#开始调试" class="headerlink" title="开始调试"></a>开始调试</h2><p>点击CLion右上角调试按钮开始调试ls程序，下方会显示连接成功，然后回到shell会发现可以输入命令了，此时我输入<code>ls grep</code>，成功触发断点。</p>
-<p><img src="https://picture-bed-1306010815.file.myqcloud.com/dE2UWb5O3a6RSvo.png" alt="image-20220329131621170"></p>
-<h1 id="xv6和CLion相关"><a href="#xv6和CLion相关" class="headerlink" title="xv6和CLion相关"></a>xv6和CLion相关</h1><ul>
-<li>xv6没有实现ps程序，要列出当前进程可以在xv6的终端里中输入<code>ctrl+p</code>，关闭xv6先按<code>ctrl+a</code>再按<code>x</code>。</li>
-<li>调试xv6时发生读取空指针，缓冲区溢出等错误时CLion不会报错，但是会导致调试异常，当系统中断，跳转到<em>spinlock.c</em>等文件内时需要格外注意。</li>
-<li>在CLion内可以用<code>ctrl+alt+h</code>来查看一个函数被哪些函数调用了。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-        <category>MIT6.S081</category>
-      </categories>
-      <tags>
-        <tag>MIT Lab</tag>
-        <tag>Clion</tag>
-        <tag>环境搭建</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>从Internet设计原则中汲取经验</title>
-    <url>/categories/%E8%A7%84%E8%8C%83%E4%B8%8E%E6%A0%87%E5%87%86/%E4%BB%8EInternet%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E4%B8%AD%E6%B1%B2%E5%8F%96%E7%BB%8F%E9%AA%8C/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="从Internet设计原则中汲取经验"><a href="#从Internet设计原则中汲取经验" class="headerlink" title="从Internet设计原则中汲取经验"></a>从Internet设计原则中汲取经验</h1><p>要深入理解软件工程的概念，就应该从那些经典的工程中学习，寻找共性。 从优秀工程的设计原则中思考，反思自己的项目工作中的设计方式， 回忆那些让开发变得很混乱的问题。<br>从前人总结出的设计原则中和自己的工作对比，找出哪些是自己可以改进的，慢慢学习如何进行工程设计。</p>
-<span id="more"></span>
-
-<p>Internet最重要的设计原则包括以下十点</p>
-<h2 id="保证工作"><a href="#保证工作" class="headerlink" title="保证工作"></a>保证工作</h2><blockquote>
-<p>直到多个原型系统成功地与对方相互通信，方可完成设计或者确定标准。设计者常常首先写出一个1000页的标准，并获得批准，过后才发现存在严重的缺陷，根本无法工作。然后他们再编写一个1.1版本的标准。这不是正确的工作方式。</p>
-</blockquote>
-<p>在建立标准前应该先测试一下可行性，有的时候我会认为自己的想法非常容易实现，甚至简单到没必要测试，等到了实际开发的时候，特别是在实现那些我认为是细枝末节的地方时，发现这个地方的逻辑有问题，根本不可能实现。</p>
-<p>比如说我在设计数据库的表关系时，有order和user两个实体，每个user有很多order。依据数据库设计三大范式，我在order的表里添加了user_id来建立映射关系，这听起来非常正确，所以我在最初以此作为标准进行开发。</p>
-<p>根据这个想法我实现了后端的功能，但是当我回到前端开发时，意识到我在前端需要显示每个订单对应的用户的名字。<br>在不改变后端代码的情况下，想要实现这个功能必须向后端发送大量的包来进行查询每个user_id对应的user，再把用户名给读取出来，这显然是效率低下的！</p>
-<p>于是我只能选择去重构后端（我前面举的例子是实际问题的简化，实际情况还要再复杂一点），而如果一开始先好好思考可行性并推敲好使用流程就可以避免类似的麻烦。</p>
-<p>上述问题在<strong>保证工作</strong>这个原则下的启示是，应该先尝试着将一条order的信息展示出来，再将标准确定下来。即使自己觉得逻辑非常清晰，也应该好好的从头开始捋一捋流程，避免忽略不切实际的设计。</p>
-<p>就好像是高中的导数题，拿到题一看迅速的对应上了解题模型，觉得这道题非常简单，等到实际做起来发现好像和不是同一个类型的题。它很像曾经做过的某题，但是解题方法并不一样，而到发现这个问题时只能推倒重做。</p>
-<p><strong>这个原则不是要否定那些逻辑并不足够严谨的假设，而是警告设计者不要想当然地认为某些东西应该是对的</strong></p>
-<h2 id="保持简单"><a href="#保持简单" class="headerlink" title="保持简单"></a>保持简单</h2><blockquote>
-<p>有疑问时应该使用最简单的解决方案。William of Occam在14世纪就提出了这条原则(称为奥卡姆的剃刀)。换成现代术语就是:决斗特性。如果一项特性并非绝对不要，那么就放弃该特性。尤其是，通过组合其他的特性也能够获得同样效果的时候。</p>
-</blockquote>
-<h2 id="明确选择"><a href="#明确选择" class="headerlink" title="明确选择"></a>明确选择</h2><blockquote>
-<p>如果有几种方法可以完成同样的事情，则选择其中一种方法。用两种或者多种方法来做同样的事情简直是自找麻烦。通常标准会有多个选项、多种模式或多个参数，因为多个实力强大的参与方坚持认为他们的方法是最好的。设计者应该坚决抵制这种倾向，学会说“不”。</p>
-</blockquote>
-<h2 id="模块开发"><a href="#模块开发" class="headerlink" title="模块开发"></a>模块开发</h2><blockquote>
-<p>这条原则直接导致了协议栈的思想，每一层的协议完全独立于所有其他的协议。按照这种方法，如果实际环境中要求改变一个模块或者一层，则其他模块或层都不会受到影响。</p>
-</blockquote>
-<p>编写代码时一定得注重<strong>”高内聚，低耦合“</strong>，这是有效提升可维护性的手段，试想以下情景：</p>
-<ul>
-<li><p>你正在编写一个函数，已经写了一百多行，当你逻辑不够清晰时想再重新梳理一遍这个函数，发现自己一时难以重新理顺逻辑。</p>
-</li>
-<li><p>你需要在两个不同的地方做同样的事情，你为了方便直接复制粘贴再稍微修改了一下，一切运行正常。过了几天你改了前一个位置的代码并调试至可以正常运行。之后，你在使用过程中发现后一个位置出了问题，你看了看发现原来是后面那里忘了改。</p>
-</li>
-<li><p>程序有bug，出问题的函数有一百多行，很难确定在哪个位置。</p>
-<p>以上问题都在于过多功能杂糅到一个模块里，而没有把任务切块，分成若干个零件，单个模块承担了过多责任，即内聚性弱。或者一个地方的修改导致很多其他地方也要修改，即耦合性强。</p>
-<p>如果要写归并排序，把二分和合并分开一定有助于编写；如果要写一个网页，若内容较多，将布局分成header、footer、aside、main，每一块单独做一个文件来处理会是不错的选择；使用vue开发，分割组件时，尽量用props暴露最低限度的接口而不是使用refs直接操作子组件（在必须耦合的情况下尽量数据耦合而不是控制耦合）；多个模块共享的数据应该是常量；一个模块只暴露必要的接口，其他部分应该对外部隐藏，而留出的接口应该在一开始就规划好以保证不到万不得已的情况不修改。</p>
-<p>以上一些增强内聚性，降低耦合性的方法。</p>
-<p><a href="https://baike.baidu.com/item/%E9%AB%98%E5%86%85%E8%81%9A%E4%BD%8E%E8%80%A6%E5%90%88/5227009?fr=aladdin">高内聚低耦合_百度百科</a></p>
-</li>
-</ul>
-<h2 id="期望异构性"><a href="#期望异构性" class="headerlink" title="期望异构性"></a>期望异构性</h2><blockquote>
-<p>在任何一个大型的网络中，可能存在不同类型的硬件、传输设施和应用程序。为了处理它们，网络的设计必须简单、通用和灵活。</p>
-</blockquote>
-<h2 id="避免静态选项和参数"><a href="#避免静态选项和参数" class="headerlink" title="避免静态选项和参数"></a>避免静态选项和参数</h2><blockquote>
-<p>如果不可避免要使用参数的话（比如最大数据包长度)，那么，最好的办法是让发送方和接收方协商一个值，而不是定义固定的参数值。</p>
-</blockquote>
-<p>比如说设计网页时一个页面展示多少条信息可以由用户选择；设计mc的一个物品时它的掉落率可以由配置文件调整</p>
-<h2 id="寻找好的而不是完美的设计"><a href="#寻找好的而不是完美的设计" class="headerlink" title="寻找好的而不是完美的设计"></a>寻找好的而不是完美的设计</h2><blockquote>
-<p>通常设计者有一个好的设计，但是它不能够处理一些怪异的特殊情况。设计者不应该乱改设计，而是坚持这个好的设计，将围绕着特殊情况而展开的工作负担转移到那些强烈需求的人身上。</p>
-</blockquote>
-<h2 id="严格发送，宽容接收"><a href="#严格发送，宽容接收" class="headerlink" title="严格发送，宽容接收"></a>严格发送，宽容接收</h2><blockquote>
-<p>换句话说，只发送那些严格符合标准的数据包，但是，容许接收那些不完全符合标准的数据包，并且试图对它们进行处理。</p>
-</blockquote>
-<p>分工设计时，不要想着别人的数据包是严格符合你的思维的，考虑好各种可能的null问题</p>
-<h2 id="考虑可扩展性"><a href="#考虑可扩展性" class="headerlink" title="考虑可扩展性"></a>考虑可扩展性</h2><blockquote>
-<p>如果系统需要有效地处理上百万台主机和几十亿用户，那么，没有一种中心数据库是可以容忍的,同时必须将负载尽可能均匀地分布到所有可用的资源上。</p>
-</blockquote>
-<h2 id="考虑性能和成本"><a href="#考虑性能和成本" class="headerlink" title="考虑性能和成本"></a>考虑性能和成本</h2><blockquote>
-<p>如果一个网络的性能很差，或者成本很高，那么没有人会使用它。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>规范与标准</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>高并发抢课系统后端架构设计</title>
-    <url>/categories/%E5%90%8E%E7%AB%AF/%E9%AB%98%E5%B9%B6%E5%8F%91%E6%8A%A2%E8%AF%BE%E7%B3%BB%E7%BB%9F%E5%90%8E%E7%AB%AF%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="项目架构"><a href="#项目架构" class="headerlink" title="项目架构"></a>项目架构</h1><p>本项目使用nginx作为接入层处理用户的http请求，并负载均衡地分发请求到多个后端服务器上。</p>
-<p>后端服务器使用django框架搭建application，使用uWSGI作为Web服务器。</p>
-<span id="more"></span>
-
-<p><img src="https://picture-bed-1306010815.file.myqcloud.com/1A9DE2FEFD2FCE5C59A02412889A9D9D.jpg" alt="img"></p>
-<p>数据储存方面使用腾讯云的云原生mysql数据库来保障数据库服务的高可用性（主备同步保证可用）和单表性能（避免在大量数据情况下的分库分表），使用redis储存抢课时快速更新的热数据和实现消息队列。</p>
-<blockquote>
-<p>mysql可以进一步替换为postgresql，使用其倒排索引gin优化模糊搜素的效率。</p>
-</blockquote>
-<h1 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h1><ul>
-<li><p>后端服务器提供无状态服务，各服务器间相互独立，一台服务器宕机不影响其他服务器提供服务</p>
-</li>
-<li><p>redis采用3主3备的cluster集群部署方式避免单点故障，并实现了数据的分布式储存。cluster集群的无中心结构有利于动态增删节点，抵抗偶发故障</p>
-<p>（服务器A、B、C分别有一个master节点和slave节点，A的slave节点跟踪B的master节点，B的slave节点跟踪C的master节点，C的slave节点跟踪A的master节点，假设服务器A挂了，服务器C的slave节点会接替服务器A的master节点工作）</p>
-</li>
-</ul>
-<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220617141938252.png" alt="image-20220617141938252"></p>
-<h1 id="高并发-x2F-高性能"><a href="#高并发-x2F-高性能" class="headerlink" title="高并发&#x2F;高性能"></a>高并发&#x2F;高性能</h1><h2 id="运维方面"><a href="#运维方面" class="headerlink" title="运维方面"></a>运维方面</h2><ul>
-<li><p>放开linux内核对打开文件数的限制以及最大socket连接数的限制</p>
-</li>
-<li><p>使用nginx处理网络请求</p>
-<ul>
-<li>使用epoll实现IO多路复用</li>
-<li>开启互斥锁避免epoll的惊群效应</li>
-<li>通过top指令监控linux负载情况合理地设置负载均衡的权重</li>
-</ul>
-</li>
-<li><p>使用C语言编写的uWSGI服务器替换django自带的WSGI服务器</p>
-<ul>
-<li>降低内存占用</li>
-<li>提升响应时间</li>
-<li>详尽的日志功能（在调试过程中发挥了极大作用）</li>
-<li>高度可配置（比如进程在处理多少请求后重启，一定程度上对抗内存泄漏）</li>
-</ul>
-<blockquote>
-<p>uWSGI和uwsgi的优质理解：<a href="https://xiaorui.cc/archives/4264">深入理解uwsgi和gunicorn网络模型</a>。</p>
-</blockquote>
-</li>
-</ul>
-<p><img src="https://pic1.zhimg.com/v2-e80ff00c68688062b6ebaae48c30db70_b.jpg" alt="img"></p>
-<p>上图稍微有些错误，uWSGI服务器和django使用WSGI协议进行交流，而uwsgi协议是uWSGI服务器与Nginx交流的手段之一。</p>
-<ul>
-<li>使用腾讯云的CDN分发静态文件，将静态文件传输的任务从云服务器上剥离开，节约带宽以提供更高的并发量</li>
-</ul>
-<p><img src="https://pic3.zhimg.com/80/v2-5ff8be3f5882508abd7f27fc09891943_1440w.jpg?source=1940ef5c" alt="img"></p>
-<p>经过一些列优化后使用apache bench压测得到的指数显著提升。</p>
-<h2 id="代码方面"><a href="#代码方面" class="headerlink" title="代码方面"></a>代码方面</h2><p>核心思想是尽量<strong>减少网络io导致的阻塞</strong>，以此减少线程切换造成的消耗。</p>
-<ul>
-<li>将抢课的业务逻辑拆分，用redis储存课程剩余名额数，如果学生抢课成功，将消息存进list后直接响应请求，抢课成功后对数据库的操作将异步执行。</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 监听消息队列的部分</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Command</span>(<span class="title class_ inherited__">BaseCommand</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">handle</span>(<span class="params">self, *args, **options</span>):</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            user_id = <span class="built_in">int</span>(redis_conn.brpop(<span class="string">&#x27;enrollment_queue&#x27;</span>, <span class="number">0</span>)[<span class="number">1</span>])</span><br><span class="line">            curriculum_id = <span class="built_in">int</span>(redis_conn.brpop(<span class="string">&#x27;enrollment_queue&#x27;</span>, <span class="number">0</span>)[<span class="number">1</span>])</span><br><span class="line">            user = User.objects.get(pk=user_id)</span><br><span class="line">            curriculum = Curriculum.objects.get(pk=curriculum_id)</span><br><span class="line">            curriculum.student.add(user)</span><br><span class="line">            <span class="keyword">if</span> settings.DEBUG:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;用户：%s 抢到了课程：%s&quot;</span> % (user.username, curriculum.name))</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>使用lua脚本合并多次redis命令，减少网络io阻塞次数。</li>
-</ul>
-<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>在3台2核云服务器的条件下（其中一台负责运行nginx，每台都有2个redis实例和1个django实例），优化前直接连接django的最大tps低于100，使用uwsgi后最大tps达到了5300，cpu利用率在95%以上。</p>
-<p>在并发量为1000的情况下90%的请求延迟小于0.5s。</p>
-<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220612172810846.png" alt="image-20220612172810846"></p>
-<p>在并发量为5000的情况下90%的请求延迟小于1.5秒。</p>
-<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220612172652723.png" alt="image-20220612172652723"></p>
-<p>在并发量为1W的情况下90%的请求延迟小于2.5s。</p>
-<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220612172857531.png" alt="image-20220612172857531"></p>
-<h1 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h1><p>通过lua脚本的原子性保证学生抢课不会发生超选或名额空缺。</p>
-<p>抢课逻辑：</p>
-<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> has_selected = redis.call(<span class="string">&quot;sadd&quot;</span>,KEYS[<span class="number">1</span>],ARGV[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">if</span> has_selected ~= <span class="number">1</span> <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">local</span> count = redis.call(<span class="string">&quot;hincrby&quot;</span>,<span class="string">&quot;curriculum&quot;</span>,ARGV[<span class="number">1</span>],<span class="number">-1</span>)</span><br><span class="line"><span class="keyword">if</span> count &lt; <span class="number">0</span> <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">redis.call(<span class="string">&quot;lpush&quot;</span>,<span class="string">&quot;enrollment_queue&quot;</span>,KEYS[<span class="number">1</span>],ARGV[<span class="number">1</span>])</span><br><span class="line">redis.call(<span class="string">&quot;sadd&quot;</span>,KEYS[<span class="number">1</span>],ARGV[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>这里的脚本在以cluster模式部署redis出现了错误，原因是lua脚本中访问的key必须在同一个node上，解决方法参考以下博文：</p>
-<p><a href="https://blog.csdn.net/qq_20128967/article/details/108611161">Redis Cluster中使用Lua脚本</a></p>
-<p><a href="https://blog.csdn.net/damanchen/article/details/100584171">redis cluster怎么保证键的均匀分配（crc16算法）</a></p>
-</blockquote>
-<h1 id="可维护性"><a href="#可维护性" class="headerlink" title="可维护性"></a>可维护性</h1><ul>
-<li><p>良好的编程风格，依据PEP8编程规范进行编程</p>
-</li>
-<li><p>统一的响应管理</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    body = json.loads(request.body)</span><br><span class="line">    curriculum_id = body[<span class="string">&#x27;curriculum_id&#x27;</span>]</span><br><span class="line"><span class="keyword">except</span> (KeyError, JSONDecodeError):</span><br><span class="line">    <span class="keyword">return</span> Results.illegal_argument</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    user_id = request.session[<span class="string">&#x27;id&#x27;</span>]</span><br><span class="line">    <span class="keyword">except</span> KeyError:</span><br><span class="line">        <span class="keyword">return</span> Results.not_login</span><br><span class="line"></span><br><span class="line">......</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> res == <span class="number">0</span>:</span><br><span class="line">    <span class="keyword">return</span> Result(data_message=<span class="string">&quot;抢课成功&quot;</span>).to_response()</span><br><span class="line"><span class="keyword">elif</span> res == <span class="number">1</span>:</span><br><span class="line">    <span class="keyword">return</span> Result(data_message=<span class="string">&quot;抢课失败：已选该课程&quot;</span>, status=<span class="literal">False</span>).to_response()</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="keyword">return</span> Result(data_message=<span class="string">&quot;抢课失败：人数已达上限&quot;</span>, status=<span class="literal">False</span>).to_response()</span><br></pre></td></tr></table></figure>
-
-<h1 id="可扩展性"><a href="#可扩展性" class="headerlink" title="可扩展性"></a>可扩展性</h1><ul>
-<li>后端使用jwt完成认证的功能，登录信息保存在浏览器而不是服务器内，后端服务器是完全无状态的</li>
-</ul>
-<p><img src="https://img-blog.csdnimg.cn/img_convert/900b3e81f832b2f08c2e8aabb540536a.png" alt="img"></p>
-<ul>
-<li><p>采用python开发，可移植性强</p>
-<ul>
-<li>python本身有跨平台的特性，易于移植到其他平台上</li>
-<li>使用pipreqs工具，自动检测项目的第三方库依赖，安装简单</li>
-<li>django提供的migration功能降低了迁移数据库和更换数据库系统的难度</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>后端</category>
-      </categories>
-      <tags>
-        <tag>分布式</tag>
-        <tag>高并发</tag>
-        <tag>redis</tag>
-        <tag>nginx</tag>
-        <tag>uWSGI</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>面向万物互联的终端操作系统设计与实现</title>
-    <url>/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%9D%A2%E5%90%91%E4%B8%87%E7%89%A9%E4%BA%92%E8%81%94%E7%9A%84%E7%BB%88%E7%AB%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p> 　　我们正在进入物联网时代，各种智能设备除了相应的硬件之外，同样也需要运行操作系统进行软硬件的管理。相应地，操作系统须支持设备的多样性：功能多样性，支持简单数据采样，到较为复杂的数据预处理&#x2F;压缩&#x2F;推断等;硬件多样性，从最基本的温度传感器，到智能处理设备等，其CPU&#x2F;内存&#x2F;外存差异大，需要进行灵活配置。</p>
-<p>　　本文结合国内外微内核操作系统设计了一款新型终端设备操作系统，并以核酸采样设备作为载体进行定制化，重点围绕设备管理、进程管理、内存管理、文件管理等组件进行深入研究，主要工作为以下几点。</p>
-<p>　　（1）实现了对外部硬件设备的良好支持以及同宏内核一致的系统调用。</p>
-<p>　　（2）为了满足核酸采样设备的定制化需要，该新型终端设备操作系统使用信号量实现了高效的同步算法，同时选择了合适的进程调度算法进行调度以避免过长的等待。</p>
-<p>　　（3）采用页式储存管理和可变分配全局置换的页面分配策略进行内存管理，综合考虑缺页率和抖动现象，使得满足性能的同时，所需总的物理内存尽量小。</p>
-<p>　　（4）针对核酸采样信息的结构化数据特性，采用B+树索引组织数据，定制化地设计了核酸采样信息的存取流程，优化了存储空间管理和外存数据读写的性能。</p>
-<p><strong>关键词：物联网，微内核，操作系统</strong></p>
-<span id="more"></span>
-
-<h1 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h1><h2 id="1-1-微内核技术的发展"><a href="#1-1-微内核技术的发展" class="headerlink" title="1.1 微内核技术的发展"></a>1.1 微内核技术的发展</h2><p>　　随着IT技术的发展，计算机系统经历了主机&#x2F;服务器系统、桌面处理系统、手机移动系统等的发展，每种新形态的出现，也都有相应代表性的操作系统出现，并占市场主流。例如，服务器操作系统Unix，桌面操作系统Windows，手机操作系统Android&#x2F;IOS等。操作系统内核有两种形态，即宏内核和微内核，目前这些主流操作系统均是宏内核操作系统。</p>
-<p>　　宏内核（Monolithic kernel）的架构特点是把所有操作系统功能放入内核进程中，整个内核程序都在内核空间（Kernel mode）下以监管者模式（Supervisor mode）的身份运行。宏内核的代码高度紧密，各个模块之间耦合性强，即使有些宏内核模式的操作系统将其运作从整体性运作拆成了多个服务模块，也会因为各个模块之间的强耦合性难以更换模块。同时，宏内核相对于微内核的功能边界更加不明确，不像微内核可以将一个功能的实现封闭在一个较小的模块中，宏内核更难以调试和维护。在出现错误时，宏内核一方面无法快速定位错误点，另一方面会由于一个功能内的错误导致整个内核崩溃。</p>
-<p>　　为了解决上述问题，微内核（Micro kernel）设计理念被提出以对抗宏内核的各种缺点。</p>
-<h2 id="1-2-微内核优势"><a href="#1-2-微内核优势" class="headerlink" title="1.2 微内核优势"></a>1.2 微内核优势</h2><p>　　（1）提高了系统的可扩展性。由于微内核操作系统的许多功能是由相对独立的服务器软件来实现的，当开发了新的硬件和软件时，微内核操作系统只须在相应的服务器中增加新的功能，或再增加一个专门的服务器。与此同时，也必然改善系统的灵活性，不仅可在操作系统中增加新的功能，还可修改原有功能，以及删除已过时的功能，以形成一个更为精干有效的操作系统。</p>
-<p>　　（2）增强了系统的可靠性。由于所有服务器都是运行在用户态，服务器与服务器之间采用的是消息传递通信机制，因此，当某个服务器出现错误时，不会影响内核，也不会影响其它服务器。</p>
-<p>　　（3）可移植性。在微内核结构的操作系统中，所有与特定CPU和I&#x2F;O设备硬件有关的代码，均放在内核和内核下面的硬件隐藏层中，而操作系统其它绝大部分(即各种服务器)均与硬件平台无关，因而，把操作系统移植到另一个计算机硬件平台上所需作的修改是比较小的。</p>
-<p>　　（4）提供了对分布式系统的支持。由于在微内核操作系统中，客户和服务器之间以及服务器和服务器之间的通信，是采用消息传递通信机制进行的，致使微内核操作系统能很好地支持分布式系统和网络系统。</p>
-<p>　　（5）融入了面向对象技术。</p>
-<p>　　鉴于以上优势，本新型终端设备操作系统采用微内核架构进行设计，以此适应终端设备的软硬件多样性，在CPU&#x2F;内存&#x2F;外存差异巨大的情况下保持良好的效率、适应性和扩展性。</p>
-<h1 id="二、整体设计"><a href="#二、整体设计" class="headerlink" title="二、整体设计"></a>二、整体设计</h1><h2 id="2-1-系统工作流程"><a href="#2-1-系统工作流程" class="headerlink" title="2.1 系统工作流程"></a>2.1 系统工作流程</h2><p>　　相对于宏内核将所有OS服务放入内核，并在内核模式下运行这些服务，微内核仅保留必须直接依赖于硬件的服务如进程间通信（IPC，inter-process communication）、任务调度（dispatcher）、低级内存管理（basic memory management）等。其他硬件无关的服务如设备驱动、文件系统、网络服务等都以服务器进程的形式运行在用户空间内。</p>
-<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220704060553156.png" alt="image-20220704060553156"></p>
-<p>　　为了满足微内核的模块化设计需求，通过参考Minix R3.3.0的架构设计，本新型终端设备操作系统采用分层架构。系统架构分为服务接口层、服务层、内核接口层、内核层、硬件适配层。其中内核层负责实现微内核直接依赖于硬件的基本服务，通过调用硬件适配层来适应不同硬件如芯片、内存条的差异以提升操作系统的可移植性，并通过内核接口层向服务层提供接口。服务层模块化地实现了从宏内核中分离出来的系统服务如设备驱动、文件管理、网络服务，这些系统服务以分离的进程的形式运行，彼此之间互相隔离，通过内核层提供的IPC服务互相通信，并通过服务接口层向应用层提供接口。</p>
-<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220704024914963.png" alt="image-20220704024914963"></p>
-<p>　　这种分层架构有利于适配多种多样的硬件平台，使得可移植性显著提升。</p>
-<h2 id="2-2-系统对新硬件设备的支持"><a href="#2-2-系统对新硬件设备的支持" class="headerlink" title="2.2 系统对新硬件设备的支持"></a>2.2 系统对新硬件设备的支持</h2><p>　　当添加一个新硬件设备时，硬件适配层会将新硬件设备的驱动程序和中断处理程序载入以创建一个新的服务器进程。当用户进程执行I&#x2F;O操作时，调用的接口和宏内核一致，但是实现方式从宏内核的直接函数调用方式替换为了进程间通信方式。</p>
-<p>　　以read系统调用为例，当一个用户进程执行read系统调用时，会使用内核层的IPC服务向文件系统进程发送消息。文件系统进程收到消息后再向设备驱动进程发送消息，随后设备驱动进程会调用相应外部设备的控制器进行读取操作。设备控制器将读取到的数据放入缓冲区后，设备驱动程序执行系统调用请求内核将设备控制器缓冲区的数据拷贝至文件系统进程的缓冲区，接着文件系统进程执行系统再调用请求内核将数据拷贝至用户进程的缓冲区中。</p>
-<pre class="mermaid">sequenceDiagram
- participant us as 用户进程
- participant fs as 文件系统
- participant dr as 设备驱动
- participant dc as 设备控制器
- participant kn as 内核
- us->>+fs:read()
- fs->>+dr:dev_io()
- dr->>+dc:do_transfer()
- dc-->>-dr:return
- dr->>+kn:sys_insw()
- kn-->>-dr:return
- dr-->>-fs:return
- fs->>+kn:sys_copy()
- kn-->>-fs:return
- fs-->>-us:return</pre>
-
-<h1 id="三、进程管理"><a href="#三、进程管理" class="headerlink" title="三、进程管理"></a>三、进程管理</h1><h2 id="3-1-进程控制块"><a href="#3-1-进程控制块" class="headerlink" title="3.1 进程控制块"></a>3.1 进程控制块</h2><p>　　系统使用进程控制块（PCB）数据结构来维护与进程相关的具体信息。进程相关的信息包括进程 id，休眠时间，进程时间片，进程状态，进程优先级，进程通信IPC缓存，进程地址空间，进程异常处理函数指针，进程异常号，进程调用终端，进程回应调用者列表，进程调用者列表，进程当前所在列表，进程列表节点，进程名，进程上下文。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pcb</span> &#123;</span></span><br><span class="line">    <span class="type">int32_t</span> pid;</span><br><span class="line">    <span class="type">int32_t</span> ppid;</span><br><span class="line">    <span class="type">int8_t</span> priority;</span><br><span class="line">    <span class="type">int8_t</span> status;</span><br><span class="line">    <span class="type">char</span>* name;</span><br><span class="line">    <span class="type">ctx_t</span> context;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-2-进程同步"><a href="#3-2-进程同步" class="headerlink" title="3.2 进程同步"></a>3.2 进程同步</h2><p>　　在核酸检测过程中，为了满足进程的同步与互斥，采样机械臂的驱动程序和识别扫码仪的驱动程序需要使用操作系统提供的信号量机制来完成任务。信号量（Semaphore）又称为信号量、旗语，是一个同步对象，用于实现进程间的同步与互斥。进程通过对信号量的P操作和V操作来获取或释放资源。核酸检测中的同步问题可以看成多个消费者和多个生产者的消费者-生产者问题，据此可以设计出如下同步算法。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">semophore full = <span class="number">0</span>, empty = k, mutex = <span class="number">1</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span>* <span class="title">waitng_list_head</span>, <span class="title">waiting_list_tail</span>;</span> <span class="comment">//等待队列指针</span></span><br><span class="line"></span><br><span class="line">cobegin</span><br><span class="line"><span class="type">void</span> <span class="title function_">machine_arm</span><span class="params">()</span> &#123;</span><br><span class="line">    P(mutex); <span class="comment">//获取互斥锁</span></span><br><span class="line">    P(full); <span class="comment">//等待等待队列有空闲位置</span></span><br><span class="line">    <span class="comment">//执行采样，删除等待队列头部的数据</span></span><br><span class="line">    V(mutex); <span class="comment">//释放互斥锁</span></span><br><span class="line">    V(empty);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">scanner</span><span class="params">()</span> &#123;</span><br><span class="line">    P(mutex); <span class="comment">//获取互斥锁</span></span><br><span class="line">    P(empty); <span class="comment">//等待等待队列有空闲位置</span></span><br><span class="line">    <span class="comment">//允许扫码，将扫码后新获取的信息插入等待队列尾部</span></span><br><span class="line">    V(mutex); <span class="comment">//释放互斥锁</span></span><br><span class="line">    V(full);</span><br><span class="line">&#125;</span><br><span class="line">coend</span><br></pre></td></tr></table></figure>
-
-<p>　　该算法实现了进程间的高效同步，确保了进程并行运行时不会出现脏读、幻读等错误。</p>
-<h2 id="3-3-进程监控"><a href="#3-3-进程监控" class="headerlink" title="3.3 进程监控"></a>3.3 进程监控</h2><p>　　为了避免核酸检测站点的人员过于密集，采样设备应该实现进程的追踪与监控。通过记录机械采样臂和识别扫码仪的开始处理时间和结束处理时间来计算完成一次核酸检测所花费的时间，并将这个指标与人员到达速率进行比较。</p>
-<p>　　用来判断是否人员过于密集的公式如下:<br>$$<br>\min(机械采样臂处理速率,识别扫码仪处理速率)&lt;人员到达速率<br>$$<br>　　若满足上列公式，则认为人员过于密集，需要广播该采样点人员过多的提示音。</p>
-<h2 id="3-4-进程调度"><a href="#3-4-进程调度" class="headerlink" title="3.4 进程调度"></a>3.4 进程调度</h2><p>　　为了满足核酸检测过程中采样机械臂的快速重采样要求，本新型终端设备操作系统的任务调度模块支持基于优先级的多级队列调度算法和时间轮转片调度算法，操作系统采用位图管理任务的优先级。应用任务可以通过接口创建另一个任务，并设置该任务的优先级。出于安全性考虑，当一个任务创建另外一个任务时，只能把另外一个任务优先级设置不高于该任务，即任务不能创建比自己优先级还高的子任务。操作系统为每一个优先级维护一个就绪队列，每次调度时选取最高优先级且非空的就绪队列，对相同优先级的任务采取时间轮转片调度算法进行调度。</p>
-<p>　　当采样机械臂人脸定位识别失败后进行重采样时，临时提高采样机械臂进程的优先级，若此次人脸定位成功，在采样后重置为默认优先级，否则继续提高采样机械臂进程的优先级直到优先级达到用户进程的最高优先级。</p>
-<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220704175301205.png" alt="image-20220704175301205"></p>
-<p>　　通过这种老化策略来保证采样机械臂在人脸定位失败后能够快速的重采样以避免被采样者等待过长时间，解决了采样机械臂可能存在的饥饿问题。</p>
-<h1 id="四、内存管理"><a href="#四、内存管理" class="headerlink" title="四、内存管理"></a>四、内存管理</h1><h2 id="4-1-物理页面分配"><a href="#4-1-物理页面分配" class="headerlink" title="4.1 物理页面分配"></a>4.1 物理页面分配</h2><p>　　为了适应终端设备的多样性，支持差异巨大的软件、硬件，本新型终端设备操作系统的物理页面分配策略采用可变分配全局置换策略。内存管理服务器刚开始会为每个进程分配一定数量的物理页面，同时会保持一个空闲物理块队列。当某进程发生缺页时，从空闲物理页面中取出一页分配给该进程；若已无空闲物理页面，则可选择一个未锁定的页面换出外存，再将该物理页面分配给缺页的进程。采用这种策略时，只要某进程发生缺页都将获得新的物理页面，仅当空闲物理页面用完时，系统才选择一个未锁定的页面调出。被选择调出的页面可能是系统中任何一个进程中的页面，因此这个被选中的进程拥有的物理页面会减少，发出请求的进程拥有的物理页面会增多。通过这种方式内存管理进程可以动态调节每个进程拥有的物理页面，有利于复用空闲的物理页面，将这些空闲的物理页面重新分配给物理页面不足的进程，以此降低缺页率。</p>
-<p>　　调页策略采用预调页和请求调页结合的方式，在进程加载、重启时预先调入多个相邻页面，这些页面必然会在不久的将来被使用，提前将这些页面加载到内存中可以减少I&#x2F;O次数，提高内存管理进程的效率。进程在运行过程中采取惰性加载措施，只在发生缺页时向内存管理进程请求调入缺失的页面。</p>
-<h2 id="4-2-页面置换"><a href="#4-2-页面置换" class="headerlink" title="4.2 页面置换"></a>4.2 页面置换</h2><p>　　当物理页面全部分配后，进程再次发生缺页，为了将进程需要的物理页面调入，必须先将一个已经分配出去的页面调出，选择被淘汰页面的方式有很多种类，其中常见的页面置换算法有先进先出置换算法（FIFO）、最近最久未使用置换算法（LRU）、第二次机会置换算法、时钟置换算法、最不常用置换算法（LFU）。其中LRU置换算法效率最佳，且不会出现belady异常，最接近最佳置换算法（OPT）的性能，但是需要大量软件和硬件的支持，不利于支持硬件设备的多样性，因而选择近似LRU的时钟置换算法作为替代。</p>
-<p>　　最简单的时钟策略需要给每一页框关联一个附加位，称为使用位。当某一页首次装入内存中时，则将该页页框的使用位设置为1；当该页随后被访问到时（在访问产生缺页中断之后），它的使用位也会被设置为1。该方法中，用于置换的候选页框集合被看做是一个循环缓冲区，并且有一个指针针与之相关联。当一页被置换时，该指针针被设置成指向缓冲区中的下一页框。当需要置换一页时，操作系统扫描缓冲区，以查找使用位被置为0的一页框。每当遇到一个使用位为1的页框时，操作系统就将该位重新置为0；如果在这个过程开始时，缓冲区中所有页框的使用位均为0时，则选择遇到的第一个页框置换；如果所有页框的使用位均为1时，则指针针在缓冲区中完整地循环一周，把所有使用位都置为0，并且停留在最初的位置上，置换该页框中的页。当需要使用的页已经存在时，则指针不会受到影响，不会发生转动。</p>
-<p>![未命名文件 (2)](<a href="https://picture-bed-1306010815.file.myqcloud.com/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6">https://picture-bed-1306010815.file.myqcloud.com/未命名文件</a> (2).png)</p>
-<p>　　可见该策略类似于FIFO置换算法，唯一不同的是，在时钟策略中使用位为1的页框被跳过，该策略之所以称为时钟策略，是因为可以把页框形象地想象成在一个环中。许多操作系统都采用这种简单时钟策略的某种变体。</p>
-<h1 id="五、文件系统"><a href="#五、文件系统" class="headerlink" title="五、文件系统"></a>五、文件系统</h1><h2 id="5-1-设计思路"><a href="#5-1-设计思路" class="headerlink" title="5.1 设计思路"></a>5.1 设计思路</h2><p>　　面对高度结构化数据的存储时，可以仿照数据库管理机制对数据建立索引进行维护。参考Mysql设计原理，本新型终端设备操作系统采用B+树来组织和维护核酸采样信息。B+树是一种树数据结构，通常用于数据库和操作系统的文件系统中。B+树的特点是能够保持数据稳定有序，其插入与修改拥有较稳定的对数时间复杂度。B+树元素自底向上插入，这与二叉树恰好相反。</p>
-<p>　　B+树在节点访问时间远远超过节点内部访问时间的时候，比红黑树、AVL树等数据结构有着显著的优势。通过最大化在每个内部节点内的子节点的数目减少树的高度，平衡操作不经常发生，而且效率增加了。这种价值得以确立通常需要每个节点在次级存储中占据完整的磁盘块或近似的大小。B+背后的想法是内部节点可以有在预定范围内的可变数目的子节点。因此，B+树不需要象其他自平衡二叉查找树那样经常的重新平衡。对于特定的实现在子节点数目上的低和高边界是固定的。</p>
-<p><img src="https://picture-bed-1306010815.file.myqcloud.com/%E5%AD%90%E9%9B%86%E9%97%AE%E9%A2%98%E8%A7%A3%E7%A9%BA%E9%97%B4%E6%A0%91.png" alt="子集问题解空间树"></p>
-<h2 id="5-2-具体应用"><a href="#5-2-具体应用" class="headerlink" title="5.2 具体应用"></a>5.2 具体应用</h2><p>　　以此为基础，将核酸采样信息的每条记录记为一行，将试管编号作为主键建立B+树，同时允许选择性地为其他可以作为查询关键词的属性建立B+树索引，如身份证号码、采样时间、采样点代码。非主键上的B+树索引不携带行数据，需要回表查询，牺牲了一些性能但节省了大量的储存空间。</p>
-<p>　　由于核酸采样信息具有不频繁更新或从不更新的性质，且增删频率相对于计算机运行速度来说极低，在更新数据时选择采用序列化的方式来保证一致性，在并行运行的情况下一次只有一个进程可以操作核酸采样信息，其他需要操作核酸采样信息的进程会陷入阻塞，直到可以操作数据时重新进入就绪队列。通过运用B+树，对核酸采样信息的增删改查操作的复杂度都降为$O(\log n)$，且支持范围查询。</p>
-<h1 id="六、总结与展望"><a href="#六、总结与展望" class="headerlink" title="六、总结与展望"></a>六、总结与展望</h1><h2 id="6-1-全文工作总结"><a href="#6-1-全文工作总结" class="headerlink" title="6.1 全文工作总结"></a>6.1 全文工作总结</h2><p>　　本文基于对支持万物互联的新型操作系统进行研究，首先介绍了微内核技术的发展与优势，展示了该新型终端设备操作系统的整体设计架构与工作流程。随后以全自动核酸采样设备作为载体，进一步细化设计目标，详细地介绍了用以适配该终端设备的进程管理系统、内存管理系统和文件管理系统的设计方案与工作细节。</p>
-<h2 id="6-2-存在的不足"><a href="#6-2-存在的不足" class="headerlink" title="6.2 存在的不足"></a>6.2 存在的不足</h2><p>　　微内核操作系统设计的研究内容非常广，工作量巨大，所以在设计过程中难免有考虑不周的地方。本新型终端设备操作系统的缺点主要体现在以下几个方面：</p>
-<p>　　（1）未实现高效的进程间通信服务，采用内存拷贝的消息传递方式开销较大。</p>
-<p>　　（2）不支持实时进程调度。</p>
-<h2 id="6-3-未来的研究与展望"><a href="#6-3-未来的研究与展望" class="headerlink" title="6.3 未来的研究与展望"></a>6.3 未来的研究与展望</h2><p>　　本研究以开发一款能够支持万物互联的微内核操作系统为目标，将继续开展更加深入的研究，下一步的工作目标包括：</p>
-<p>　　（1）进一步完善进程间通信服务，借鉴seL4微内核采用寄存器传递消息的方式提高进程间通信的效率。</p>
-<p>　　（2）研究微内核系统服务对实时性的支持。</p>
-<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>[1]彭星海.基于X86架构的微内核操作系统的研究和实现[D].成都:电子科技大学, 2020.</p>
-<p>[2]林禹清.面向控制领域的微内核系统服务的设计与实现[D].成都:电子科技大学,2019.</p>
-<p>[3]王训,周东红.微内核操作系统的发展与关键技术解析[J].自动化博览,2022(03):56-61.</p>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>物联网</tag>
-        <tag>微内核</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数组与指针的深度理解</title>
     <url>/categories/CPP/%E6%95%B0%E7%BB%84%E4%B8%8E%E6%8C%87%E9%92%88%E7%9A%84%E6%B7%B1%E5%BA%A6%E7%90%86%E8%A7%A3/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="数组存储与指针问题"><a href="#数组存储与指针问题" class="headerlink" title="数组存储与指针问题"></a>数组存储与指针问题</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><blockquote>
@@ -579,6 +222,363 @@
       <tags>
         <tag>数组</tag>
         <tag>指针</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MIT6.s081操作系统实验——环境搭建</title>
+    <url>/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6-S081/MIT6-S081%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E9%AA%8C%E2%80%94%E2%80%94%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在做过各种语言的项目，对网站架构和职业要求有一个基础认知后，我认为要在卷翻天的职场立足，在了解并能使用前沿技术的同时还得打好计算机基础，所以痛下决心重拾大二摸鱼过去的OS实验。</p>
+<p>2018年及以前MIT6.828是MIT的本科生OS课程，2019开始这门课被拆成了6.s081和6.828，分别成为本科生和研究生的OS课程。6.s081的实验由原来的5个拆成了10个，总体难度降低，更加易于基础并不牢固的学生学习。</p>
+<p>课程链接<a href="https://pdos.csail.mit.edu/6.828/2021/">6.S081 &#x2F; Fall 2021 (mit.edu)</a></p>
+<p>我将记录2021年课程的实验全过程，下文是运行环境以及<strong>调试环境</strong>搭建的记录，着重记录<strong>如何使用CLion进行远程开发以及远程调试</strong>，这在网上很难找到相应资料。（非常佩服能使用原始gdb进行调试的人，已经是一个离不开ide的快速跳转，自动补全，集成调试的废物了）</p>
+<span id="more"></span>
+
+<h1 id="安装虚拟机以及必要工具下载"><a href="#安装虚拟机以及必要工具下载" class="headerlink" title="安装虚拟机以及必要工具下载"></a>安装虚拟机以及必要工具下载</h1><p>课程的文档里有各个平台的安装教程，本文以VMware Workstation Pro 16中安装Ubuntu20.04.4 Server作为基础环境。</p>
+<p>课程原文 <a href="https://pdos.csail.mit.edu/6.828/2021/tools.html">6.S081 &#x2F; Fall 2021 (mit.edu)</a></p>
+<p>安装虚拟机可以在百度上找到很多教程，这里不再赘述，仅放出下载链接</p>
+<ul>
+<li><p><a href="https://www.vmware.com/cn/products/workstation-pro/workstation-pro-evaluation.html">下载 VMware Workstation Pro | CN</a></p>
+</li>
+<li><p><a href="https://cn.ubuntu.com/download/server/step1">获取Ubuntu服务器版 | Ubuntu</a>   我下载的是Server版，只有命令行没有桌面，更喜爱桌面版可以自行下载</p>
+</li>
+</ul>
+<p>安装完成并启动虚拟机后输入以下命令下载必要工具，主要是c&#x2F;c++编译工具集，riscv64架构的gnu工具集，qemu虚拟机，git，适用于riscv64架构的gdb。（本课程使用的操作系统为xv6，是一个基于riscv64架构的小型教学向OS）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install git build-essential gdb-multiarch qemu-system-misc gcc-riscv64-linux-gnu binutils-riscv64-linux-gnu </span><br></pre></td></tr></table></figure>
+
+<p>直接下载可能会过于缓慢，如果太慢了请先替换apt源为国内源（<strong>请尽量用较新的源</strong>）。这里使用的是阿里源和清华源，网上教程有很多，以下是我使用的源，用它替换掉*&#x2F;etc&#x2F;apt&#x2F;source.list*中的内容后输入<code>apt-get update</code>就行了。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#添加阿里源</span></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse</span><br><span class="line"><span class="comment">#添加清华源</span></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse</span></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse</span></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse</span></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="下载xv6的git仓库"><a href="#下载xv6的git仓库" class="headerlink" title="下载xv6的git仓库"></a>下载xv6的git仓库</h1><p>在用户文件夹下输入以下命令下载课程的xv6源码，注意<strong>不要下载xv6的官方源码而是下载课程改动过的源码</strong>，对改动内容感兴趣的话可以使用<code>git log</code>查看改动内容。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git://g.csail.mit.edu/xv6-labs-2021</span><br></pre></td></tr></table></figure>
+
+<p>下载速度可能很缓慢，可以直接从我的git仓库fork一份或直接clone。</p>
+<p><a href="https://github.com/foliet/MIT-6.s081">foliet&#x2F;MIT-6.s081 (github.com)</a></p>
+<p>我仓库my+实验名的分支是我自己完成后代码，ricsv分支是xv6的源码，其他十个分支是对应lab的分支。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git@github.com:Foliet/MIT-6.s081.git <span class="comment">#ssh</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/Foliet/MIT-6.s081.git <span class="comment">#https</span></span><br></pre></td></tr></table></figure>
+
+<p>先进入文件夹内，然后输入以下两条命令。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout util</span><br><span class="line">make qemu</span><br></pre></td></tr></table></figure>
+
+<p>看到如下输出即为启动成功，一切顺利，否则按照课程原文说明逐个工具检查是否下载成功。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">riscv64-unknown-elf-gcc    -c -o kernel/entry.o kernel/entry.S</span><br><span class="line">riscv64-unknown-elf-gcc -Wall -Werror -O -fno-omit-frame-pointer -ggdb -DSOL_UTIL -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -mno-relax -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/start.o kernel/start.c</span><br><span class="line">...  </span><br><span class="line">riscv64-unknown-elf-ld -z max-page-size=4096 -N -e main -Ttext 0 -o user/_zombie user/zombie.o user/ulib.o user/usys.o user/printf.o user/umalloc.o</span><br><span class="line">riscv64-unknown-elf-objdump -S user/_zombie &gt; user/zombie.asm</span><br><span class="line">riscv64-unknown-elf-objdump -t user/_zombie | sed <span class="string">&#x27;1,/SYMBOL TABLE/d; s/ .* / /; /^$/d&#x27;</span> &gt; user/zombie.sym</span><br><span class="line">mkfs/mkfs fs.img README  user/xargstest.sh user/_cat user/_echo user/_forktest user/_grep user/_init user/_kill user/_ln user/_ls user/_mkdir user/_rm user/_sh user/_stressfs user/_usertests user/_grind user/_wc user/_zombie </span><br><span class="line">nmeta 46 (boot, super, <span class="built_in">log</span> blocks 30 inode blocks 13, bitmap blocks 1) blocks 954 total 1000</span><br><span class="line">balloc: first 591 blocks have been allocated</span><br><span class="line">balloc: write bitmap block at sector 45</span><br><span class="line">qemu-system-riscv64 -machine virt -bios none -kernel kernel/kernel -m 128M -smp 3 -nographic -drive file=fs.img,<span class="keyword">if</span>=none,format=raw,<span class="built_in">id</span>=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0</span><br><span class="line"></span><br><span class="line">xv6 kernel is booting</span><br><span class="line"></span><br><span class="line">hart 2 starting</span><br><span class="line">hart 1 starting</span><br><span class="line">init: starting sh</span><br><span class="line">$ </span><br></pre></td></tr></table></figure>
+
+<h1 id="配置Ubuntu的ssh服务器"><a href="#配置Ubuntu的ssh服务器" class="headerlink" title="配置Ubuntu的ssh服务器"></a>配置Ubuntu的ssh服务器</h1><p>输入<code>sudo su</code>进入root用户模式，然后输入<code>passwd</code>为root用户设置一个密码。</p>
+<p>输入<code>ls /etc/ssh</code>命令查看是否有<em>sshd_config</em>这个文件，如果没有则输入<code>apt-get install openssh-server</code>下载。</p>
+<p>将<code>sshd_config</code>中的PermitRootLogin的#号去掉，并将值改为yes。</p>
+<p>输入<code>service ssh restart</code>重启ssh服务。（<strong>如果没设置开机自动启动，那么每次开机都要重启ssh服务</strong>）</p>
+<p>完成后在物理机上打开一个shell，输入以下命令尝试连接虚拟机。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh root@&#123;你的虚拟机ip&#125;</span><br><span class="line">ssh root@192.168.126.128 <span class="comment"># 比如这样</span></span><br></pre></td></tr></table></figure>
+
+<p>如果不成功请转向百度找问题，搜索<strong>“以root用户连接ssh服务器”</strong>应该能找到很多教程。</p>
+<h1 id="在CLion上连接虚拟机"><a href="#在CLion上连接虚拟机" class="headerlink" title="在CLion上连接虚拟机"></a>在CLion上连接虚拟机</h1><p>CLion是jetbrains公司面向c&#x2F;c++的ide，<strong>通过学生优惠可以免费获取全家桶的一年通行证，并且在校期间可以无限续，只需要有edu后缀的邮箱就行了</strong>，请转向百度搜索如何获得学生优惠。</p>
+<p><a href="https://www.jetbrains.com/zh-cn/clion/">CLion：JetBrains 出品的 C 和 C++ 跨平台 IDE</a></p>
+<h2 id="配置工具链"><a href="#配置工具链" class="headerlink" title="配置工具链"></a>配置工具链</h2><p>新建一个项目，打开<strong>设置</strong>，选择<strong>构建、执行、部署</strong>，选择<strong>工具链</strong>，点上方加号➕添加一个远程主机，添加一个ssh凭据并手动输入gdb-multiarch的路径来替代默认gdb（原始gdb不能识别riscv的指令集）。</p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220329105815490.png" alt="image-20220329105815490"></p>
+<p>我这里是下了cmake，不下cmake也没关系，只需要管<strong>凭据</strong>和<strong>调试器</strong>。</p>
+<h2 id="配置部署服务器"><a href="#配置部署服务器" class="headerlink" title="配置部署服务器"></a>配置部署服务器</h2><p>点击上方<strong>工具</strong>，选择<strong>部署</strong>，点击<strong>配置</strong>，填好映射路径。</p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220329130436272.png" alt="image-20220329130436272"></p>
+<p>然后依次点<strong>工具</strong>、<strong>部署</strong>、<strong>浏览远程主机</strong>，就可以管理虚拟机的文件了，在这里可以很方便的直接管理虚拟机文件。</p>
+<p>删除项目内初始的文件（如果有的话），右键项目文件夹，点击部署，然后下载虚拟机里的文件。</p>
+<h2 id="配置Makefile项目"><a href="#配置Makefile项目" class="headerlink" title="配置Makefile项目"></a>配置Makefile项目</h2><p>打开设置，将构建目标设置为<em>qemu-gdb</em>。</p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/d3PMj8gnxAlXT6u.png" alt="image-20220402152641258"></p>
+<p><strong>如果设置里显示未检测到<em>Makefile</em>项目就删掉项目文件夹里的*.idea*文件夹，然后重新打开项目。</strong>之前的设置会被初始化，需要重新设置一下。</p>
+<p>设置完了之后打开<em>Makefile</em>文件，点右上角按钮重新加载项目。</p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/FXeTWYk2zhjrHGS.png" alt="image-20220402152934792"></p>
+<p>此时索引就建立完毕了，可以自动补全和<code>ctrl+B</code>来快速跳转了。</p>
+<h2 id="添加调试配置"><a href="#添加调试配置" class="headerlink" title="添加调试配置"></a>添加调试配置</h2><p>在右上角打开<strong>运行&#x2F;调试配置</strong>，添加一个<strong>远程调试</strong>的配置。</p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220329124021990.png" alt="image-20220329124021990"></p>
+<p>课程内的gdb服务器默认使用<em>25000</em>端口。</p>
+<p>执行<code>make</code>后会对内核程序和和每个用户程序各生成一个符号文件，内核的符号文件就叫<em>kernel</em>，用户程序的符号文件为_{程序名}，例如ls的符号文件为<em>_ls</em>。</p>
+<h2 id="设置-gdbinit"><a href="#设置-gdbinit" class="headerlink" title="设置.gdbinit"></a>设置.gdbinit</h2><p>在*&#x2F;root<em>文件夹下创建一个名为</em>.gdbinit*的文件</p>
+<p>向里面填入如下内容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">set</span> confirm off</span><br><span class="line"><span class="built_in">set</span> architecture riscv:rv64</span><br><span class="line">file kernel/kernel</span><br><span class="line">add-symbol-file user/_ls</span><br><span class="line"><span class="built_in">set</span> disassemble-next-line auto</span><br><span class="line"><span class="built_in">set</span> riscv use-compressed-breakpoints <span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
+
+<p>这里是调试<em>ls</em>，如果要调试自己写的程序，比如说<em>myproc</em>，就添加一行<code>add-symbol-file user/_myproc</code>。</p>
+<h2 id="启动调试服务器"><a href="#启动调试服务器" class="headerlink" title="启动调试服务器"></a>启动调试服务器</h2><p>在虚拟机的xv6文件夹下输入<code>make qemu-gdb</code>来启动gdb服务器，如遇到错误可以尝试<code>make clean</code>来清除之前make生成的文件，shell输出以下内容即为开启成功。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">*** Now run <span class="string">&#x27;gdb&#x27;</span> <span class="keyword">in</span> another window.</span><br><span class="line">qemu-system-riscv64 -machine virt -bios none -kernel kernel/kernel -m 128M -smp 3 -nographic -drive file=fs.img,<span class="keyword">if</span>=none,format=raw,<span class="built_in">id</span>=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0 -S -gdb tcp::25000</span><br></pre></td></tr></table></figure>
+
+<p>如果显示<em>25000</em>端口已被占用或者文件<em>fs.img</em>被占用，应该是上一次运行没有正确退出，请自行百度查找如何根据占用端口或者文件获取pid，然后kill掉，这里建议使用lsof。</p>
+<ul>
+<li><code>apt-get install lsof</code>安装lsof。</li>
+<li><code>lsof fs.img</code>和<code>lsof -i:25000</code>查询进程。</li>
+</ul>
+<h2 id="开始调试"><a href="#开始调试" class="headerlink" title="开始调试"></a>开始调试</h2><p>点击CLion右上角调试按钮开始调试ls程序，下方会显示连接成功，然后回到shell会发现可以输入命令了，此时我输入<code>ls grep</code>，成功触发断点。</p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/dE2UWb5O3a6RSvo.png" alt="image-20220329131621170"></p>
+<h1 id="xv6和CLion相关"><a href="#xv6和CLion相关" class="headerlink" title="xv6和CLion相关"></a>xv6和CLion相关</h1><ul>
+<li>xv6没有实现ps程序，要列出当前进程可以在xv6的终端里中输入<code>ctrl+p</code>，关闭xv6先按<code>ctrl+a</code>再按<code>x</code>。</li>
+<li>调试xv6时发生读取空指针，缓冲区溢出等错误时CLion不会报错，但是会导致调试异常，当系统中断，跳转到<em>spinlock.c</em>等文件内时需要格外注意。</li>
+<li>在CLion内可以用<code>ctrl+alt+h</code>来查看一个函数被哪些函数调用了。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+        <category>MIT6.S081</category>
+      </categories>
+      <tags>
+        <tag>MIT Lab</tag>
+        <tag>Clion</tag>
+        <tag>环境搭建</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>高并发抢课系统后端架构设计</title>
+    <url>/categories/%E5%90%8E%E7%AB%AF/%E9%AB%98%E5%B9%B6%E5%8F%91%E6%8A%A2%E8%AF%BE%E7%B3%BB%E7%BB%9F%E5%90%8E%E7%AB%AF%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="项目架构"><a href="#项目架构" class="headerlink" title="项目架构"></a>项目架构</h1><p>本项目使用nginx作为接入层处理用户的http请求，并负载均衡地分发请求到多个后端服务器上。</p>
+<p>后端服务器使用django框架搭建application，使用uWSGI作为Web服务器。</p>
+<span id="more"></span>
+
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/1A9DE2FEFD2FCE5C59A02412889A9D9D.jpg" alt="img"></p>
+<p>数据储存方面使用腾讯云的云原生mysql数据库来保障数据库服务的高可用性（主备同步保证可用）和单表性能（避免在大量数据情况下的分库分表），使用redis储存抢课时快速更新的热数据和实现消息队列。</p>
+<blockquote>
+<p>mysql可以进一步替换为postgresql，使用其倒排索引gin优化模糊搜素的效率。</p>
+</blockquote>
+<h1 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h1><ul>
+<li><p>后端服务器提供无状态服务，各服务器间相互独立，一台服务器宕机不影响其他服务器提供服务</p>
+</li>
+<li><p>redis采用3主3备的cluster集群部署方式避免单点故障，并实现了数据的分布式储存。cluster集群的无中心结构有利于动态增删节点，抵抗偶发故障</p>
+<p>（服务器A、B、C分别有一个master节点和slave节点，A的slave节点跟踪B的master节点，B的slave节点跟踪C的master节点，C的slave节点跟踪A的master节点，假设服务器A挂了，服务器C的slave节点会接替服务器A的master节点工作）</p>
+</li>
+</ul>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220617141938252.png" alt="image-20220617141938252"></p>
+<h1 id="高并发-x2F-高性能"><a href="#高并发-x2F-高性能" class="headerlink" title="高并发&#x2F;高性能"></a>高并发&#x2F;高性能</h1><h2 id="运维方面"><a href="#运维方面" class="headerlink" title="运维方面"></a>运维方面</h2><ul>
+<li><p>放开linux内核对打开文件数的限制以及最大socket连接数的限制</p>
+</li>
+<li><p>使用nginx处理网络请求</p>
+<ul>
+<li>使用epoll实现IO多路复用</li>
+<li>开启互斥锁避免epoll的惊群效应</li>
+<li>通过top指令监控linux负载情况合理地设置负载均衡的权重</li>
+</ul>
+</li>
+<li><p>使用C语言编写的uWSGI服务器替换django自带的WSGI服务器</p>
+<ul>
+<li>降低内存占用</li>
+<li>提升响应时间</li>
+<li>详尽的日志功能（在调试过程中发挥了极大作用）</li>
+<li>高度可配置（比如进程在处理多少请求后重启，一定程度上对抗内存泄漏）</li>
+</ul>
+<blockquote>
+<p>uWSGI和uwsgi的优质理解：<a href="https://xiaorui.cc/archives/4264">深入理解uwsgi和gunicorn网络模型</a>。</p>
+</blockquote>
+</li>
+</ul>
+<p><img src="https://pic1.zhimg.com/v2-e80ff00c68688062b6ebaae48c30db70_b.jpg" alt="img"></p>
+<p>上图稍微有些错误，uWSGI服务器和django使用WSGI协议进行交流，而uwsgi协议是uWSGI服务器与Nginx交流的手段之一。</p>
+<ul>
+<li>使用腾讯云的CDN分发静态文件，将静态文件传输的任务从云服务器上剥离开，节约带宽以提供更高的并发量</li>
+</ul>
+<p><img src="https://pic3.zhimg.com/80/v2-5ff8be3f5882508abd7f27fc09891943_1440w.jpg?source=1940ef5c" alt="img"></p>
+<p>经过一些列优化后使用apache bench压测得到的指数显著提升。</p>
+<h2 id="代码方面"><a href="#代码方面" class="headerlink" title="代码方面"></a>代码方面</h2><p>核心思想是尽量<strong>减少网络io导致的阻塞</strong>，以此减少线程切换造成的消耗。</p>
+<ul>
+<li>将抢课的业务逻辑拆分，用redis储存课程剩余名额数，如果学生抢课成功，将消息存进list后直接响应请求，抢课成功后对数据库的操作将异步执行。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 监听消息队列的部分</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Command</span>(<span class="title class_ inherited__">BaseCommand</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">handle</span>(<span class="params">self, *args, **options</span>):</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            user_id = <span class="built_in">int</span>(redis_conn.brpop(<span class="string">&#x27;enrollment_queue&#x27;</span>, <span class="number">0</span>)[<span class="number">1</span>])</span><br><span class="line">            curriculum_id = <span class="built_in">int</span>(redis_conn.brpop(<span class="string">&#x27;enrollment_queue&#x27;</span>, <span class="number">0</span>)[<span class="number">1</span>])</span><br><span class="line">            user = User.objects.get(pk=user_id)</span><br><span class="line">            curriculum = Curriculum.objects.get(pk=curriculum_id)</span><br><span class="line">            curriculum.student.add(user)</span><br><span class="line">            <span class="keyword">if</span> settings.DEBUG:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;用户：%s 抢到了课程：%s&quot;</span> % (user.username, curriculum.name))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用lua脚本合并多次redis命令，减少网络io阻塞次数。</li>
+</ul>
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>在3台2核云服务器的条件下（其中一台负责运行nginx，每台都有2个redis实例和1个django实例），优化前直接连接django的最大tps低于100，使用uwsgi后最大tps达到了5300，cpu利用率在95%以上。</p>
+<p>在并发量为1000的情况下90%的请求延迟小于0.5s。</p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220612172810846.png" alt="image-20220612172810846"></p>
+<p>在并发量为5000的情况下90%的请求延迟小于1.5秒。</p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220612172652723.png" alt="image-20220612172652723"></p>
+<p>在并发量为1W的情况下90%的请求延迟小于2.5s。</p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220612172857531.png" alt="image-20220612172857531"></p>
+<h1 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h1><p>通过lua脚本的原子性保证学生抢课不会发生超选或名额空缺。</p>
+<p>抢课逻辑：</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> has_selected = redis.call(<span class="string">&quot;sadd&quot;</span>,KEYS[<span class="number">1</span>],ARGV[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">if</span> has_selected ~= <span class="number">1</span> <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">local</span> count = redis.call(<span class="string">&quot;hincrby&quot;</span>,<span class="string">&quot;curriculum&quot;</span>,ARGV[<span class="number">1</span>],<span class="number">-1</span>)</span><br><span class="line"><span class="keyword">if</span> count &lt; <span class="number">0</span> <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">redis.call(<span class="string">&quot;lpush&quot;</span>,<span class="string">&quot;enrollment_queue&quot;</span>,KEYS[<span class="number">1</span>],ARGV[<span class="number">1</span>])</span><br><span class="line">redis.call(<span class="string">&quot;sadd&quot;</span>,KEYS[<span class="number">1</span>],ARGV[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这里的脚本在以cluster模式部署redis出现了错误，原因是lua脚本中访问的key必须在同一个node上，解决方法参考以下博文：</p>
+<p><a href="https://blog.csdn.net/qq_20128967/article/details/108611161">Redis Cluster中使用Lua脚本</a></p>
+<p><a href="https://blog.csdn.net/damanchen/article/details/100584171">redis cluster怎么保证键的均匀分配（crc16算法）</a></p>
+</blockquote>
+<h1 id="可维护性"><a href="#可维护性" class="headerlink" title="可维护性"></a>可维护性</h1><ul>
+<li><p>良好的编程风格，依据PEP8编程规范进行编程</p>
+</li>
+<li><p>统一的响应管理</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    body = json.loads(request.body)</span><br><span class="line">    curriculum_id = body[<span class="string">&#x27;curriculum_id&#x27;</span>]</span><br><span class="line"><span class="keyword">except</span> (KeyError, JSONDecodeError):</span><br><span class="line">    <span class="keyword">return</span> Results.illegal_argument</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    user_id = request.session[<span class="string">&#x27;id&#x27;</span>]</span><br><span class="line">    <span class="keyword">except</span> KeyError:</span><br><span class="line">        <span class="keyword">return</span> Results.not_login</span><br><span class="line"></span><br><span class="line">......</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> res == <span class="number">0</span>:</span><br><span class="line">    <span class="keyword">return</span> Result(data_message=<span class="string">&quot;抢课成功&quot;</span>).to_response()</span><br><span class="line"><span class="keyword">elif</span> res == <span class="number">1</span>:</span><br><span class="line">    <span class="keyword">return</span> Result(data_message=<span class="string">&quot;抢课失败：已选该课程&quot;</span>, status=<span class="literal">False</span>).to_response()</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="keyword">return</span> Result(data_message=<span class="string">&quot;抢课失败：人数已达上限&quot;</span>, status=<span class="literal">False</span>).to_response()</span><br></pre></td></tr></table></figure>
+
+<h1 id="可扩展性"><a href="#可扩展性" class="headerlink" title="可扩展性"></a>可扩展性</h1><ul>
+<li>后端使用jwt完成认证的功能，登录信息保存在浏览器而不是服务器内，后端服务器是完全无状态的</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/900b3e81f832b2f08c2e8aabb540536a.png" alt="img"></p>
+<ul>
+<li><p>采用python开发，可移植性强</p>
+<ul>
+<li>python本身有跨平台的特性，易于移植到其他平台上</li>
+<li>使用pipreqs工具，自动检测项目的第三方库依赖，安装简单</li>
+<li>django提供的migration功能降低了迁移数据库和更换数据库系统的难度</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>后端</category>
+      </categories>
+      <tags>
+        <tag>分布式</tag>
+        <tag>高并发</tag>
+        <tag>redis</tag>
+        <tag>nginx</tag>
+        <tag>uWSGI</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>从Internet设计原则中汲取经验</title>
+    <url>/categories/%E8%A7%84%E8%8C%83%E4%B8%8E%E6%A0%87%E5%87%86/%E4%BB%8EInternet%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E4%B8%AD%E6%B1%B2%E5%8F%96%E7%BB%8F%E9%AA%8C/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="从Internet设计原则中汲取经验"><a href="#从Internet设计原则中汲取经验" class="headerlink" title="从Internet设计原则中汲取经验"></a>从Internet设计原则中汲取经验</h1><p>要深入理解软件工程的概念，就应该从那些经典的工程中学习，寻找共性。 从优秀工程的设计原则中思考，反思自己的项目工作中的设计方式， 回忆那些让开发变得很混乱的问题。<br>从前人总结出的设计原则中和自己的工作对比，找出哪些是自己可以改进的，慢慢学习如何进行工程设计。</p>
+<span id="more"></span>
+
+<p>Internet最重要的设计原则包括以下十点</p>
+<h2 id="保证工作"><a href="#保证工作" class="headerlink" title="保证工作"></a>保证工作</h2><blockquote>
+<p>直到多个原型系统成功地与对方相互通信，方可完成设计或者确定标准。设计者常常首先写出一个1000页的标准，并获得批准，过后才发现存在严重的缺陷，根本无法工作。然后他们再编写一个1.1版本的标准。这不是正确的工作方式。</p>
+</blockquote>
+<p>在建立标准前应该先测试一下可行性，有的时候我会认为自己的想法非常容易实现，甚至简单到没必要测试，等到了实际开发的时候，特别是在实现那些我认为是细枝末节的地方时，发现这个地方的逻辑有问题，根本不可能实现。</p>
+<p>比如说我在设计数据库的表关系时，有order和user两个实体，每个user有很多order。依据数据库设计三大范式，我在order的表里添加了user_id来建立映射关系，这听起来非常正确，所以我在最初以此作为标准进行开发。</p>
+<p>根据这个想法我实现了后端的功能，但是当我回到前端开发时，意识到我在前端需要显示每个订单对应的用户的名字。<br>在不改变后端代码的情况下，想要实现这个功能必须向后端发送大量的包来进行查询每个user_id对应的user，再把用户名给读取出来，这显然是效率低下的！</p>
+<p>于是我只能选择去重构后端（我前面举的例子是实际问题的简化，实际情况还要再复杂一点），而如果一开始先好好思考可行性并推敲好使用流程就可以避免类似的麻烦。</p>
+<p>上述问题在<strong>保证工作</strong>这个原则下的启示是，应该先尝试着将一条order的信息展示出来，再将标准确定下来。即使自己觉得逻辑非常清晰，也应该好好的从头开始捋一捋流程，避免忽略不切实际的设计。</p>
+<p>就好像是高中的导数题，拿到题一看迅速的对应上了解题模型，觉得这道题非常简单，等到实际做起来发现好像和不是同一个类型的题。它很像曾经做过的某题，但是解题方法并不一样，而到发现这个问题时只能推倒重做。</p>
+<p><strong>这个原则不是要否定那些逻辑并不足够严谨的假设，而是警告设计者不要想当然地认为某些东西应该是对的</strong></p>
+<h2 id="保持简单"><a href="#保持简单" class="headerlink" title="保持简单"></a>保持简单</h2><blockquote>
+<p>有疑问时应该使用最简单的解决方案。William of Occam在14世纪就提出了这条原则(称为奥卡姆的剃刀)。换成现代术语就是:决斗特性。如果一项特性并非绝对不要，那么就放弃该特性。尤其是，通过组合其他的特性也能够获得同样效果的时候。</p>
+</blockquote>
+<h2 id="明确选择"><a href="#明确选择" class="headerlink" title="明确选择"></a>明确选择</h2><blockquote>
+<p>如果有几种方法可以完成同样的事情，则选择其中一种方法。用两种或者多种方法来做同样的事情简直是自找麻烦。通常标准会有多个选项、多种模式或多个参数，因为多个实力强大的参与方坚持认为他们的方法是最好的。设计者应该坚决抵制这种倾向，学会说“不”。</p>
+</blockquote>
+<h2 id="模块开发"><a href="#模块开发" class="headerlink" title="模块开发"></a>模块开发</h2><blockquote>
+<p>这条原则直接导致了协议栈的思想，每一层的协议完全独立于所有其他的协议。按照这种方法，如果实际环境中要求改变一个模块或者一层，则其他模块或层都不会受到影响。</p>
+</blockquote>
+<p>编写代码时一定得注重<strong>”高内聚，低耦合“</strong>，这是有效提升可维护性的手段，试想以下情景：</p>
+<ul>
+<li><p>你正在编写一个函数，已经写了一百多行，当你逻辑不够清晰时想再重新梳理一遍这个函数，发现自己一时难以重新理顺逻辑。</p>
+</li>
+<li><p>你需要在两个不同的地方做同样的事情，你为了方便直接复制粘贴再稍微修改了一下，一切运行正常。过了几天你改了前一个位置的代码并调试至可以正常运行。之后，你在使用过程中发现后一个位置出了问题，你看了看发现原来是后面那里忘了改。</p>
+</li>
+<li><p>程序有bug，出问题的函数有一百多行，很难确定在哪个位置。</p>
+<p>以上问题都在于过多功能杂糅到一个模块里，而没有把任务切块，分成若干个零件，单个模块承担了过多责任，即内聚性弱。或者一个地方的修改导致很多其他地方也要修改，即耦合性强。</p>
+<p>如果要写归并排序，把二分和合并分开一定有助于编写；如果要写一个网页，若内容较多，将布局分成header、footer、aside、main，每一块单独做一个文件来处理会是不错的选择；使用vue开发，分割组件时，尽量用props暴露最低限度的接口而不是使用refs直接操作子组件（在必须耦合的情况下尽量数据耦合而不是控制耦合）；多个模块共享的数据应该是常量；一个模块只暴露必要的接口，其他部分应该对外部隐藏，而留出的接口应该在一开始就规划好以保证不到万不得已的情况不修改。</p>
+<p>以上一些增强内聚性，降低耦合性的方法。</p>
+<p><a href="https://baike.baidu.com/item/%E9%AB%98%E5%86%85%E8%81%9A%E4%BD%8E%E8%80%A6%E5%90%88/5227009?fr=aladdin">高内聚低耦合_百度百科</a></p>
+</li>
+</ul>
+<h2 id="期望异构性"><a href="#期望异构性" class="headerlink" title="期望异构性"></a>期望异构性</h2><blockquote>
+<p>在任何一个大型的网络中，可能存在不同类型的硬件、传输设施和应用程序。为了处理它们，网络的设计必须简单、通用和灵活。</p>
+</blockquote>
+<h2 id="避免静态选项和参数"><a href="#避免静态选项和参数" class="headerlink" title="避免静态选项和参数"></a>避免静态选项和参数</h2><blockquote>
+<p>如果不可避免要使用参数的话（比如最大数据包长度)，那么，最好的办法是让发送方和接收方协商一个值，而不是定义固定的参数值。</p>
+</blockquote>
+<p>比如说设计网页时一个页面展示多少条信息可以由用户选择；设计mc的一个物品时它的掉落率可以由配置文件调整</p>
+<h2 id="寻找好的而不是完美的设计"><a href="#寻找好的而不是完美的设计" class="headerlink" title="寻找好的而不是完美的设计"></a>寻找好的而不是完美的设计</h2><blockquote>
+<p>通常设计者有一个好的设计，但是它不能够处理一些怪异的特殊情况。设计者不应该乱改设计，而是坚持这个好的设计，将围绕着特殊情况而展开的工作负担转移到那些强烈需求的人身上。</p>
+</blockquote>
+<h2 id="严格发送，宽容接收"><a href="#严格发送，宽容接收" class="headerlink" title="严格发送，宽容接收"></a>严格发送，宽容接收</h2><blockquote>
+<p>换句话说，只发送那些严格符合标准的数据包，但是，容许接收那些不完全符合标准的数据包，并且试图对它们进行处理。</p>
+</blockquote>
+<p>分工设计时，不要想着别人的数据包是严格符合你的思维的，考虑好各种可能的null问题</p>
+<h2 id="考虑可扩展性"><a href="#考虑可扩展性" class="headerlink" title="考虑可扩展性"></a>考虑可扩展性</h2><blockquote>
+<p>如果系统需要有效地处理上百万台主机和几十亿用户，那么，没有一种中心数据库是可以容忍的,同时必须将负载尽可能均匀地分布到所有可用的资源上。</p>
+</blockquote>
+<h2 id="考虑性能和成本"><a href="#考虑性能和成本" class="headerlink" title="考虑性能和成本"></a>考虑性能和成本</h2><blockquote>
+<p>如果一个网络的性能很差，或者成本很高，那么没有人会使用它。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>规范与标准</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>面向万物互联的终端操作系统设计与实现</title>
+    <url>/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%9D%A2%E5%90%91%E4%B8%87%E7%89%A9%E4%BA%92%E8%81%94%E7%9A%84%E7%BB%88%E7%AB%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p> 　　我们正在进入物联网时代，各种智能设备除了相应的硬件之外，同样也需要运行操作系统进行软硬件的管理。相应地，操作系统须支持设备的多样性：功能多样性，支持简单数据采样，到较为复杂的数据预处理&#x2F;压缩&#x2F;推断等;硬件多样性，从最基本的温度传感器，到智能处理设备等，其CPU&#x2F;内存&#x2F;外存差异大，需要进行灵活配置。</p>
+<p>　　本文结合国内外微内核操作系统设计了一款新型终端设备操作系统，并以核酸采样设备作为载体进行定制化，重点围绕设备管理、进程管理、内存管理、文件管理等组件进行深入研究，主要工作为以下几点。</p>
+<p>　　（1）实现了对外部硬件设备的良好支持以及同宏内核一致的系统调用。</p>
+<p>　　（2）为了满足核酸采样设备的定制化需要，该新型终端设备操作系统使用信号量实现了高效的同步算法，同时选择了合适的进程调度算法进行调度以避免过长的等待。</p>
+<p>　　（3）采用页式储存管理和可变分配全局置换的页面分配策略进行内存管理，综合考虑缺页率和抖动现象，使得满足性能的同时，所需总的物理内存尽量小。</p>
+<p>　　（4）针对核酸采样信息的结构化数据特性，采用B+树索引组织数据，定制化地设计了核酸采样信息的存取流程，优化了存储空间管理和外存数据读写的性能。</p>
+<p><strong>关键词：物联网，微内核，操作系统</strong></p>
+<span id="more"></span>
+
+<h1 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h1><h2 id="1-1-微内核技术的发展"><a href="#1-1-微内核技术的发展" class="headerlink" title="1.1 微内核技术的发展"></a>1.1 微内核技术的发展</h2><p>　　随着IT技术的发展，计算机系统经历了主机&#x2F;服务器系统、桌面处理系统、手机移动系统等的发展，每种新形态的出现，也都有相应代表性的操作系统出现，并占市场主流。例如，服务器操作系统Unix，桌面操作系统Windows，手机操作系统Android&#x2F;IOS等。操作系统内核有两种形态，即宏内核和微内核，目前这些主流操作系统均是宏内核操作系统。</p>
+<p>　　宏内核（Monolithic kernel）的架构特点是把所有操作系统功能放入内核进程中，整个内核程序都在内核空间（Kernel mode）下以监管者模式（Supervisor mode）的身份运行。宏内核的代码高度紧密，各个模块之间耦合性强，即使有些宏内核模式的操作系统将其运作从整体性运作拆成了多个服务模块，也会因为各个模块之间的强耦合性难以更换模块。同时，宏内核相对于微内核的功能边界更加不明确，不像微内核可以将一个功能的实现封闭在一个较小的模块中，宏内核更难以调试和维护。在出现错误时，宏内核一方面无法快速定位错误点，另一方面会由于一个功能内的错误导致整个内核崩溃。</p>
+<p>　　为了解决上述问题，微内核（Micro kernel）设计理念被提出以对抗宏内核的各种缺点。</p>
+<h2 id="1-2-微内核优势"><a href="#1-2-微内核优势" class="headerlink" title="1.2 微内核优势"></a>1.2 微内核优势</h2><p>　　（1）提高了系统的可扩展性。由于微内核操作系统的许多功能是由相对独立的服务器软件来实现的，当开发了新的硬件和软件时，微内核操作系统只须在相应的服务器中增加新的功能，或再增加一个专门的服务器。与此同时，也必然改善系统的灵活性，不仅可在操作系统中增加新的功能，还可修改原有功能，以及删除已过时的功能，以形成一个更为精干有效的操作系统。</p>
+<p>　　（2）增强了系统的可靠性。由于所有服务器都是运行在用户态，服务器与服务器之间采用的是消息传递通信机制，因此，当某个服务器出现错误时，不会影响内核，也不会影响其它服务器。</p>
+<p>　　（3）可移植性。在微内核结构的操作系统中，所有与特定CPU和I&#x2F;O设备硬件有关的代码，均放在内核和内核下面的硬件隐藏层中，而操作系统其它绝大部分(即各种服务器)均与硬件平台无关，因而，把操作系统移植到另一个计算机硬件平台上所需作的修改是比较小的。</p>
+<p>　　（4）提供了对分布式系统的支持。由于在微内核操作系统中，客户和服务器之间以及服务器和服务器之间的通信，是采用消息传递通信机制进行的，致使微内核操作系统能很好地支持分布式系统和网络系统。</p>
+<p>　　（5）融入了面向对象技术。</p>
+<p>　　鉴于以上优势，本新型终端设备操作系统采用微内核架构进行设计，以此适应终端设备的软硬件多样性，在CPU&#x2F;内存&#x2F;外存差异巨大的情况下保持良好的效率、适应性和扩展性。</p>
+<h1 id="二、整体设计"><a href="#二、整体设计" class="headerlink" title="二、整体设计"></a>二、整体设计</h1><h2 id="2-1-系统工作流程"><a href="#2-1-系统工作流程" class="headerlink" title="2.1 系统工作流程"></a>2.1 系统工作流程</h2><p>　　相对于宏内核将所有OS服务放入内核，并在内核模式下运行这些服务，微内核仅保留必须直接依赖于硬件的服务如进程间通信（IPC，inter-process communication）、任务调度（dispatcher）、低级内存管理（basic memory management）等。其他硬件无关的服务如设备驱动、文件系统、网络服务等都以服务器进程的形式运行在用户空间内。</p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220704060553156.png" alt="image-20220704060553156"></p>
+<p>　　为了满足微内核的模块化设计需求，通过参考Minix R3.3.0的架构设计，本新型终端设备操作系统采用分层架构。系统架构分为服务接口层、服务层、内核接口层、内核层、硬件适配层。其中内核层负责实现微内核直接依赖于硬件的基本服务，通过调用硬件适配层来适应不同硬件如芯片、内存条的差异以提升操作系统的可移植性，并通过内核接口层向服务层提供接口。服务层模块化地实现了从宏内核中分离出来的系统服务如设备驱动、文件管理、网络服务，这些系统服务以分离的进程的形式运行，彼此之间互相隔离，通过内核层提供的IPC服务互相通信，并通过服务接口层向应用层提供接口。</p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220704024914963.png" alt="image-20220704024914963"></p>
+<p>　　这种分层架构有利于适配多种多样的硬件平台，使得可移植性显著提升。</p>
+<h2 id="2-2-系统对新硬件设备的支持"><a href="#2-2-系统对新硬件设备的支持" class="headerlink" title="2.2 系统对新硬件设备的支持"></a>2.2 系统对新硬件设备的支持</h2><p>　　当添加一个新硬件设备时，硬件适配层会将新硬件设备的驱动程序和中断处理程序载入以创建一个新的服务器进程。当用户进程执行I&#x2F;O操作时，调用的接口和宏内核一致，但是实现方式从宏内核的直接函数调用方式替换为了进程间通信方式。</p>
+<p>　　以read系统调用为例，当一个用户进程执行read系统调用时，会使用内核层的IPC服务向文件系统进程发送消息。文件系统进程收到消息后再向设备驱动进程发送消息，随后设备驱动进程会调用相应外部设备的控制器进行读取操作。设备控制器将读取到的数据放入缓冲区后，设备驱动程序执行系统调用请求内核将设备控制器缓冲区的数据拷贝至文件系统进程的缓冲区，接着文件系统进程执行系统再调用请求内核将数据拷贝至用户进程的缓冲区中。</p>
+<pre class="mermaid">sequenceDiagram
+ participant us as 用户进程
+ participant fs as 文件系统
+ participant dr as 设备驱动
+ participant dc as 设备控制器
+ participant kn as 内核
+ us->>+fs:read()
+ fs->>+dr:dev_io()
+ dr->>+dc:do_transfer()
+ dc-->>-dr:return
+ dr->>+kn:sys_insw()
+ kn-->>-dr:return
+ dr-->>-fs:return
+ fs->>+kn:sys_copy()
+ kn-->>-fs:return
+ fs-->>-us:return</pre>
+
+<h1 id="三、进程管理"><a href="#三、进程管理" class="headerlink" title="三、进程管理"></a>三、进程管理</h1><h2 id="3-1-进程控制块"><a href="#3-1-进程控制块" class="headerlink" title="3.1 进程控制块"></a>3.1 进程控制块</h2><p>　　系统使用进程控制块（PCB）数据结构来维护与进程相关的具体信息。进程相关的信息包括进程 id，休眠时间，进程时间片，进程状态，进程优先级，进程通信IPC缓存，进程地址空间，进程异常处理函数指针，进程异常号，进程调用终端，进程回应调用者列表，进程调用者列表，进程当前所在列表，进程列表节点，进程名，进程上下文。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pcb</span> &#123;</span></span><br><span class="line">    <span class="type">int32_t</span> pid;</span><br><span class="line">    <span class="type">int32_t</span> ppid;</span><br><span class="line">    <span class="type">int8_t</span> priority;</span><br><span class="line">    <span class="type">int8_t</span> status;</span><br><span class="line">    <span class="type">char</span>* name;</span><br><span class="line">    <span class="type">ctx_t</span> context;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-2-进程同步"><a href="#3-2-进程同步" class="headerlink" title="3.2 进程同步"></a>3.2 进程同步</h2><p>　　在核酸检测过程中，为了满足进程的同步与互斥，采样机械臂的驱动程序和识别扫码仪的驱动程序需要使用操作系统提供的信号量机制来完成任务。信号量（Semaphore）又称为信号量、旗语，是一个同步对象，用于实现进程间的同步与互斥。进程通过对信号量的P操作和V操作来获取或释放资源。核酸检测中的同步问题可以看成多个消费者和多个生产者的消费者-生产者问题，据此可以设计出如下同步算法。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">semophore full = <span class="number">0</span>, empty = k, mutex = <span class="number">1</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span>* <span class="title">waitng_list_head</span>, <span class="title">waiting_list_tail</span>;</span> <span class="comment">//等待队列指针</span></span><br><span class="line"></span><br><span class="line">cobegin</span><br><span class="line"><span class="type">void</span> <span class="title function_">machine_arm</span><span class="params">()</span> &#123;</span><br><span class="line">    P(mutex); <span class="comment">//获取互斥锁</span></span><br><span class="line">    P(full); <span class="comment">//等待等待队列有空闲位置</span></span><br><span class="line">    <span class="comment">//执行采样，删除等待队列头部的数据</span></span><br><span class="line">    V(mutex); <span class="comment">//释放互斥锁</span></span><br><span class="line">    V(empty);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">scanner</span><span class="params">()</span> &#123;</span><br><span class="line">    P(mutex); <span class="comment">//获取互斥锁</span></span><br><span class="line">    P(empty); <span class="comment">//等待等待队列有空闲位置</span></span><br><span class="line">    <span class="comment">//允许扫码，将扫码后新获取的信息插入等待队列尾部</span></span><br><span class="line">    V(mutex); <span class="comment">//释放互斥锁</span></span><br><span class="line">    V(full);</span><br><span class="line">&#125;</span><br><span class="line">coend</span><br></pre></td></tr></table></figure>
+
+<p>　　该算法实现了进程间的高效同步，确保了进程并行运行时不会出现脏读、幻读等错误。</p>
+<h2 id="3-3-进程监控"><a href="#3-3-进程监控" class="headerlink" title="3.3 进程监控"></a>3.3 进程监控</h2><p>　　为了避免核酸检测站点的人员过于密集，采样设备应该实现进程的追踪与监控。通过记录机械采样臂和识别扫码仪的开始处理时间和结束处理时间来计算完成一次核酸检测所花费的时间，并将这个指标与人员到达速率进行比较。</p>
+<p>　　用来判断是否人员过于密集的公式如下:<br>$$<br>\min(机械采样臂处理速率,识别扫码仪处理速率)&lt;人员到达速率<br>$$<br>　　若满足上列公式，则认为人员过于密集，需要广播该采样点人员过多的提示音。</p>
+<h2 id="3-4-进程调度"><a href="#3-4-进程调度" class="headerlink" title="3.4 进程调度"></a>3.4 进程调度</h2><p>　　为了满足核酸检测过程中采样机械臂的快速重采样要求，本新型终端设备操作系统的任务调度模块支持基于优先级的多级队列调度算法和时间轮转片调度算法，操作系统采用位图管理任务的优先级。应用任务可以通过接口创建另一个任务，并设置该任务的优先级。出于安全性考虑，当一个任务创建另外一个任务时，只能把另外一个任务优先级设置不高于该任务，即任务不能创建比自己优先级还高的子任务。操作系统为每一个优先级维护一个就绪队列，每次调度时选取最高优先级且非空的就绪队列，对相同优先级的任务采取时间轮转片调度算法进行调度。</p>
+<p>　　当采样机械臂人脸定位识别失败后进行重采样时，临时提高采样机械臂进程的优先级，若此次人脸定位成功，在采样后重置为默认优先级，否则继续提高采样机械臂进程的优先级直到优先级达到用户进程的最高优先级。</p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/image-20220704175301205.png" alt="image-20220704175301205"></p>
+<p>　　通过这种老化策略来保证采样机械臂在人脸定位失败后能够快速的重采样以避免被采样者等待过长时间，解决了采样机械臂可能存在的饥饿问题。</p>
+<h1 id="四、内存管理"><a href="#四、内存管理" class="headerlink" title="四、内存管理"></a>四、内存管理</h1><h2 id="4-1-物理页面分配"><a href="#4-1-物理页面分配" class="headerlink" title="4.1 物理页面分配"></a>4.1 物理页面分配</h2><p>　　为了适应终端设备的多样性，支持差异巨大的软件、硬件，本新型终端设备操作系统的物理页面分配策略采用可变分配全局置换策略。内存管理服务器刚开始会为每个进程分配一定数量的物理页面，同时会保持一个空闲物理块队列。当某进程发生缺页时，从空闲物理页面中取出一页分配给该进程；若已无空闲物理页面，则可选择一个未锁定的页面换出外存，再将该物理页面分配给缺页的进程。采用这种策略时，只要某进程发生缺页都将获得新的物理页面，仅当空闲物理页面用完时，系统才选择一个未锁定的页面调出。被选择调出的页面可能是系统中任何一个进程中的页面，因此这个被选中的进程拥有的物理页面会减少，发出请求的进程拥有的物理页面会增多。通过这种方式内存管理进程可以动态调节每个进程拥有的物理页面，有利于复用空闲的物理页面，将这些空闲的物理页面重新分配给物理页面不足的进程，以此降低缺页率。</p>
+<p>　　调页策略采用预调页和请求调页结合的方式，在进程加载、重启时预先调入多个相邻页面，这些页面必然会在不久的将来被使用，提前将这些页面加载到内存中可以减少I&#x2F;O次数，提高内存管理进程的效率。进程在运行过程中采取惰性加载措施，只在发生缺页时向内存管理进程请求调入缺失的页面。</p>
+<h2 id="4-2-页面置换"><a href="#4-2-页面置换" class="headerlink" title="4.2 页面置换"></a>4.2 页面置换</h2><p>　　当物理页面全部分配后，进程再次发生缺页，为了将进程需要的物理页面调入，必须先将一个已经分配出去的页面调出，选择被淘汰页面的方式有很多种类，其中常见的页面置换算法有先进先出置换算法（FIFO）、最近最久未使用置换算法（LRU）、第二次机会置换算法、时钟置换算法、最不常用置换算法（LFU）。其中LRU置换算法效率最佳，且不会出现belady异常，最接近最佳置换算法（OPT）的性能，但是需要大量软件和硬件的支持，不利于支持硬件设备的多样性，因而选择近似LRU的时钟置换算法作为替代。</p>
+<p>　　最简单的时钟策略需要给每一页框关联一个附加位，称为使用位。当某一页首次装入内存中时，则将该页页框的使用位设置为1；当该页随后被访问到时（在访问产生缺页中断之后），它的使用位也会被设置为1。该方法中，用于置换的候选页框集合被看做是一个循环缓冲区，并且有一个指针针与之相关联。当一页被置换时，该指针针被设置成指向缓冲区中的下一页框。当需要置换一页时，操作系统扫描缓冲区，以查找使用位被置为0的一页框。每当遇到一个使用位为1的页框时，操作系统就将该位重新置为0；如果在这个过程开始时，缓冲区中所有页框的使用位均为0时，则选择遇到的第一个页框置换；如果所有页框的使用位均为1时，则指针针在缓冲区中完整地循环一周，把所有使用位都置为0，并且停留在最初的位置上，置换该页框中的页。当需要使用的页已经存在时，则指针不会受到影响，不会发生转动。</p>
+<p>![未命名文件 (2)](<a href="https://picture-bed-1306010815.file.myqcloud.com/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6">https://picture-bed-1306010815.file.myqcloud.com/未命名文件</a> (2).png)</p>
+<p>　　可见该策略类似于FIFO置换算法，唯一不同的是，在时钟策略中使用位为1的页框被跳过，该策略之所以称为时钟策略，是因为可以把页框形象地想象成在一个环中。许多操作系统都采用这种简单时钟策略的某种变体。</p>
+<h1 id="五、文件系统"><a href="#五、文件系统" class="headerlink" title="五、文件系统"></a>五、文件系统</h1><h2 id="5-1-设计思路"><a href="#5-1-设计思路" class="headerlink" title="5.1 设计思路"></a>5.1 设计思路</h2><p>　　面对高度结构化数据的存储时，可以仿照数据库管理机制对数据建立索引进行维护。参考Mysql设计原理，本新型终端设备操作系统采用B+树来组织和维护核酸采样信息。B+树是一种树数据结构，通常用于数据库和操作系统的文件系统中。B+树的特点是能够保持数据稳定有序，其插入与修改拥有较稳定的对数时间复杂度。B+树元素自底向上插入，这与二叉树恰好相反。</p>
+<p>　　B+树在节点访问时间远远超过节点内部访问时间的时候，比红黑树、AVL树等数据结构有着显著的优势。通过最大化在每个内部节点内的子节点的数目减少树的高度，平衡操作不经常发生，而且效率增加了。这种价值得以确立通常需要每个节点在次级存储中占据完整的磁盘块或近似的大小。B+背后的想法是内部节点可以有在预定范围内的可变数目的子节点。因此，B+树不需要象其他自平衡二叉查找树那样经常的重新平衡。对于特定的实现在子节点数目上的低和高边界是固定的。</p>
+<p><img src="https://picture-bed-1306010815.file.myqcloud.com/%E5%AD%90%E9%9B%86%E9%97%AE%E9%A2%98%E8%A7%A3%E7%A9%BA%E9%97%B4%E6%A0%91.png" alt="子集问题解空间树"></p>
+<h2 id="5-2-具体应用"><a href="#5-2-具体应用" class="headerlink" title="5.2 具体应用"></a>5.2 具体应用</h2><p>　　以此为基础，将核酸采样信息的每条记录记为一行，将试管编号作为主键建立B+树，同时允许选择性地为其他可以作为查询关键词的属性建立B+树索引，如身份证号码、采样时间、采样点代码。非主键上的B+树索引不携带行数据，需要回表查询，牺牲了一些性能但节省了大量的储存空间。</p>
+<p>　　由于核酸采样信息具有不频繁更新或从不更新的性质，且增删频率相对于计算机运行速度来说极低，在更新数据时选择采用序列化的方式来保证一致性，在并行运行的情况下一次只有一个进程可以操作核酸采样信息，其他需要操作核酸采样信息的进程会陷入阻塞，直到可以操作数据时重新进入就绪队列。通过运用B+树，对核酸采样信息的增删改查操作的复杂度都降为$O(\log n)$，且支持范围查询。</p>
+<h1 id="六、总结与展望"><a href="#六、总结与展望" class="headerlink" title="六、总结与展望"></a>六、总结与展望</h1><h2 id="6-1-全文工作总结"><a href="#6-1-全文工作总结" class="headerlink" title="6.1 全文工作总结"></a>6.1 全文工作总结</h2><p>　　本文基于对支持万物互联的新型操作系统进行研究，首先介绍了微内核技术的发展与优势，展示了该新型终端设备操作系统的整体设计架构与工作流程。随后以全自动核酸采样设备作为载体，进一步细化设计目标，详细地介绍了用以适配该终端设备的进程管理系统、内存管理系统和文件管理系统的设计方案与工作细节。</p>
+<h2 id="6-2-存在的不足"><a href="#6-2-存在的不足" class="headerlink" title="6.2 存在的不足"></a>6.2 存在的不足</h2><p>　　微内核操作系统设计的研究内容非常广，工作量巨大，所以在设计过程中难免有考虑不周的地方。本新型终端设备操作系统的缺点主要体现在以下几个方面：</p>
+<p>　　（1）未实现高效的进程间通信服务，采用内存拷贝的消息传递方式开销较大。</p>
+<p>　　（2）不支持实时进程调度。</p>
+<h2 id="6-3-未来的研究与展望"><a href="#6-3-未来的研究与展望" class="headerlink" title="6.3 未来的研究与展望"></a>6.3 未来的研究与展望</h2><p>　　本研究以开发一款能够支持万物互联的微内核操作系统为目标，将继续开展更加深入的研究，下一步的工作目标包括：</p>
+<p>　　（1）进一步完善进程间通信服务，借鉴seL4微内核采用寄存器传递消息的方式提高进程间通信的效率。</p>
+<p>　　（2）研究微内核系统服务对实时性的支持。</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>[1]彭星海.基于X86架构的微内核操作系统的研究和实现[D].成都:电子科技大学, 2020.</p>
+<p>[2]林禹清.面向控制领域的微内核系统服务的设计与实现[D].成都:电子科技大学,2019.</p>
+<p>[3]王训,周东红.微内核操作系统的发展与关键技术解析[J].自动化博览,2022(03):56-61.</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>物联网</tag>
+        <tag>微内核</tag>
       </tags>
   </entry>
 </search>
