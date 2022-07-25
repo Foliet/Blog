@@ -20,29 +20,30 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"foliet.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"default"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="华东师范大学软件学院的20级学术废物，希望能有人能一起做MC的mod，来点小伙伴吧🐱">
-<meta property="og:type" content="website">
-<meta property="og:title" content="关于">
-<meta property="og:url" content="https://foliet.com/about/index.html">
+    <meta name="description" content="前言实验原文：Lab: System calls (mit.edu)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MIT6.S081操作系统实验——system calls">
+<meta property="og:url" content="https://foliet.com/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6-S081/MIT6-S081%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E9%AA%8C%E2%80%94%E2%80%94system-calls/index.html">
 <meta property="og:site_name" content="foliet&#39;s Blog">
-<meta property="og:description" content="华东师范大学软件学院的20级学术废物，希望能有人能一起做MC的mod，来点小伙伴吧🐱">
+<meta property="og:description" content="前言实验原文：Lab: System calls (mit.edu)">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-07-15T15:43:13.000Z">
-<meta property="article:modified_time" content="2021-12-31T08:32:32.404Z">
+<meta property="article:published_time" content="2022-07-25T18:34:44.000Z">
+<meta property="article:modified_time" content="2022-07-25T19:29:24.851Z">
 <meta property="article:author" content="foliet">
-<meta property="article:tag" content="foliet">
+<meta property="article:tag" content="MIT Lab">
+<meta property="article:tag" content="Xv6">
+<meta property="article:tag" content="system call">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://foliet.com/about/">
+<link rel="canonical" href="https://foliet.com/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6-S081/MIT6-S081%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E9%AA%8C%E2%80%94%E2%80%94system-calls/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":true,"permalink":"https://foliet.com/about/index.html","path":"about/index.html","title":"关于"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foliet.com/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6-S081/MIT6-S081%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E9%AA%8C%E2%80%94%E2%80%94system-calls/","path":"categories/操作系统/MIT6-S081/MIT6-S081操作系统实验——system-calls/","title":"MIT6.S081操作系统实验——system calls"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>关于 | foliet's Blog
-</title>
+<title>MIT6.S081操作系统实验——system calls | foliet's Blog</title>
   
 
 
@@ -134,7 +135,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -147,6 +148,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -226,35 +228,148 @@
 </noscript>
 
 
-    <div class="main-inner page posts-expand">
+    <div class="main-inner post posts-expand">
 
 
-    
-    
-    
-    <div class="post-block" lang="zh-CN"><header class="post-header">
+  
 
-<h1 class="post-title" itemprop="name headline">关于
-</h1>
 
-<div class="post-meta-container">
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://foliet.com/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6-S081/MIT6-S081%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E9%AA%8C%E2%80%94%E2%80%94system-calls/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="foliet">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="foliet's Blog">
+      <meta itemprop="description" content="一个无名之辈的博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MIT6.S081操作系统实验——system calls | foliet's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MIT6.S081操作系统实验——system calls
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-07-26 02:34:44 / 修改时间：03:29:24" itemprop="dateCreated datePublished" datetime="2022-07-26T02:34:44+08:00">2022-07-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6-S081/" itemprop="url" rel="index"><span itemprop="name">MIT6.S081</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>31</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
 </div>
 
-</header>
+        </div>
+      </header>
 
-      
-      
-      <div class="post-body">
-          <p>华东师范大学软件学院的20级学术废物，希望能有人能一起做MC的mod，来点小伙伴吧🐱</p>
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>实验原文：<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2021/labs/syscall.html">Lab: System calls (mit.edu)</a></p>
+<span id="more"></span>
 
-      </div>
-      
-      
-      
     </div>
 
     
     
+    
+      
+
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>foliet
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://foliet.com/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6-S081/MIT6-S081%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E9%AA%8C%E2%80%94%E2%80%94system-calls/" title="MIT6.S081操作系统实验——system calls">https://foliet.com/categories/操作系统/MIT6-S081/MIT6-S081操作系统实验——system-calls/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/MIT-Lab/" rel="tag"><i class="fa fa-tag"></i> MIT Lab</a>
+              <a href="/tags/Xv6/" rel="tag"><i class="fa fa-tag"></i> Xv6</a>
+              <a href="/tags/system-call/" rel="tag"><i class="fa fa-tag"></i> system call</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/categories/%E5%90%8E%E7%AB%AF/%E9%AB%98%E5%B9%B6%E5%8F%91%E6%8A%A2%E8%AF%BE%E7%B3%BB%E7%BB%9F%E5%90%8E%E7%AB%AF%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" rel="prev" title="高并发抢课系统后端架构设计">
+                  <i class="fa fa-chevron-left"></i> 高并发抢课系统后端架构设计
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
 
 
     <div class="comments gitalk-container"></div>
@@ -326,7 +441,7 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"foliet","repo":"blog","client_id":"e92cefb8c9c4246908b0","client_secret":"6cb98c583fc32a5f16c51db0c1831262dda5711c","admin_user":"foliet","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","createIssue_manually":true,"js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"3be7aa98d992907175cbd79c194399f2"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"foliet","repo":"blog","client_id":"e92cefb8c9c4246908b0","client_secret":"6cb98c583fc32a5f16c51db0c1831262dda5711c","admin_user":"foliet","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","createIssue_manually":true,"js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"abf5bc54765ecfc6c346e8ebf67331b3"}</script>
 <script src="/js/third-party/comments/gitalk.js"></script>
 
 </body>
