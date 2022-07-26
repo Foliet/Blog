@@ -20,15 +20,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"foliet.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"default"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="前言实验原文：Lab: System calls (mit.edu)">
+    <meta name="description" content="前言本次实验的主要内容是学习系统调用的工作流程，实现两个简单的系统调用。 实验原文：Lab: System calls (mit.edu)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MIT6.S081操作系统实验——system calls">
 <meta property="og:url" content="https://foliet.com/article/64950/index.html">
 <meta property="og:site_name" content="foliet&#39;s Blog">
-<meta property="og:description" content="前言实验原文：Lab: System calls (mit.edu)">
+<meta property="og:description" content="前言本次实验的主要内容是学习系统调用的工作流程，实现两个简单的系统调用。 实验原文：Lab: System calls (mit.edu)">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-07-25T18:34:44.000Z">
-<meta property="article:modified_time" content="2022-07-25T20:46:58.056Z">
+<meta property="article:modified_time" content="2022-07-26T19:23:23.414Z">
 <meta property="article:author" content="foliet">
 <meta property="article:tag" content="MIT Lab">
 <meta property="article:tag" content="Xv6">
@@ -146,7 +146,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%B7%A5%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">前置工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">系统调用基本流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4"><span class="nav-number">3.1.</span> <span class="nav-text">用户空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4"><span class="nav-number">3.2.</span> <span class="nav-text">内核空间</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#System-call-tracing-moderate"><span class="nav-number">4.</span> <span class="nav-text">System call tracing (moderate)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1"><span class="nav-number">4.1.</span> <span class="nav-text">任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E8%BF%87%E7%A8%8B"><span class="nav-number">4.2.</span> <span class="nav-text">关键过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E8%BF%9B%E7%A8%8B%E7%BB%93%E6%9E%84%E4%BD%93"><span class="nav-number">4.2.1.</span> <span class="nav-text">修改进程结构体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0sys-trace"><span class="nav-number">4.2.2.</span> <span class="nav-text">实现sys_trace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9syscall"><span class="nav-number">4.2.3.</span> <span class="nav-text">修改syscall</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sysinfo-moderate"><span class="nav-number">5.</span> <span class="nav-text">Sysinfo(moderate)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1-1"><span class="nav-number">5.1.</span> <span class="nav-text">任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E8%BF%87%E7%A8%8B-1"><span class="nav-number">5.2.</span> <span class="nav-text">关键过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E8%AE%A1%E6%9C%AA%E4%BD%BF%E7%94%A8%E7%9A%84%E8%BF%9B%E7%A8%8B%E6%95%B0"><span class="nav-number">5.2.1.</span> <span class="nav-text">统计未使用的进程数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E8%AE%A1%E7%A9%BA%E9%97%B2%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E7%9A%84%E5%AD%97%E8%8A%82%E6%95%B0"><span class="nav-number">5.2.2.</span> <span class="nav-text">统计空闲物理内存的字节数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0sys-sysinfo"><span class="nav-number">5.2.3.</span> <span class="nav-text">实现sys_sysinfo</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -265,9 +265,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2022-07-26 02:34:44 / 修改时间：04:46:58" itemprop="dateCreated datePublished" datetime="2022-07-26T02:34:44+08:00">2022-07-26</time>
+      <time title="创建时间：2022-07-26 02:34:44" itemprop="dateCreated datePublished" datetime="2022-07-26T02:34:44+08:00">2022-07-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-07-27 03:23:23" itemprop="dateModified" datetime="2022-07-27T03:23:23+08:00">2022-07-27</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -297,14 +303,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>31</span>
+      <span>5.4k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>5 分钟</span>
     </span>
 </div>
 
@@ -315,8 +321,78 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>实验原文：<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2021/labs/syscall.html">Lab: System calls (mit.edu)</a></p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本次实验的主要内容是学习系统调用的工作流程，实现两个简单的系统调用。</p>
+<p>实验原文：<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2021/labs/syscall.html">Lab: System calls (mit.edu)</a></p>
 <span id="more"></span>
+
+<h1 id="前置工作"><a href="#前置工作" class="headerlink" title="前置工作"></a>前置工作</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git checkout syscall <span class="comment">#切换到syscall分支，对应本实验</span></span><br><span class="line">git clean -xfd <span class="comment">#清除无关文件（未追踪的、忽略的文件和文件夹）</span></span><br><span class="line">git checkout -b solvesyscall <span class="comment">#新建一个solvesyscall分支，来记录自己的编程过程</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="系统调用基本流程"><a href="#系统调用基本流程" class="headerlink" title="系统调用基本流程"></a>系统调用基本流程</h1><blockquote>
+<p>Before you start coding, read Chapter 2 of the <a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2021/xv6/book-riscv-rev1.pdf">xv6 book</a>, and Sections 4.3 and 4.4 of Chapter 4, and related source files:</p>
+<ul>
+<li>The user-space code for systems calls is in <code>user/user.h</code> and <code>user/usys.pl</code>.</li>
+<li>The kernel-space code is <code>kernel/syscall.h</code>, <code>kernel/syscall.c</code>.</li>
+<li>The process-related code is <code>kernel/proc.h</code> and <code>kernel/proc.c</code>.</li>
+</ul>
+</blockquote>
+<h2 id="用户空间"><a href="#用户空间" class="headerlink" title="用户空间"></a>用户空间</h2><p>根据实验说明的提示，用户进程执行系统调用时相关的代码在<code>user/user.h</code>中声明，在 <code>user/usys.pl</code>中定义。</p>
+<p>首先可以看到<code>user/user.h</code>中有很多预设的系统调用。在Clion中，部分系统调用的左边会显示转到定义的双向箭头，但实际上转向的内容是内核空间对应的代码而非用户空间对应的代码。</p>
+<p>实际的定义写在 <code>user/usys.pl</code>中，在make时perl脚本会被编译为汇编文件<code>usys.S</code>。</p>
+<p>打开编译后的<code>usys.S</code>可以看到以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># generated by usys.pl - do not edit</span><br><span class="line">#include &quot;kernel/syscall.h&quot;</span><br><span class="line">.global fork</span><br><span class="line">fork:</span><br><span class="line"> li a7, SYS_fork</span><br><span class="line"> ecall</span><br><span class="line"> ret</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p>首先执行<code>#include &quot;kernel/syscall.h&quot;</code>导入系统调用的编号，然后接下来是各个系统调用的定义，每一个系统调用只有三行指令。</p>
+<p>以fork举例，<code>.global fork</code>表示fork是一个全局函数，<code>li a7, SYS_fork</code>表示将SYS_fork的值加载到trapframe的a7中（li &#x3D; load immediate），trapframe是在进程陷入内核态时保存寄存器状态的结构。接下来执行<code>ecall</code>陷入内核态，在内核完成系统调用后执行<code>ret</code>结束系统调用。</p>
+<h2 id="内核空间"><a href="#内核空间" class="headerlink" title="内核空间"></a>内核空间</h2><p>根据实验说明的提示，内核空间关于系统调用的代码写在<code>kernel/syscall.h</code>和<code>kernel/syscall.c</code>中。</p>
+<p>在用户空间执行完<code>ecall</code>后，CPU陷入内核态，本质上是将当前运行的进程从执行系统调用的用户进程切换到内核进程，这个转换过程将在实验四trap中详细学习。</p>
+<p>切换完成后，执行<code>syscall()</code>处理系统调用。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span></span><br><span class="line"><span class="title function_">syscall</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> num;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">proc</span> *<span class="title">p</span> =</span> myproc();</span><br><span class="line"></span><br><span class="line">  num = p-&gt;trapframe-&gt;a7;</span><br><span class="line">  <span class="keyword">if</span>(num &gt; <span class="number">0</span> &amp;&amp; num &lt; NELEM(syscalls) &amp;&amp; syscalls[num]) &#123;</span><br><span class="line">      p-&gt;trapframe-&gt;a0 = syscalls[num]();</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %s: unknown sys call %d\n&quot;</span>,</span><br><span class="line">            p-&gt;pid, p-&gt;name, num);</span><br><span class="line">    p-&gt;trapframe-&gt;a0 = <span class="number">-1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从trapframe的a7中获取系统调用编号，然后执行相应的系统调用，并将返回值写入trapframe的a0中，至此完成系统调用，CPU从内核态转回用户态，转换回去的具体过程同样在实验四中学习。</p>
+<p>其中syscalls是一个<strong>函数指针数组</strong>，使用了一种特殊的初始化方式<del>（我也是第一次见到）</del>，用来自定义初始化数组的成员，数组的长度取决于成员下标的最大值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="title function_">uint64</span> <span class="params">(*syscalls[])</span><span class="params">(<span class="type">void</span>)</span> = &#123;</span><br><span class="line">[SYS_fork]    sys_fork,</span><br><span class="line">[SYS_exit]    sys_exit,</span><br><span class="line">[SYS_wait]    sys_wait,</span><br><span class="line">[SYS_pipe]    sys_pipe,</span><br><span class="line">......</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>syscalls首先与<code>[]</code>结合，所以它是一个数组；接着与<code>*</code>结合，所以这个数组的成员是指针；指针的类型是<code>uint64 (void)</code>，即参数类型为<code>void</code>，返回值类型为<code>uint64</code>的函数。</p>
+<p>如果无法理解这个数组的类型定义可以参考我的另一篇博文：<a href="https://foliet.com/article/11681/">数组与指针的深度理解</a>。</p>
+<p>最后<code>static</code>修饰syscalls表示它是一个静态变量，只在本文件内可以被访问，类似java中的<code>private</code>。</p>
+<p><code>static</code>在汇编中的体现就是被修饰的变量在汇编中没有<code>.global</code>修饰，可以参考这篇博文：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/515804741">C语言static修饰符作用 汇编层面验证</a></p>
+<h1 id="System-call-tracing-moderate"><a href="#System-call-tracing-moderate" class="headerlink" title="System call tracing (moderate)"></a>System call tracing (moderate)</h1><h2 id="任务"><a href="#任务" class="headerlink" title="任务"></a>任务</h2><p>了解完系统调用基本流程可以进入正题了，这个实验的目标是实现系统调用trace，参数为一个整数，该整数的第n个二进制位为1时表示追踪编号为n的系统调用<strong>（包括trace本身）</strong>。例如，为了跟踪 fork和exit 系统调用，程序调用 <code>trace(1 &lt;&lt; SYS_fork + 1 &lt;&lt; SYS_exit)</code>。</p>
+<p>在执行被追踪的系统调用后，打印进程ID、系统调用的名称和返回值。</p>
+<h2 id="关键过程"><a href="#关键过程" class="headerlink" title="关键过程"></a>关键过程</h2><h3 id="修改进程结构体"><a href="#修改进程结构体" class="headerlink" title="修改进程结构体"></a>修改进程结构体</h3><p>为了能够记录进程想要追踪的系统调用，需要在PCB中添加一个成员来达成目的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># kernel/proc.h</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">proc</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">spinlock</span> <span class="title">lock</span>;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// p-&gt;lock must be held when using these:</span></span><br><span class="line">  <span class="class"><span class="keyword">enum</span> <span class="title">procstate</span> <span class="title">state</span>;</span>        <span class="comment">// Process state</span></span><br><span class="line">......</span><br><span class="line">  <span class="comment">// wait_lock must be held when using this:</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">proc</span> *<span class="title">parent</span>;</span>         <span class="comment">// Parent process</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// these are private to the process, so p-&gt;lock need not be held.</span></span><br><span class="line">  <span class="type">int</span> trace;</span><br><span class="line">  uint64 kstack;               <span class="comment">// Virtual address of kernel stack</span></span><br><span class="line">......</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>新增的成员trace是进程的私有成员，所以在对它进行操作的时候不需要先获取自旋锁。</p>
+<p>关于操作一个成员时是否需要先获取自旋锁我的理解是，只有在进程处于<em>RUNNING</em>状态才会被访问的成员是<strong>不需要</strong>先获取自旋锁的，因为<strong>一个进程在任意时刻最多只可能运行在一个CPU上</strong>，那么这些成员不可能同时被两个CPU修改或者访问，自然就没有互斥问题。</p>
+<h3 id="实现sys-trace"><a href="#实现sys-trace" class="headerlink" title="实现sys_trace"></a>实现sys_trace</h3><p><code>sys_trace</code>的逻辑非常简单，只要获取参数并把参数赋值给PCB的trace就完成了。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">uint64</span><br><span class="line"><span class="title function_">sys_trace</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    argint(<span class="number">0</span>, &amp;myproc()-&gt;trace);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>完成任务是次要的，学习知识才是首要任务。</strong>下面来分析一下内核如何获取用户进程执行系统调用时传递的参数。</p>
+<p><code>argint</code>、<code>argaddr</code>、<code>argstr</code>实际上都是简单地调用了<code>argraw</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> uint64</span><br><span class="line"><span class="title function_">argraw</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">proc</span> *<span class="title">p</span> =</span> myproc();</span><br><span class="line">  <span class="keyword">switch</span> (n) &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">    <span class="keyword">return</span> p-&gt;trapframe-&gt;a0;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">    <span class="keyword">return</span> p-&gt;trapframe-&gt;a1;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">    <span class="keyword">return</span> p-&gt;trapframe-&gt;a2;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">    <span class="keyword">return</span> p-&gt;trapframe-&gt;a3;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">4</span>:</span><br><span class="line">    <span class="keyword">return</span> p-&gt;trapframe-&gt;a4;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">5</span>:</span><br><span class="line">    <span class="keyword">return</span> p-&gt;trapframe-&gt;a5;</span><br><span class="line">  &#125;</span><br><span class="line">  panic(<span class="string">&quot;argraw&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>查看<code>argraw</code>的源码可以看到xv6的系统调用最多可以传递六个参数，使用trapframe的a0~a5进行传递。</p>
+<p>值得一提的是，在risc-v指令集架构中，调用普通函数时将使用a0~a7共八个寄存器进行参数传递，也就是传递八个参数，当参数超过八个时多出来的参数使用进程栈进行传递，类似x86。当函数返回时，使用寄存器a0和a1来传递返回值。</p>
+<h3 id="修改syscall"><a href="#修改syscall" class="headerlink" title="修改syscall"></a>修改syscall</h3><p>为了输出系统调用的名称，首先我们要先定义一个数组储存各个系统调用的名字，仿照syscalls的定义方式定义一个数组syscalls_name如下。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">char</span>* syscalls_name[] = &#123;</span><br><span class="line">[SYS_fork]    = <span class="string">&quot;fork&quot;</span>,</span><br><span class="line">[SYS_exit]    = <span class="string">&quot;exit&quot;</span>,</span><br><span class="line">[SYS_wait]    = <span class="string">&quot;wait&quot;</span>,</span><br><span class="line">[SYS_pipe]    = <span class="string">&quot;pipe&quot;</span>,</span><br><span class="line">......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>相比于syscalls，这里在定义每个成员时多加了一个等于号，实际上这样才是标准的写法，syscalls的定义方法是GNU的一种扩展语法，允许省略等于号，可以不加等于号，但是Clion会给出警告。</p>
+<p>接下来在内核执行完具体的系统调用后，检查PCB的trace中与该系统调用编号相对应的二进制位是否被置为1，如果是，输出相应信息。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">p-&gt;trapframe-&gt;a0 = syscalls[num]();</span><br><span class="line"><span class="keyword">if</span>(p-&gt;trace&amp;(<span class="number">1</span>&lt;&lt;num))&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d: syscall %s -&gt; %d\n&quot;</span>, p-&gt;pid, syscalls_name[num], p-&gt;trapframe-&gt;a0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此系统调用trace实现完成。</p>
+<h1 id="Sysinfo-moderate"><a href="#Sysinfo-moderate" class="headerlink" title="Sysinfo(moderate)"></a>Sysinfo(moderate)</h1><h2 id="任务-1"><a href="#任务-1" class="headerlink" title="任务"></a>任务</h2><p>这个任务预设了一个有两个成员的结构体sysinfo，其中nproc表示未使用的进程数，也就是还可以创建的进程数，freemem表示操作系统空闲物理内存的字节数。任务的目标是实现系统调用sysinfo，接受一个sysinfo的指针，并填充它的字段。</p>
+<h2 id="关键过程-1"><a href="#关键过程-1" class="headerlink" title="关键过程"></a>关键过程</h2><h3 id="统计未使用的进程数"><a href="#统计未使用的进程数" class="headerlink" title="统计未使用的进程数"></a>统计未使用的进程数</h3><p>非常简单，只需要遍历一遍内核的进程数组，统计state为<em>UNUSED</em>的进程数量即可。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">uint64</span><br><span class="line"><span class="title function_">proc_count</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">proc</span> *<span class="title">p</span>;</span></span><br><span class="line">    uint64 count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(p = proc; p &lt; &amp;proc[NPROC]; p++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(p-&gt;state!=UNUSED)count++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="统计空闲物理内存的字节数"><a href="#统计空闲物理内存的字节数" class="headerlink" title="统计空闲物理内存的字节数"></a>统计空闲物理内存的字节数</h3><p>观察<code>kalloc.c</code>中的代码可以发现，kmem是用来管理物理内存的结构，物理内存被分成了若干个大小为<em>PGSIZE</em>（其值为4096）bytes的单位，通常称之为物理页。kmem中的freelist是记录空闲物理页地址的链表，freelist的长度即为空闲物理页的个数，所以遍历链表计算长度，再将长度乘以<em>PGSIZE</em>即可。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">uint64</span><br><span class="line"><span class="title function_">kcount</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">run</span> *<span class="title">r</span>;</span></span><br><span class="line">    uint64 count = <span class="number">0</span>;</span><br><span class="line">    acquire(&amp;kmem.lock);</span><br><span class="line">    r = kmem.freelist;</span><br><span class="line">    <span class="keyword">while</span>(r)&#123;</span><br><span class="line">        r=r-&gt;next;</span><br><span class="line">        count+=PGSIZE;</span><br><span class="line">    &#125;</span><br><span class="line">    release(&amp;kmem.lock);</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是内存使用情况在不断变化，统计时必须先获取kmem的互斥锁。</p>
+<h3 id="实现sys-sysinfo"><a href="#实现sys-sysinfo" class="headerlink" title="实现sys_sysinfo"></a>实现sys_sysinfo</h3><p>用户进程传递了一个地址作为参数，由于虚拟内存的存在，内核和用户进程的地址空间是分离的，不能在内核态下直接向用户进程传递的地址写入数据，而是要先使用用户进程的页表来找到该虚拟地址对应的物理地址，然后才能将sysinfo的值写入。</p>
+<p>仿照系统调用fstat，调用copyout来完成从内核空间到用户空间的数据传递。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">uint64</span><br><span class="line"><span class="title function_">sys_sysinfo</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">proc</span> *<span class="title">p</span> =</span> myproc();</span><br><span class="line">    uint64 addr;</span><br><span class="line">    argaddr(<span class="number">0</span>,&amp;addr);</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sysinfo</span> <span class="title">info</span>;</span></span><br><span class="line">    info.nproc=proc_count();</span><br><span class="line">    info.freemem=kcount();</span><br><span class="line">    <span class="keyword">if</span>(copyout(p-&gt;pagetable, addr, (<span class="type">char</span> *)&amp;info, <span class="keyword">sizeof</span>(info)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此系统调用sysinfo实现完成。</p>
 
     </div>
 
@@ -394,13 +470,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">27k</span>
+    <span title="站点总字数">32k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">24 分钟</span>
+    <span title="站点阅读时长">29 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">
