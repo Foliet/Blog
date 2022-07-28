@@ -20,15 +20,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"foliet.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"default"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="前言本次实验的主要内容是学习系统调用的工作流程，实现两个简单的系统调用。 实验原文：Lab: System calls (mit.edu)">
+    <meta name="description" content="前言 Before you start coding, read Chapter 2 of the xv6 book, and Sections 4.3 and 4.4 of Chapter 4, and related source files:  The user-space code for systems calls is in user&#x2F;user.h and user&#x2F;usys.pl.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MIT6.S081操作系统实验——system calls">
 <meta property="og:url" content="https://foliet.com/article/64950/index.html">
 <meta property="og:site_name" content="foliet&#39;s Blog">
-<meta property="og:description" content="前言本次实验的主要内容是学习系统调用的工作流程，实现两个简单的系统调用。 实验原文：Lab: System calls (mit.edu)">
+<meta property="og:description" content="前言 Before you start coding, read Chapter 2 of the xv6 book, and Sections 4.3 and 4.4 of Chapter 4, and related source files:  The user-space code for systems calls is in user&#x2F;user.h and user&#x2F;usys.pl.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-07-25T18:34:44.000Z">
-<meta property="article:modified_time" content="2022-07-26T19:35:31.977Z">
+<meta property="article:modified_time" content="2022-07-26T20:41:54.079Z">
 <meta property="article:author" content="foliet">
 <meta property="article:tag" content="MIT Lab">
 <meta property="article:tag" content="Xv6">
@@ -49,6 +49,9 @@
 
 
 
+
+  <script class="next-config" data-name="matomo" type="application/json">true</script>
+  <script src="/js/third-party/analytics/matomo.js"></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -89,7 +92,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">16</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">5</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a></li><li class="menu-item menu-item-网盘"><a href="https://cloud.rainspace.cn/" rel="noopener" target="_blank"><i class="fa fa-cloud-download-alt fa-fw"></i>网盘</a></li><li class="menu-item menu-item-电影院"><a href="https://cloud.rainspace.cn/s/MzuN" rel="noopener" target="_blank"><i class="fas fa-film fa-fw"></i>电影院</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">17</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">5</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">8</span></a></li><li class="menu-item menu-item-网盘"><a href="https://cloud.rainspace.cn/" rel="noopener" target="_blank"><i class="fa fa-cloud-download-alt fa-fw"></i>网盘</a></li><li class="menu-item menu-item-电影院"><a href="https://cloud.rainspace.cn/s/MzuN" rel="noopener" target="_blank"><i class="fas fa-film fa-fw"></i>电影院</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -146,7 +149,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%B7%A5%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">前置工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">系统调用基本流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4"><span class="nav-number">3.1.</span> <span class="nav-text">用户空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4"><span class="nav-number">3.2.</span> <span class="nav-text">内核空间</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#System-call-tracing-moderate"><span class="nav-number">4.</span> <span class="nav-text">System call tracing (moderate)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1"><span class="nav-number">4.1.</span> <span class="nav-text">任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E8%BF%87%E7%A8%8B"><span class="nav-number">4.2.</span> <span class="nav-text">关键过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E8%BF%9B%E7%A8%8B%E7%BB%93%E6%9E%84%E4%BD%93"><span class="nav-number">4.2.1.</span> <span class="nav-text">修改进程结构体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0sys-trace"><span class="nav-number">4.2.2.</span> <span class="nav-text">实现sys_trace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9syscall"><span class="nav-number">4.2.3.</span> <span class="nav-text">修改syscall</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sysinfo-moderate"><span class="nav-number">5.</span> <span class="nav-text">Sysinfo(moderate)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1-1"><span class="nav-number">5.1.</span> <span class="nav-text">任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E8%BF%87%E7%A8%8B-1"><span class="nav-number">5.2.</span> <span class="nav-text">关键过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E8%AE%A1%E6%9C%AA%E4%BD%BF%E7%94%A8%E7%9A%84%E8%BF%9B%E7%A8%8B%E6%95%B0"><span class="nav-number">5.2.1.</span> <span class="nav-text">统计未使用的进程数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E8%AE%A1%E7%A9%BA%E9%97%B2%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E7%9A%84%E5%AD%97%E8%8A%82%E6%95%B0"><span class="nav-number">5.2.2.</span> <span class="nav-text">统计空闲物理内存的字节数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0sys-sysinfo"><span class="nav-number">5.2.3.</span> <span class="nav-text">实现sys_sysinfo</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">系统调用基本流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4"><span class="nav-number">2.1.</span> <span class="nav-text">用户空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4"><span class="nav-number">2.2.</span> <span class="nav-text">内核空间</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#System-call-tracing-moderate"><span class="nav-number">3.</span> <span class="nav-text">System call tracing (moderate)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.1.</span> <span class="nav-text">任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E8%BF%87%E7%A8%8B"><span class="nav-number">3.2.</span> <span class="nav-text">关键过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E8%BF%9B%E7%A8%8B%E7%BB%93%E6%9E%84%E4%BD%93"><span class="nav-number">3.2.1.</span> <span class="nav-text">修改进程结构体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0sys-trace"><span class="nav-number">3.2.2.</span> <span class="nav-text">实现sys_trace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9syscall"><span class="nav-number">3.2.3.</span> <span class="nav-text">修改syscall</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sysinfo-moderate"><span class="nav-number">4.</span> <span class="nav-text">Sysinfo(moderate)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1-1"><span class="nav-number">4.1.</span> <span class="nav-text">任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E8%BF%87%E7%A8%8B-1"><span class="nav-number">4.2.</span> <span class="nav-text">关键过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E8%AE%A1%E6%9C%AA%E4%BD%BF%E7%94%A8%E7%9A%84%E8%BF%9B%E7%A8%8B%E6%95%B0"><span class="nav-number">4.2.1.</span> <span class="nav-text">统计未使用的进程数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E8%AE%A1%E7%A9%BA%E9%97%B2%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E7%9A%84%E5%AD%97%E8%8A%82%E6%95%B0"><span class="nav-number">4.2.2.</span> <span class="nav-text">统计空闲物理内存的字节数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0sys-sysinfo"><span class="nav-number">4.2.3.</span> <span class="nav-text">实现sys_sysinfo</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -161,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -172,7 +175,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -273,7 +276,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-07-27 03:35:31" itemprop="dateModified" datetime="2022-07-27T03:35:31+08:00">2022-07-27</time>
+      <time title="修改时间：2022-07-27 04:41:54" itemprop="dateModified" datetime="2022-07-27T04:41:54+08:00">2022-07-27</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -303,7 +306,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>5.4k</span>
+      <span>5.3k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -321,13 +324,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本次实验的主要内容是学习系统调用的工作流程，实现两个简单的系统调用。</p>
-<p>实验原文：<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2021/labs/syscall.html">Lab: System calls (mit.edu)</a></p>
-<span id="more"></span>
-
-<h1 id="前置工作"><a href="#前置工作" class="headerlink" title="前置工作"></a>前置工作</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git checkout syscall <span class="comment">#切换到syscall分支，对应本实验</span></span><br><span class="line">git clean -xfd <span class="comment">#清除无关文件（未追踪的、忽略的文件和文件夹）</span></span><br><span class="line">git checkout -b solvesyscall <span class="comment">#新建一个solvesyscall分支，来记录自己的编程过程</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="系统调用基本流程"><a href="#系统调用基本流程" class="headerlink" title="系统调用基本流程"></a>系统调用基本流程</h1><blockquote>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
 <p>Before you start coding, read Chapter 2 of the <a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2021/xv6/book-riscv-rev1.pdf">xv6 book</a>, and Sections 4.3 and 4.4 of Chapter 4, and related source files:</p>
 <ul>
 <li>The user-space code for systems calls is in <code>user/user.h</code> and <code>user/usys.pl</code>.</li>
@@ -335,7 +332,11 @@
 <li>The process-related code is <code>kernel/proc.h</code> and <code>kernel/proc.c</code>.</li>
 </ul>
 </blockquote>
-<h2 id="用户空间"><a href="#用户空间" class="headerlink" title="用户空间"></a>用户空间</h2><p>根据实验说明的提示，用户进程执行系统调用时相关的代码在<code>user/user.h</code>中声明，在 <code>user/usys.pl</code>中定义。</p>
+<p>本次实验的主要内容是学习系统调用的工作流程，实现两个简单的系统调用。</p>
+<p>实验原文：<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2021/labs/syscall.html">Lab: System calls (mit.edu)</a></p>
+<span id="more"></span>
+
+<h1 id="系统调用基本流程"><a href="#系统调用基本流程" class="headerlink" title="系统调用基本流程"></a>系统调用基本流程</h1><h2 id="用户空间"><a href="#用户空间" class="headerlink" title="用户空间"></a>用户空间</h2><p>根据实验说明的提示，用户进程执行系统调用时相关的代码在<code>user/user.h</code>中声明，在 <code>user/usys.pl</code>中定义。</p>
 <p>首先可以看到<code>user/user.h</code>中有很多预设的系统调用。在Clion中，部分系统调用的左边会显示转到定义的双向箭头，但实际上转向的内容是内核空间对应的代码而非用户空间对应的代码。</p>
 <p>实际的定义写在 <code>user/usys.pl</code>中，在make时perl脚本会被编译为汇编文件<code>usys.S</code>。</p>
 <p>打开编译后的<code>usys.S</code>可以看到以下内容：</p>
@@ -435,6 +436,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/article/41624/" rel="next" title="MIT6-S081操作系统实验——page tables">
+                  MIT6-S081操作系统实验——page tables <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
