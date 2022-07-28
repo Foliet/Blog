@@ -1,4 +1,4 @@
-<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>/* global CONFIG */
+/* global CONFIG */
 
 if(CONFIG.matomo){
     var _paq = window._paq = window._paq || [];
