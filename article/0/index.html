@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foliet.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"default"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言记录一下使用python爬虫获取steam折扣信息的代码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="foliet&#39;s Blog">
+<meta property="og:url" content="https://foliet.com/article/0/index.html">
+<meta property="og:site_name" content="foliet&#39;s Blog">
+<meta property="og:description" content="前言记录一下使用python爬虫获取steam折扣信息的代码。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-21T04:17:36.771Z">
+<meta property="article:modified_time" content="2021-11-21T04:24:35.038Z">
+<meta property="article:author" content="foliet">
+<meta property="article:tag" content="foliet">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://foliet.com/article/0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foliet.com/article/0/","path":"article/0/","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | foliet's Blog</title>
+  
+
+
+
+
+
+  <script class="next-config" data-name="matomo" type="application/json">{"enable":true,"server_url":"https://matomo.rainspace.cn/","site_id":1}</script>
+  <script src="/js/third-party/analytics/matomo.js"></script>
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">foliet's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">论废物的自我修养</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">20</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">6</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">11</span></a></li><li class="menu-item menu-item-网盘"><a href="https://cloud.rainspace.cn/" rel="noopener" target="_blank"><i class="fa fa-cloud-download-alt fa-fw"></i>网盘</a></li><li class="menu-item menu-item-电影院"><a href="https://cloud.rainspace.cn/s/MzuN" rel="noopener" target="_blank"><i class="fas fa-film fa-fw"></i>电影院</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">代码</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="foliet"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">foliet</p>
+  <div class="site-description" itemprop="description">一个无名之辈的博客</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="/images/QQ.png" title="QQ → &#x2F;images&#x2F;QQ.png"><i class="fab fa-qq fa-fw"></i>QQ</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat_channel.png" title="WeChat → &#x2F;images&#x2F;wechat_channel.png"><i class="fab fa-weixin fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://github.com/Foliet" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Foliet" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-group fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://duerwuyi.github.io/" title="https:&#x2F;&#x2F;duerwuyi.github.io&#x2F;" rel="noopener" target="_blank">duerwuyi</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://foliet.com/article/0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="foliet">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="foliet's Blog">
+      <meta itemprop="description" content="一个无名之辈的博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | foliet's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-21 12:17:36" itemprop="dateCreated datePublished" datetime="2022-08-21T12:17:36+08:00">2022-08-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-11-21 12:24:35" itemprop="dateModified" datetime="2021-11-21T12:24:35+08:00">2021-11-21</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>33</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>记录一下使用python爬虫获取steam折扣信息的代码。</p>
+<span id="more"></span>
+
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">write_csv</span>(<span class="params">data</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;steam折扣爬虫.csv&#x27;</span>, <span class="string">&#x27;a&#x27;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>, newline=<span class="string">&#x27;&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        fields = [</span><br><span class="line">            <span class="string">&#x27;title&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;platforms&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;reviews&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;positives&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;review_summary&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;released&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;price&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;discount&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;final_price&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;main_tag&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;url&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;all_tags&#x27;</span></span><br><span class="line">        ]</span><br><span class="line">        writer = csv.DictWriter(f, fieldnames=fields)</span><br><span class="line">        writer.writerow(data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_html</span>(<span class="params">url</span>):</span><br><span class="line">    response = requests.get(url, headers=&#123;<span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36 Edg/103.0.1264.77&#x27;</span>&#125;)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> response.ok:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;Code: <span class="subst">&#123;response.status_code&#125;</span>, url: <span class="subst">&#123;url&#125;</span>&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> response.text</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_games</span>(<span class="params">html</span>):</span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">&#x27;lxml&#x27;</span>)</span><br><span class="line">    pattern = <span class="string">r&#x27;^https://store.steampowered.com/app/&#x27;</span></span><br><span class="line">    games = soup.find_all(<span class="string">&#x27;a&#x27;</span>, href=re.<span class="built_in">compile</span>(pattern))</span><br><span class="line">    <span class="keyword">return</span> games</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_hover_data</span>(<span class="params"><span class="built_in">id</span></span>):</span><br><span class="line">    url = <span class="string">f&#x27;https://store.steampowered.com/apphoverpublic/<span class="subst">&#123;<span class="built_in">id</span>&#125;</span>&#x27;</span></span><br><span class="line">    html = get_html(url)</span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">&#x27;lxml&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        title = soup.find(<span class="string">&#x27;h4&#x27;</span>, class_=<span class="string">&#x27;hover_title&#x27;</span>).text.strip()</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        title = <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        released = soup.find(<span class="string">&#x27;div&#x27;</span>, class_=<span class="string">&#x27;hover_release&#x27;</span>).span.text.split(<span class="string">&#x27;:&#x27;</span>)[-<span class="number">1</span>].strip()</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        released = <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        reviews_raw = soup.find(<span class="string">&#x27;div&#x27;</span>, class_=<span class="string">&#x27;hover_review_summary&#x27;</span>).text</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        reviews = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        pattern = <span class="string">r&#x27;\d+&#x27;</span></span><br><span class="line">        reviews = <span class="built_in">int</span>(<span class="string">&#x27;&#x27;</span>.join(re.findall(pattern, reviews_raw)))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        tags_raw = soup.find_all(<span class="string">&#x27;div&#x27;</span>, class_=<span class="string">&#x27;app_tag&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        all_tags = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        main_tag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        tags_text = [tag.text <span class="keyword">for</span> tag <span class="keyword">in</span> tags_raw]</span><br><span class="line">        <span class="keyword">if</span> tags_text:</span><br><span class="line">            main_tag = tags_text[<span class="number">0</span>]</span><br><span class="line">            all_tags = <span class="string">&#x27;, &#x27;</span>.join(tags_text[<span class="number">0</span>:<span class="number">3</span>])</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            main_tag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">            all_tags = <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">&#x27;title&#x27;</span>: title,</span><br><span class="line">        <span class="string">&#x27;released&#x27;</span>: released,</span><br><span class="line">        <span class="string">&#x27;reviews&#x27;</span>: reviews,</span><br><span class="line">        <span class="string">&#x27;main_tag&#x27;</span>: main_tag,</span><br><span class="line">        <span class="string">&#x27;all_tags&#x27;</span>: all_tags</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">scrape_game_data</span>(<span class="params">game</span>):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        tooltip_raw = game.find(<span class="string">&#x27;span&#x27;</span>, class_=<span class="string">&#x27;search_review_summary&#x27;</span>).get(<span class="string">&#x27;data-tooltip-html&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        review_summary = <span class="string">&#x27;None&#x27;</span></span><br><span class="line">        positives = <span class="number">0</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        tr_splitted = tooltip_raw.split(<span class="string">&#x27;&lt;br&gt;&#x27;</span>)</span><br><span class="line">        review_summary = tr_splitted[<span class="number">0</span>]</span><br><span class="line">        positives_raw = tr_splitted[<span class="number">1</span>]</span><br><span class="line">        positives = <span class="built_in">int</span>(positives_raw[:positives_raw.find(<span class="string">&#x27;%&#x27;</span>)])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        platforms_raw = game.find(<span class="string">&#x27;div&#x27;</span>, class_=<span class="string">&#x27;search_name&#x27;</span>).p</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        platforms = <span class="string">&#x27;None&#x27;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        platforms_os = [platform.get_attribute_list(<span class="string">&#x27;class&#x27;</span>)[-<span class="number">1</span>].title() <span class="keyword">for</span> platform <span class="keyword">in</span> platforms_raw.find_all(<span class="string">&#x27;span&#x27;</span>, class_=<span class="string">&#x27;platform_img&#x27;</span>)]</span><br><span class="line">        vr = platforms_raw.text.strip()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> vr:</span><br><span class="line">            platforms = <span class="string">&#x27;, &#x27;</span>.join(platforms_os) + <span class="string">&#x27;, &#x27;</span> + vr</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            platforms = <span class="string">&#x27;, &#x27;</span>.join(platforms_os)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        price_raw = game.find(<span class="string">&#x27;div&#x27;</span>, class_=<span class="string">&#x27;search_price&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        price = <span class="number">0</span></span><br><span class="line">        final_price = <span class="number">0</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        price_text = price_raw.text.strip()  </span><br><span class="line">        pattern = <span class="string">r&#x27;\d&#123;1,3&#125;.\d&#123;1,3&#125;&#x27;</span></span><br><span class="line">        prices = re.findall(pattern, price_text)</span><br><span class="line">        <span class="keyword">if</span> prices:</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(prices) &gt; <span class="number">1</span>:</span><br><span class="line">                price, final_price = prices</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                price = prices[<span class="number">0</span>]</span><br><span class="line">                final_price = <span class="number">0</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            price = price_text</span><br><span class="line">            final_price = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        discount_raw = game.find(<span class="string">&#x27;div&#x27;</span>, class_=<span class="string">&#x27;search_discount&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        discount = <span class="number">0</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        discount = discount_raw.text.strip().strip(<span class="string">&#x27;%&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        url = game.get(<span class="string">&#x27;href&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        url = <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">&#x27;review_summary&#x27;</span>: review_summary,</span><br><span class="line">        <span class="string">&#x27;positives&#x27;</span>: positives,</span><br><span class="line">        <span class="string">&#x27;platforms&#x27;</span>: platforms,</span><br><span class="line">        <span class="string">&#x27;price&#x27;</span>: price,</span><br><span class="line">        <span class="string">&#x27;final_price&#x27;</span>: final_price,</span><br><span class="line">        <span class="string">&#x27;discount&#x27;</span>: discount,</span><br><span class="line">        <span class="string">&#x27;url&#x27;</span>: url</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">id</span> = game.get(<span class="string">&#x27;data-ds-appid&#x27;</span>)</span><br><span class="line">    data.update(get_hover_data(<span class="built_in">id</span>))</span><br><span class="line"></span><br><span class="line">    write_csv(data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    all_games = []</span><br><span class="line">    start = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    url = <span class="string">f&#x27;https://store.steampowered.com/search/results/?query&amp;start=<span class="subst">&#123;start&#125;</span>&amp;count=100&amp;tags=9&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line"></span><br><span class="line">        games = get_games(get_html(url))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> games:</span><br><span class="line">            all_games.extend(games)</span><br><span class="line">            start += <span class="number">100</span></span><br><span class="line">            url = <span class="string">f&#x27;https://store.steampowered.com/search/results/?query&amp;start=<span class="subst">&#123;start&#125;</span>&amp;count=100&amp;tags=9&#x27;</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> game <span class="keyword">in</span> all_games:</span><br><span class="line">        scrape_game_data(game)</span><br><span class="line"></span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>foliet
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://foliet.com/article/0/" title="">https://foliet.com/article/0/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/article/42403/" rel="prev" title="MIT6.S081操作系统实验——操作系统是如何在qemu虚拟机中启动的？">
+                  <i class="fa fa-chevron-left"></i> MIT6.S081操作系统实验——操作系统是如何在qemu虚拟机中启动的？
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">沪ICP备2021022043号-3 </a>
+      <img src="/images/beian.png" alt="">
+  </div>
+
+<div class="copyright">
+  &copy; 2021.7.15 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foliet</span>
+</div>
+<div class="busuanzi-count">
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@9.1.3/dist/mermaid.min.js","integrity":"sha256-TIYL00Rhw/8WaoUhYTLX9SKIEFdXxg+yMWSLVUbhiLg="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"foliet","repo":"blog","client_id":"e92cefb8c9c4246908b0","client_secret":"6cb98c583fc32a5f16c51db0c1831262dda5711c","admin_user":"foliet","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","createIssue_manually":true,"js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"3bc907b1389e52793763a3c120f20f0e"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
