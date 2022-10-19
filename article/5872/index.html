@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foliet.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"default"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言测验传送门">
+<meta property="og:type" content="article">
+<meta property="og:title" content="暑期集训-数据结构专题">
+<meta property="og:url" content="https://foliet.com/article/5872/index.html">
+<meta property="og:site_name" content="foliet&#39;s Blog">
+<meta property="og:description" content="前言测验传送门">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-19T12:50:43.000Z">
+<meta property="article:modified_time" content="2022-10-19T18:31:12.279Z">
+<meta property="article:author" content="foliet">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="codeforces">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://foliet.com/article/5872/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foliet.com/article/5872/","path":"article/5872/","title":"暑期集训-数据结构专题"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>暑期集训-数据结构专题 | foliet's Blog</title>
+  
+
+
+
+
+
+  <script class="next-config" data-name="matomo" type="application/json">{"enable":true,"server_url":"https://matomo.rainspace.cn/","site_id":1}</script>
+  <script src="/js/third-party/analytics/matomo.js"></script>
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">foliet's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">论废物的自我修养</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">22</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">6</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">12</span></a></li><li class="menu-item menu-item-网盘"><a href="https://cloud.rainspace.cn/" rel="noopener" target="_blank"><i class="fa fa-cloud-download-alt fa-fw"></i>网盘</a></li><li class="menu-item menu-item-电影院"><a href="https://cloud.rainspace.cn/s/MzuN" rel="noopener" target="_blank"><i class="fas fa-film fa-fw"></i>电影院</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Easy"><span class="nav-number">2.</span> <span class="nav-text">Easy</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#A-Cells-Not-Under-Attack"><span class="nav-number">2.1.</span> <span class="nav-text">A. Cells Not Under Attack</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E9%9D%A2"><span class="nav-number">2.1.1.</span> <span class="nav-text">题面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B"><span class="nav-number">2.1.2.</span> <span class="nav-text">测试样例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F"><span class="nav-number">2.1.3.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="nav-number">2.1.4.</span> <span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AC%E4%BB%A3%E7%A0%81"><span class="nav-number">2.1.5.</span> <span class="nav-text">AC代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-Minimum-Array"><span class="nav-number">2.2.</span> <span class="nav-text">C. Minimum Array</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E9%9D%A2-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">题面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">测试样例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF-1"><span class="nav-number">2.2.4.</span> <span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AC%E4%BB%A3%E7%A0%81-1"><span class="nav-number">2.2.5.</span> <span class="nav-text">AC代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#H-Subsegments"><span class="nav-number">2.3.</span> <span class="nav-text">H. Subsegments</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E9%9D%A2-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">题面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B-2"><span class="nav-number">2.3.2.</span> <span class="nav-text">测试样例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F-2"><span class="nav-number">2.3.3.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF-2"><span class="nav-number">2.3.4.</span> <span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AC%E4%BB%A3%E7%A0%81-2"><span class="nav-number">2.3.5.</span> <span class="nav-text">AC代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#I-Little-Girl-and-Maximum-Sum"><span class="nav-number">2.4.</span> <span class="nav-text">I. Little Girl and Maximum Sum</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E9%9D%A2-3"><span class="nav-number">2.4.1.</span> <span class="nav-text">题面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B-3"><span class="nav-number">2.4.2.</span> <span class="nav-text">测试样例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F-3"><span class="nav-number">2.4.3.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF-3"><span class="nav-number">2.4.4.</span> <span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AC%E4%BB%A3%E7%A0%81-3"><span class="nav-number">2.4.5.</span> <span class="nav-text">AC代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#K-Queries-about-less-or-equal-elements"><span class="nav-number">2.5.</span> <span class="nav-text">K. Queries about less or equal elements</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E9%9D%A2-4"><span class="nav-number">2.5.1.</span> <span class="nav-text">题面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B-4"><span class="nav-number">2.5.2.</span> <span class="nav-text">测试样例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F-4"><span class="nav-number">2.5.3.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF-4"><span class="nav-number">2.5.4.</span> <span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AC%E4%BB%A3%E7%A0%81-4"><span class="nav-number">2.5.5.</span> <span class="nav-text">AC代码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hard"><span class="nav-number">3.</span> <span class="nav-text">Hard</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#B-Too-Easy-Problems"><span class="nav-number">3.1.</span> <span class="nav-text">B. Too Easy Problems</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E9%9D%A2-5"><span class="nav-number">3.1.1.</span> <span class="nav-text">题面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B-5"><span class="nav-number">3.1.2.</span> <span class="nav-text">测试样例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F-5"><span class="nav-number">3.1.3.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF-5"><span class="nav-number">3.1.4.</span> <span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AC%E4%BB%A3%E7%A0%81-5"><span class="nav-number">3.1.5.</span> <span class="nav-text">AC代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#E-Interesting-Array"><span class="nav-number">3.2.</span> <span class="nav-text">E. Interesting Array</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E9%9D%A2-6"><span class="nav-number">3.2.1.</span> <span class="nav-text">题面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B-6"><span class="nav-number">3.2.2.</span> <span class="nav-text">测试样例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F-6"><span class="nav-number">3.2.3.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF-6"><span class="nav-number">3.2.4.</span> <span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AC%E4%BB%A3%E7%A0%81-6"><span class="nav-number">3.2.5.</span> <span class="nav-text">AC代码</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="foliet"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">foliet</p>
+  <div class="site-description" itemprop="description">一个无名之辈的博客</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="/images/QQ.png" title="QQ → &#x2F;images&#x2F;QQ.png"><i class="fab fa-qq fa-fw"></i>QQ</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat_channel.png" title="WeChat → &#x2F;images&#x2F;wechat_channel.png"><i class="fab fa-weixin fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://github.com/Foliet" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Foliet" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-group fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://duerwuyi.github.io/" title="https:&#x2F;&#x2F;duerwuyi.github.io&#x2F;" rel="noopener" target="_blank">duerwuyi</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://foliet.com/article/5872/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="foliet">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="foliet's Blog">
+      <meta itemprop="description" content="一个无名之辈的博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="暑期集训-数据结构专题 | foliet's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          暑期集训-数据结构专题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-07-19 20:50:43" itemprop="dateCreated datePublished" datetime="2021-07-19T20:50:43+08:00">2021-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-10-20 02:31:12" itemprop="dateModified" datetime="2022-10-20T02:31:12+08:00">2022-10-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CPP/" itemprop="url" rel="index"><span itemprop="name">CPP</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CPP/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>8.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>22 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><a target="_blank" rel="noopener" href="https://codeforces.com/group/5FquYr3Pbe/contest/288107">测验传送门</a></p>
+<span id="more"></span>
+<h1 id="Easy"><a href="#Easy" class="headerlink" title="Easy"></a>Easy</h1><h2 id="A-Cells-Not-Under-Attack"><a href="#A-Cells-Not-Under-Attack" class="headerlink" title="A. Cells Not Under Attack"></a>A. Cells Not Under Attack</h2><h3 id="题面"><a href="#题面" class="headerlink" title="题面"></a>题面</h3><blockquote>
+<center>Time limit per test: 2 seconds<br/>Memory limit per test: 256 megabytes<br/></center>
+</blockquote>
+<blockquote>
+<p>Vasya has the square chessboard of size $n × n$ and $m$ rooks. Initially the chessboard is empty. Vasya will consequently put the rooks on the board one after another.<br>The cell of the field is under rook’s attack, if there is at least one rook located in the same row or in the same column with this cell. If there is a rook located in the cell, this cell is also under attack.<br>You are given the positions of the board where Vasya will put rooks. For each rook you have to determine the number of cells which are not under attack after Vasya puts it on the board.<br><strong>Input</strong><br>The first line of the input contains two integers $n$ and $m$ $(1 ≤ n ≤ 100 000, 1 ≤ m ≤ min(100 000, n^2))$ — the size of the board and the number of rooks.<br>Each of the next m lines contains integers $x_i$ and $y_i$ $(1 ≤ x_i, y_i ≤ n)$ — the number of the row and the number of the column where Vasya will put the $i$-th rook. Vasya puts rooks on the board in the order they appear in the input. It is guaranteed that any cell will contain no more than one rook.<br><strong>Output</strong><br>Print $m$ integer, the $i$-th of them should be equal to the number of cells that are not under attack after first $i$ rooks are put.</p>
+</blockquote>
+<h3 id="测试样例"><a href="#测试样例" class="headerlink" title="测试样例"></a>测试样例</h3><p><strong>Input</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">3 3</span><br><span class="line">1 1</span><br><span class="line">3 1</span><br><span class="line">2 2</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4 2 0</span><br></pre></td></tr></table></figure>
+
+<p><strong>Input</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">5 2</span><br><span class="line">1 5</span><br><span class="line">5 1</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">16 9</span><br></pre></td></tr></table></figure>
+
+<p><strong>Input</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">100000 1</span><br><span class="line">300 400</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">9999800001</span><br></pre></td></tr></table></figure>
+<h3 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h3><p>向n*n的棋盘放置m颗棋子，与一个棋子同行或同列的格子视为被攻击。<br>每放置一颗棋子后，输出未受攻击的格子数量</p>
+<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>最后所有未受攻击的格子可以通过平移再组成一个大矩形，只需要用数组r和c记录哪些行和列受到了攻击，将未受攻击的行数和列数相乘就是答案</p>
+<h3 id="AC代码"><a href="#AC代码" class="headerlink" title="AC代码"></a>AC代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> int long long</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1e5</span>+<span class="number">50</span>;</span><br><span class="line"><span class="type">bool</span> r[maxn],c[maxn];</span><br><span class="line"><span class="function"><span class="type">signed</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="type">int</span> n,m;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="type">int</span> a=n,b=n;</span><br><span class="line">    <span class="keyword">while</span>(m--)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> x,y;</span><br><span class="line">        cin &gt;&gt; x &gt;&gt; y;</span><br><span class="line">        <span class="keyword">if</span>(!r[x])</span><br><span class="line">        &#123;</span><br><span class="line">            r[x]=<span class="number">1</span>;a--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!c[y])</span><br><span class="line">        &#123;</span><br><span class="line">            c[y]=<span class="number">1</span>;b--;</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; a * b &lt;&lt; <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; flush;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="C-Minimum-Array"><a href="#C-Minimum-Array" class="headerlink" title="C. Minimum Array"></a>C. Minimum Array</h2><h3 id="题面-1"><a href="#题面-1" class="headerlink" title="题面"></a>题面</h3><blockquote>
+<center>Time limit per test: 2 seconds<br/>Memory limit per test: 256 megabytes<br/></center>
+</blockquote>
+<blockquote>
+<p>You are given two arrays a and b, both of length n. All elements of both arrays are from 0 to $n−1$.<br>You can reorder elements of the array b (if you want, you may leave the order of elements as it is). After that, let array c be the array of length n, the i-th element of this array is $c_i&#x3D;(a_i+b_i) % n $ , where $ x % y$ is x modulo y.<br>Your task is to reorder elements of the array b to obtain the <strong>lexicographically</strong> minimum possible array c.<br>Array x of length n is lexicographically less than array y of length n, if there exists such $i$ $(1≤i≤n)$, that $x_i&lt;y_i$, and for any $j$ $(1≤j&lt;i)$ $x_j&#x3D;y_j$.<br><strong>Input</strong><br>The first line of the input contains one integer $n$ $(1≤n≤2⋅10^5)$ — the number of elements in a, b and c.<br>The second line of the input contains n integers $a_1,a_2,…,a_n (0≤a_i&lt;n)$, where $a_i$ is the $i$-th element of $a$.<br>The third line of the input contains n integers $b_1,b_2,…,b_n (0≤b_i&lt;n)$, where $b_i$ is the $i$-th element of $b$.<br><strong>Output</strong><br>Print the <strong>lexicographically</strong> minimum possible array c. Recall that your task is to reorder elements of the array b and obtain the <strong>lexicographically</strong> minimum possible array c, where the $i$-th element of $c$ is $c_i&#x3D;(a_i+b_i)%n$.</p>
+</blockquote>
+<h3 id="测试样例-1"><a href="#测试样例-1" class="headerlink" title="测试样例"></a>测试样例</h3><p><strong>Input</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">4</span><br><span class="line">0 1 2 1</span><br><span class="line">3 2 1 1</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 0 0 2</span><br></pre></td></tr></table></figure>
+
+<p><strong>Input</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">7</span><br><span class="line">2 5 1 5 3 4 3</span><br><span class="line">2 4 3 5 6 5 1</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 0 0 1 0 2 4</span><br></pre></td></tr></table></figure>
+<h3 id="题目大意-1"><a href="#题目大意-1" class="headerlink" title="题目大意"></a>题目大意</h3><p>就给定a,b，b可以随意排序，c是a和b对应位置相加后模n，求如何排序b让c的字典序最小。</p>
+<h3 id="解题思路-1"><a href="#解题思路-1" class="headerlink" title="解题思路"></a>解题思路</h3><p><strong>贪心算法</strong>嘛，挺简单的，先给b排个序，每一步找最优解，从头开始，能找到n-a<del>i</del>就用，找不到就用比n-a<del>i</del>大且最小的值，没有更大的就用最小的。</p>
+<h3 id="AC代码-1"><a href="#AC代码-1" class="headerlink" title="AC代码"></a>AC代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> int long long</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> pii pair<span class="string">&lt;int,int&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">2e5</span>+<span class="number">50</span>;</span><br><span class="line"><span class="type">int</span> a[maxn],c[maxn];</span><br><span class="line">multiset&lt;<span class="type">int</span>&gt;b;</span><br><span class="line"><span class="function"><span class="type">signed</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">    	cin &gt;&gt; a[i];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">    &#123;</span><br><span class="line">    	<span class="type">int</span> tmp;</span><br><span class="line">    	cin &gt;&gt; tmp;</span><br><span class="line">    	b.<span class="built_in">insert</span>(tmp);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        multiset&lt;<span class="type">int</span>&gt;::iterator iter=b.<span class="built_in">lower_bound</span>(n-a[i]);</span><br><span class="line">	    <span class="keyword">if</span>(iter==b.<span class="built_in">end</span>())</span><br><span class="line">	    &#123;</span><br><span class="line">	    	c[i]=a[i]+*b.<span class="built_in">begin</span>();</span><br><span class="line">	    	b.<span class="built_in">erase</span>(b.<span class="built_in">begin</span>());</span><br><span class="line">	    &#125;</span><br><span class="line">	    <span class="keyword">else</span> <span class="keyword">if</span>(*iter==n-a[i]) b.<span class="built_in">erase</span>(iter);</span><br><span class="line">	    <span class="keyword">else</span></span><br><span class="line">	    &#123;</span><br><span class="line">	    	c[i]=a[i]+*iter-n;</span><br><span class="line">	    	b.<span class="built_in">erase</span>(iter);</span><br><span class="line">	    &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">        cout &lt;&lt; c[i] &lt;&lt; <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">    cout &lt;&lt; flush;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="H-Subsegments"><a href="#H-Subsegments" class="headerlink" title="H. Subsegments"></a>H. Subsegments</h2><h3 id="题面-2"><a href="#题面-2" class="headerlink" title="题面"></a>题面</h3><blockquote>
+<center>Time limit per test: 1 seconds<br/>Memory limit per test: 256 megabytes<br/></center>
+</blockquote>
+<blockquote>
+<p>Programmer Sasha has recently begun to study data structures. His coach Stas told him to solve the problem of finding a minimum on the segment of the array in $O(log\ n)$, which Sasha coped with. For Sasha not to think that he had learned all, Stas gave him a new task. For each segment of the fixed length Sasha must find the maximum element of those that occur on the given segment exactly once. Help Sasha solve this problem.<br><strong>Input</strong><br>The first line contains two positive integers n and k $(1 ≤ n ≤ 10^5, 1 ≤ k ≤ n) $— the number of array elements and the length of the segment.<br>Then follow n lines: the i-th one contains a single number $a_i ( - 10^9 ≤ a_i ≤ 10^9)$.<br><strong>Output</strong><br>Print n–k + 1 numbers, one per line: on the i-th line print of the maximum number of those numbers from the subarray $a_i\ ,a_i+1\ …\ a_i+k-1$ that occur in this subarray exactly 1 time. If there are no such numbers in this subarray, print “Nothing”.</p>
+</blockquote>
+<h3 id="测试样例-2"><a href="#测试样例-2" class="headerlink" title="测试样例"></a>测试样例</h3><p><strong>Input</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">5 3</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">3</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+
+<p><strong>Input</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">6 4</span><br><span class="line">3</span><br><span class="line">3</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">4</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">4</span><br><span class="line">Nothing</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<h3 id="题目大意-2"><a href="#题目大意-2" class="headerlink" title="题目大意"></a>题目大意</h3><p>就是一个滑动窗口，先取前k个数，找出只出现一次且最大的数，然后窗口向右移动一格再找，如此反复</p>
+<h3 id="解题思路-2"><a href="#解题思路-2" class="headerlink" title="解题思路"></a>解题思路</h3><p>运用<strong>单调队列</strong>的话不太好找只出现一次的数，干脆直接无脑set和map得了，用这两个挺简单就过了</p>
+<h3 id="AC代码-2"><a href="#AC代码-2" class="headerlink" title="AC代码"></a>AC代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> int long long</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> pii pair<span class="string">&lt;int,int&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1e5</span>+<span class="number">50</span>;</span><br><span class="line">map&lt;<span class="type">int</span>,<span class="type">int</span>&gt;m;</span><br><span class="line">set&lt;<span class="type">int</span>&gt;s;</span><br><span class="line">queue&lt;<span class="type">int</span>&gt;q;</span><br><span class="line"><span class="function"><span class="type">signed</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="type">int</span> n,k;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; k;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> temp;</span><br><span class="line">        cin &gt;&gt; temp;</span><br><span class="line">        q.<span class="built_in">push</span>(temp);</span><br><span class="line">        map&lt;<span class="type">int</span>,<span class="type">int</span>&gt;::iterator iter=m.<span class="built_in">find</span>(temp);</span><br><span class="line">        <span class="keyword">if</span>(iter==m.<span class="built_in">end</span>())&#123;m[temp]=<span class="number">1</span>;s.<span class="built_in">insert</span>(temp);&#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(iter-&gt;second==<span class="number">1</span>)&#123;m[temp]++;s.<span class="built_in">erase</span>(temp);&#125;</span><br><span class="line">        <span class="keyword">else</span> m[temp]++;</span><br><span class="line">        <span class="keyword">if</span>(q.<span class="built_in">size</span>()&gt;k)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(m[q.<span class="built_in">front</span>()]==<span class="number">1</span>)&#123;m.<span class="built_in">erase</span>(q.<span class="built_in">front</span>());s.<span class="built_in">erase</span>(q.<span class="built_in">front</span>());&#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (m[q.<span class="built_in">front</span>()]== <span class="number">2</span>)&#123;m[q.<span class="built_in">front</span>()]--;s.<span class="built_in">insert</span>(q.<span class="built_in">front</span>());&#125;</span><br><span class="line">            <span class="keyword">else</span> m[q.<span class="built_in">front</span>()]--;</span><br><span class="line">            q.<span class="built_in">pop</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(q.<span class="built_in">size</span>()&gt;=k)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(!s.<span class="built_in">empty</span>())cout &lt;&lt; *--s.<span class="built_in">end</span>() &lt;&lt; endl;</span><br><span class="line">            <span class="keyword">else</span> cout &lt;&lt; <span class="string">&quot;Nothing&quot;</span> &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; flush;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="I-Little-Girl-and-Maximum-Sum"><a href="#I-Little-Girl-and-Maximum-Sum" class="headerlink" title="I. Little Girl and Maximum Sum"></a>I. Little Girl and Maximum Sum</h2><h3 id="题面-3"><a href="#题面-3" class="headerlink" title="题面"></a>题面</h3><blockquote>
+<center>Time limit per test: 2 seconds<br/>Memory limit per test: 256 megabytes<br/></center>
+</blockquote>
+<blockquote>
+<p>The little girl loves the problems on array queries very much.<br>One day she came across a rather well-known problem: you’ve got an array of n elements (the elements of the array are indexed starting from 1); also, there are q queries, each one is defined by a pair of integers $l_i, r_i (1 ≤ l_i ≤ r_i ≤ n)$. You need to find for each query the sum of elements of the array with indexes from li to $r_i$, inclusive.<br>The little girl found the problem rather boring. She decided to reorder the array elements before replying to the queries in a way that makes the sum of query replies maximum possible. Your task is to find the value of this maximum sum.<br><strong>Input</strong><br>The first line contains two space-separated integers $n (1 ≤ n ≤ 2·10^5)$ and $q (1 ≤ q ≤ 2·10^5)$ — the number of elements in the array and the number of queries, correspondingly.<br>The next line contains n space-separated integers $ai (1 ≤ a_i ≤ 2·10^5)$ — the array elements.<br>Each of the following q lines contains two space-separated integers $l_i$ and $r_i$ $(1 ≤ l_i ≤ r_i ≤ n)$ — the $i$-th query.<br><strong>Output</strong><br>In a single line print a single integer — the maximum sum of query replies after the array elements are reordered.</p>
+</blockquote>
+<h3 id="测试样例-3"><a href="#测试样例-3" class="headerlink" title="测试样例"></a>测试样例</h3><p><strong>Input</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">3 3</span><br><span class="line">5 3 2</span><br><span class="line">1 2</span><br><span class="line">2 3</span><br><span class="line">1 3</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">25</span><br></pre></td></tr></table></figure>
+
+<p><strong>Input</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">5 3</span><br><span class="line">5 2 4 1 3</span><br><span class="line">1 5</span><br><span class="line">2 3</span><br><span class="line">2 3</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">33</span><br></pre></td></tr></table></figure>
+<h3 id="题目大意-3"><a href="#题目大意-3" class="headerlink" title="题目大意"></a>题目大意</h3><p>给一个数组，接下来每次操作对第l到r个数求和，问如何排序数组让最后求和后总和最大</p>
+<h3 id="解题思路-3"><a href="#解题思路-3" class="headerlink" title="解题思路"></a>解题思路</h3><p>非常简单的题，用<strong>前缀和</strong>和<strong>差分</strong>思想，得出每一位被加了多少次，然后把最大的数分配给被加了最多次的数，其余位置同理</p>
+<h3 id="AC代码-3"><a href="#AC代码-3" class="headerlink" title="AC代码"></a>AC代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> int long long</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> pii pair<span class="string">&lt;int,int&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">2e5</span>+<span class="number">50</span>;</span><br><span class="line"><span class="type">int</span> a[maxn],b[maxn],c[maxn];</span><br><span class="line"><span class="function"><span class="type">signed</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="type">int</span> n ,q;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; q;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">        cin &gt;&gt; c[i];</span><br><span class="line">    <span class="built_in">sort</span>(c+<span class="number">1</span>,c+n+<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">while</span>(q--)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> l,r;</span><br><span class="line">        cin &gt;&gt; l &gt;&gt; r;</span><br><span class="line">        b[l]++;</span><br><span class="line">        b[r+<span class="number">1</span>]--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">        a[i]=b[i]+a[i<span class="number">-1</span>];</span><br><span class="line">    <span class="built_in">sort</span>(a+<span class="number">1</span>,a+n+<span class="number">1</span>);</span><br><span class="line">    <span class="type">int</span> ans=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">        ans+=a[i]*c[i];</span><br><span class="line">    cout &lt;&lt; ans &lt;&lt; flush;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="K-Queries-about-less-or-equal-elements"><a href="#K-Queries-about-less-or-equal-elements" class="headerlink" title="K. Queries about less or equal elements"></a>K. Queries about less or equal elements</h2><h3 id="题面-4"><a href="#题面-4" class="headerlink" title="题面"></a>题面</h3><blockquote>
+<center>Time limit per test: 2 seconds<br/>Memory limit per test: 256 megabytes<br/></center>
+</blockquote>
+<blockquote>
+<p>You are given two arrays of integers $a$ and $b$. For each element of the second array $b_j$ you should find the number of elements in array $a$ that are less than or equal to the value $b_j$.<br><strong>Input</strong><br>The first line contains two integers $n, m (1 ≤ n, m ≤ 2·10^5)$ — the sizes of arrays $a$ and $b$.<br>The second line contains $n$ integers — the elements of array $a ( -10^9 ≤ a_i ≤ 10^9)$.<br>The third line contains $m$ integers — the elements of array $b ( -10^9 ≤ b_j ≤ 10^9)$.<br><strong>Output</strong><br>Print $m$ integers, separated by spaces: the $j$-th of which is equal to the number of such elements in array $a$ that are less than or equal to the value $b_j$.</p>
+</blockquote>
+<h3 id="测试样例-4"><a href="#测试样例-4" class="headerlink" title="测试样例"></a>测试样例</h3><p><strong>Input</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">5 4</span><br><span class="line">1 3 5 7 9</span><br><span class="line">6 4 2 8</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3 2 1 4</span><br></pre></td></tr></table></figure>
+
+<p><strong>Input</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">5 5</span><br><span class="line">1 2 1 2 5</span><br><span class="line">3 1 4 1 5</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4 2 4 2 5</span><br></pre></td></tr></table></figure>
+<h3 id="题目大意-4"><a href="#题目大意-4" class="headerlink" title="题目大意"></a>题目大意</h3><p>给定数组a和b，对b的每个值找出a中有多少数小与等于该值</p>
+<h3 id="解题思路-4"><a href="#解题思路-4" class="headerlink" title="解题思路"></a>解题思路</h3><p>非常简单的题，先对a和b排序，然后运用<strong>双指针</strong>很快能做出</p>
+<h3 id="AC代码-4"><a href="#AC代码-4" class="headerlink" title="AC代码"></a>AC代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> int long long</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> pii pair<span class="string">&lt;int,int&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">2e5</span>+<span class="number">50</span>;</span><br><span class="line"><span class="type">int</span> a[maxn],c[maxn];</span><br><span class="line">pii b[maxn];</span><br><span class="line"><span class="function"><span class="type">signed</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="type">int</span> n,m;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        cin &gt;&gt; a[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;m;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> temp;</span><br><span class="line">        cin &gt;&gt; temp;</span><br><span class="line">        b[i]=&#123;temp,i&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">sort</span>(a,a+n);<span class="built_in">sort</span>(b,b+m);</span><br><span class="line">    <span class="type">int</span> ans=<span class="number">0</span>,i=<span class="number">0</span>,j=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(i&lt;n&amp;&amp;j&lt;m)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(a[i]&lt;=b[j].first)&#123;ans++;i++;&#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;c[b[j].second]=ans;j++;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(j&lt;m)</span><br><span class="line">    &#123;</span><br><span class="line">        c[b[j].second]=ans;j++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;m;i++)</span><br><span class="line">        cout &lt;&lt; c[i] &lt;&lt; <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">    cout &lt;&lt; flush;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Hard"><a href="#Hard" class="headerlink" title="Hard"></a>Hard</h1><h2 id="B-Too-Easy-Problems"><a href="#B-Too-Easy-Problems" class="headerlink" title="B. Too Easy Problems"></a>B. Too Easy Problems</h2><h3 id="题面-5"><a href="#题面-5" class="headerlink" title="题面"></a>题面</h3><blockquote>
+<center>Time limit per test: 2 seconds<br/>Memory limit per test: 256 megabytes<br/></center>
+</blockquote>
+<blockquote>
+<p>You are preparing for an exam on scheduling theory. The exam will last for exactly T milliseconds and will consist of n problems. You can either solve problem  $i$  in exactly $t_i$ milliseconds or ignore it and spend no time. You don’t need time to rest after solving a problem, either.<br>Unfortunately, your teacher considers some of the problems too easy for you. Thus, he assigned an integer ai to every problem $i$ meaning that the problem $i$ can bring you a point to the final score only in case you have solved no more than ai problems overall (including problem $i$ ).<br>Formally, suppose you solve problems $p_1, p_2, …, p_k$ during the exam. Then, your final score s will be equal to the number of values of j between 1 and k such that $      k ≤ a_{p_j}$.<br>You have guessed that the real first problem of the exam is already in front of you. Therefore, you want to choose a set of problems to solve during the exam maximizing your final score in advance. Don’t forget that the exam is limited in time, and you must have enough time to solve all chosen problems. If there exist different sets of problems leading to the maximum final score, any of them will do.<br><strong>Input</strong><br>The first line contains two integers n and T ($1 ≤ n ≤ 2·10^5; 1 ≤ T ≤ 10^9$) — the number of problems in the exam and the length of the exam in milliseconds, respectively.<br>Each of the next n lines contains two integers ai and ti ($1 ≤ a_i ≤ n; 1 ≤ t_i ≤ 10^4$). The problems are numbered from 1 to $n$.<br><strong>Output</strong><br>In the first line, output a single integer s — your maximum possible final score.<br>In the second line, output a single integer $k$ $(0 ≤ k ≤ n)$ — the number of problems you should solve.<br>In the third line, output k distinct integers $p_1, p_2, …, p_k (1 ≤ p_i ≤ n)$ — the indexes of problems you should solve, in any order.<br>If there are several optimal sets of problems, you may output any of them.</p>
+</blockquote>
+<h3 id="测试样例-5"><a href="#测试样例-5" class="headerlink" title="测试样例"></a>测试样例</h3><p><strong>Input</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">5 300</span><br><span class="line">3 100</span><br><span class="line">4 150</span><br><span class="line">4 80</span><br><span class="line">2 90</span><br><span class="line">2 300</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">3</span><br><span class="line">3 1 4</span><br></pre></td></tr></table></figure>
+
+<p><strong>Input</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2 100</span><br><span class="line">1 787</span><br><span class="line">2 788</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">0</span><br><span class="line">0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>Input</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2 100</span><br><span class="line">2 42</span><br><span class="line">2 58</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">2</span><br><span class="line">1 2</span><br></pre></td></tr></table></figure>
+<h3 id="题目大意-5"><a href="#题目大意-5" class="headerlink" title="题目大意"></a>题目大意</h3><p>给定题目数量n和考试时间T，做出每个题目需要的时间，还有题目的一个属性a。一开始没看懂这个a是什么意思，琢磨了一下样例发现是如果做出的总题目数超过a则这个题不给分，就是说a越小题目越简单，你做出了很多题这个题就不该得分（对dalao来说太简单了，但是对菜鸡还是得捞，得给分）。求最多能得到的分，最多能做出多少题，做出来的题目的题号。</p>
+<h3 id="解题思路-5"><a href="#解题思路-5" class="headerlink" title="解题思路"></a>解题思路</h3><p>这个题需要用到<strong>单调队列</strong>的思想，以a的值作为判断某个题的<strong>生存能力</strong>的大小，a更大的题，是更可能得分的题。先将所有题目的a值，编号，耗时记录下来，按照耗时大小排升序。先考虑最高得分，排完序一个题一个题读进单调队列（以a值为关键词升序排列）。<br>假设当前队列里有x个题，如果读到的题a &lt; x，那么做这道题无法得分；<br>如果a &#x3D; x，那么做这个题之后就a &lt; x了，要么舍弃这个题要么舍弃队首，但显然队首题目的a小与等于读进这个题目前的x，而且耗时还要更少，所以不做；<br>如果a &gt; x，做完可以加分，没问题，但是要考虑做题总数增加后队首题目是否还能有效给分，若队首不再合法，则又舍弃。<br>得到最高分后把选中的题目全部记录下来，从耗时最少的题目开始再遍历一遍，把多余的时间尽量做多的题目，得到最后答案<br><strong>注意：</strong> 得出最高得分后，最多完成的题目不可以超过队首的a值，如果多完成了题目，那么本来得分的题目又不得分了。</p>
+<h3 id="AC代码-5"><a href="#AC代码-5" class="headerlink" title="AC代码"></a>AC代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> int long long</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> pii pair<span class="string">&lt;int,int&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">2e5</span>+<span class="number">50</span>;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">p</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> a,i,m;</span><br><span class="line">    <span class="type">bool</span> <span class="keyword">operator</span>&lt;(<span class="type">const</span> p&amp; a) <span class="type">const</span><span class="comment">//定义排序方式</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>-&gt;a==a.a)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(m==a.m)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> i &gt; a.i;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> m &gt; a.m;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>-&gt;a &gt; a.a;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">cmp</span><span class="params">(p a,p b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a.m&lt;b.m;</span><br><span class="line">&#125;</span><br><span class="line">priority_queue&lt;p&gt;pq;</span><br><span class="line">p temp[maxn];</span><br><span class="line"><span class="type">bool</span> ans[maxn];</span><br><span class="line"><span class="function"><span class="type">signed</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="type">int</span> n,t;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; t;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)<span class="comment">//读入每道题的编号i 时间m 属性a</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> a,m;</span><br><span class="line">        cin &gt;&gt; a &gt;&gt; m;</span><br><span class="line">        temp[i]=&#123;a,i,m&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">sort</span>(temp+<span class="number">1</span>,temp+<span class="number">1</span>+n,cmp);<span class="comment">//以m为关键词排序</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(t&lt;temp[i].m)<span class="keyword">break</span>;<span class="comment">//时间不够用了直接结束</span></span><br><span class="line">        <span class="keyword">if</span>(temp[i].a&gt;pq.<span class="built_in">size</span>())<span class="comment">//生存能力高的进队列</span></span><br><span class="line">        &#123;</span><br><span class="line">            pq.<span class="built_in">push</span>(temp[i]);</span><br><span class="line">            t-=temp[i].m;</span><br><span class="line">            <span class="keyword">if</span>(pq.<span class="built_in">top</span>().a&lt;pq.<span class="built_in">size</span>())<span class="comment">//淘汰队首生存能力差的</span></span><br><span class="line">            &#123;</span><br><span class="line">                t+=pq.<span class="built_in">top</span>().m;</span><br><span class="line">                pq.<span class="built_in">pop</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> sum=pq.<span class="built_in">size</span>();<span class="comment">//最高得分</span></span><br><span class="line">    cout &lt;&lt; sum &lt;&lt; endl;</span><br><span class="line">    <span class="type">int</span> min = <span class="number">1</span>&lt;&lt;<span class="number">30</span>;</span><br><span class="line">    <span class="keyword">while</span>(!pq.<span class="built_in">empty</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        ans[pq.<span class="built_in">top</span>().i]=<span class="number">1</span>;<span class="comment">//记录已选题目编号</span></span><br><span class="line">        min=min&lt;pq.<span class="built_in">top</span>().a?min:pq.<span class="built_in">top</span>().a;<span class="comment">//记录最小的a</span></span><br><span class="line">        pq.<span class="built_in">pop</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n&amp;&amp;sum&lt;min;i++)<span class="comment">//注意加进来可能会导致原有题目不得分</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(t&lt;temp[i].m)<span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">if</span>(!ans[temp[i].i])</span><br><span class="line">        &#123;</span><br><span class="line">            sum++;</span><br><span class="line">            t-=temp[i].m;</span><br><span class="line">            ans[temp[i].i]=<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; sum &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">        <span class="keyword">if</span>(ans[i])cout &lt;&lt; i &lt;&lt;<span class="string">&#x27; &#x27;</span>;</span><br><span class="line">    cout &lt;&lt; flush;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="E-Interesting-Array"><a href="#E-Interesting-Array" class="headerlink" title="E. Interesting Array"></a>E. Interesting Array</h2><h3 id="题面-6"><a href="#题面-6" class="headerlink" title="题面"></a>题面</h3><blockquote>
+<center>Time limit per test: 1 seconds<br/>Memory limit per test: 256 megabytes<br/></center>
+</blockquote>
+<blockquote>
+<p>We’ll call an array of n non-negative integers a[1], a[2], …, a[n] interesting, if it meets m constraints. The i-th of the m constraints consists of three integers $l_i, r_i, q_i (1 ≤ l_i ≤ r_i ≤ n)$ meaning that value  should be equal to $q_i$.<br>Your task is to find any interesting array of n elements or state that such array doesn’t exist.<br>Expression x&amp;y means the bitwise AND of numbers x and y. In programming languages C++, Java and Python this operation is represented as “&amp;”, in Pascal — as “and”.<br><strong>Input</strong><br>The first line contains two integers n, m $(1 ≤ n ≤ 10^5, 1 ≤ m ≤ 10^5)$ — the number of elements in the array and the number of limits.<br>Each of the next m lines contains three integers $l_i, r_i, q_i (1 ≤ l_i ≤ r_i ≤ n, 0 ≤ q_i &lt; 230)$ describing the i-th limit.<br><strong>Output</strong><br>If the interesting array exists, in the first line print “YES” (without the quotes) and in the second line print n integers a[1], a[2], …, a[n] (0 ≤ a[i] &lt; 230) decribing the interesting array. If there are multiple answers, print any of them.<br>If the interesting array doesn’t exist, print “NO” (without the quotes) in the single line.</p>
+</blockquote>
+<h3 id="测试样例-6"><a href="#测试样例-6" class="headerlink" title="测试样例"></a>测试样例</h3><p><strong>Input</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">3 1</span><br><span class="line">1 3 3</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">YES</span><br><span class="line">3 3 3</span><br></pre></td></tr></table></figure>
+
+<p><strong>Input</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">3 2</span><br><span class="line">1 3 3</span><br><span class="line">1 3 2</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NO</span><br></pre></td></tr></table></figure>
+<h3 id="题目大意-6"><a href="#题目大意-6" class="headerlink" title="题目大意"></a>题目大意</h3><p>找到一个数列，每一个限制要求数列的第l个到第r个数按位与可以得到q。</p>
+<h3 id="解题思路-6"><a href="#解题思路-6" class="headerlink" title="解题思路"></a>解题思路</h3><p>将每一位视作一个独立的部分。<br>先将所有要求与后为0的限制按优先l然后r排好序。<br>用<strong>前缀和</strong>和<strong>差分</strong>思想标记出每一个必须为1的位，若第l到r个数的某一位与运算得到1，则第l到r个数的该位都得为1，用t[l]++,和t[r+1]–来记录，最后前缀和得出必须为1的位。<br>然后，遍历一遍数组验证剩下的位均为0是否满足剩余的限制。</p>
+<h3 id="AC代码-6"><a href="#AC代码-6" class="headerlink" title="AC代码"></a>AC代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> int long long</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> pii pair<span class="string">&lt;int,int&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1e5</span>+<span class="number">50</span>;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">que</span><span class="comment">//question</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> l,r,q;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">cmp</span><span class="params">(que a, que b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(a.l==b.l)<span class="keyword">return</span> a.r&lt;b.r;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> a.l&lt;b.l;</span><br><span class="line">&#125;</span><br><span class="line">que b[maxn];<span class="comment">//记录所有限制</span></span><br><span class="line"><span class="type">int</span> t[maxn],tt[maxn],a[<span class="number">31</span>][maxn];<span class="comment">//t差分数组，tt前缀和，a记录答案</span></span><br><span class="line"><span class="function"><span class="type">signed</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="type">int</span> n,m;</span><br><span class="line">    cin &gt;&gt; n&gt;&gt;m;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;m;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        cin &gt;&gt; b[i].l &gt;&gt; b[i].r &gt;&gt; b[i].q;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">sort</span>(b,b+m,cmp);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">31</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        queue&lt;pii&gt;p;<span class="comment">//记录要求与后为0的限制</span></span><br><span class="line">        <span class="built_in">memset</span>(t,<span class="number">0</span>,<span class="built_in">sizeof</span>(t));</span><br><span class="line">        <span class="built_in">memset</span>(t,<span class="number">0</span>,<span class="built_in">sizeof</span>(tt));</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;m;j++)<span class="comment">//处理每一条限制的第i位</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> l=b[j].l,r=b[j].r;</span><br><span class="line">            <span class="keyword">if</span>(b[j].q&amp;<span class="number">1</span>)&#123;t[l]++;t[r+<span class="number">1</span>]--;&#125;<span class="comment">//要求与后为1用差分数组记录</span></span><br><span class="line">            <span class="keyword">else</span> p.<span class="built_in">push</span>(&#123;l,r&#125;);</span><br><span class="line">            b[j].q&gt;&gt;=<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=n;j++)<span class="comment">//标记那些必须为1的位</span></span><br><span class="line">        &#123;</span><br><span class="line">            tt[j]=t[j]+tt[j<span class="number">-1</span>];</span><br><span class="line">            <span class="keyword">if</span>(tt[j])a[i][j]=<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> iter=<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">while</span>(!p.<span class="built_in">empty</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> l=p.<span class="built_in">front</span>().first,r=p.<span class="built_in">front</span>().second;</span><br><span class="line">            <span class="keyword">if</span>(iter&gt;r)&#123;cout &lt;&lt; <span class="string">&quot;NO&quot;</span>;<span class="keyword">return</span> <span class="number">0</span>;&#125;<span class="comment">//超过这条限制要求的区间还没找到可以填0的地方</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(iter&lt;l)iter=l;<span class="comment">//还没到l，中间没有做要求，那我们跳过，相当于默认填0</span></span><br><span class="line">            <span class="keyword">else</span> &#123;p.<span class="built_in">pop</span>();<span class="keyword">continue</span>;&#125;<span class="comment">//iter已经在l和r之间表示l和r种的iter位置已经确定可以填0了，直接跳过</span></span><br><span class="line">            <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(iter&gt;r)&#123;cout &lt;&lt; <span class="string">&quot;NO&quot;</span>;<span class="keyword">return</span> <span class="number">0</span>;&#125;</span><br><span class="line">                <span class="keyword">if</span>(!tt[iter])</span><br><span class="line">                &#123;</span><br><span class="line">                    p.<span class="built_in">pop</span>();</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> iter++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;YES&quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)<span class="comment">//输出结果</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;<span class="number">31</span>;j++)</span><br><span class="line">            sum+=a[j][i]&lt;&lt;j;</span><br><span class="line">        cout &lt;&lt; sum &lt;&lt; <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; flush;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>foliet
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://foliet.com/article/5872/" title="暑期集训-数据结构专题">https://foliet.com/article/5872/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"><i class="fa fa-tag"></i> 数据结构</a>
+              <a href="/tags/codeforces/" rel="tag"><i class="fa fa-tag"></i> codeforces</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/article/4216/" rel="next" title="暑期集训-动态规划专题">
+                  暑期集训-动态规划专题 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">沪ICP备2021022043号-3 </a>
+      <img src="/images/beian.png" alt="">
+  </div>
+
+<div class="copyright">
+  &copy; 2021.7.15 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">foliet</span>
+</div>
+<div class="busuanzi-count">
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@9.1.3/dist/mermaid.min.js","integrity":"sha256-TIYL00Rhw/8WaoUhYTLX9SKIEFdXxg+yMWSLVUbhiLg="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"foliet","repo":"blog","client_id":"e92cefb8c9c4246908b0","client_secret":"6cb98c583fc32a5f16c51db0c1831262dda5711c","admin_user":"foliet","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","createIssue_manually":true,"js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"f7c771bdf7fe7d8f237a206c54128aee"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
